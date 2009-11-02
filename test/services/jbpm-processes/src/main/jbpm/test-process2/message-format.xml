@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message-format-model xmlns="http://objectcode.de/soatools/mfm">
+	<message-format name="test-process2" version="1">
+		<body-component name="consumerTag" required="false">
+			<string />
+		</body-component>
+	</message-format>
+</message-format-model>

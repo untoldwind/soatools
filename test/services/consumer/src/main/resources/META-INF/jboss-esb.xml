@@ -1,0 +1,99 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jbossesb
+	xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd"
+	parameterReloadSecs="5">
+	<providers>
+		<jms-jca-provider name="JBossMessaging"
+			connection-factory="XAConnectionFactory">
+			<jms-bus busid="soatool_test_consumer_wo_log">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_consumer_wo_log" />
+			</jms-bus>
+
+			<jms-bus busid="soatool_test_consumer_with_log">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_consumer_with_log" />
+			</jms-bus>
+
+			<jms-bus busid="soatool_test_consumer_request">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_consumer_request" />
+			</jms-bus>
+		</jms-jca-provider>
+	</providers>
+	<services>
+		<service category="SoatoolsTest" name="ConsumerWithoutLog"
+			description="Test consumer without logging">
+			<listeners>
+				<jms-listener name="ConsumerWithoutLogListener"
+					busidref="soatool_test_consumer_wo_log" maxThreads="20" />
+			</listeners>
+			<actions mep="OneWay">
+				<action name="count"
+					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
+
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+			</actions>
+		</service>
+		<service category="SoatoolsTest" name="ConsumerWithLog"
+			description="Test consumer with logging">
+			<listeners>
+				<jms-listener name="ConsumerWithLogListener" busidref="soatool_test_consumer_with_log"
+					maxThreads="20" />
+			</listeners>
+			<actions mep="OneWay">
+				<action name="logException"
+					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+					</property>
+				</action>
+
+				<action name="count"
+					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
+
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+
+				<action name="log"
+					class="de.objectcode.soatools.logstore.actions.LogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+					</property>
+				</action>
+			</actions>
+		</service>
+		<service category="SoatoolsTest" name="ConsumerRequestReply"
+			description="Test dummy request reply">
+			<listeners>
+				<jms-listener name="ConsumerRequestReplyListener"
+					busidref="soatool_test_consumer_request" maxThreads="20" />
+			</listeners>
+			<actions>
+				<action name="logException"
+					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+					</property>
+				</action>
+				
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+				
+				<action name="count"
+					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
+
+				<action name="log"
+					class="de.objectcode.soatools.logstore.actions.LogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+					</property>
+				</action>
+			</actions>
+		</service>
+	</services>
+</jbossesb>

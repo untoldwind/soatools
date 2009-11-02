@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich" template="template.xhtml">
+
+	<ui:define name="title">LogStore console</ui:define>
+	<ui:define name="content">
+		<div class="logincontainer">
+			<h3>Login:</h3>
+			
+			<form jsfc="h:form">
+			<table>
+			<tr>
+			<td>UserId:</td><td><h:inputText value="#{identity.username}" maxlength="30" class="txt_l" /></td>
+			</tr>
+			<tr>
+			<td>Password:</td><td><h:inputSecret value="#{identity.password}" class="txt_l" /></td>
+			</tr>
+			<tr>
+			<td colspan="2" align="right"><h:commandButton value="Login" action="#{identity.login}" /></td>
+			</tr>
+			</table>
+			</form>
+		</div>
+	</ui:define>
+</ui:composition>

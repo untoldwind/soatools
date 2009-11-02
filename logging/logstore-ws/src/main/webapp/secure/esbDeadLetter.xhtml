@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+  template="template.xhtml">
+
+  <ui:define name="title">LogStore console</ui:define>
+  <ui:define name="header">
+    <style type="text/css">
+h2.message {
+  color: red
+}
+
+table.message {
+  border: 2px solid black
+}
+
+th.message {
+  background: lightgray
+}
+
+td.message {
+  border: 1px solid black;
+  vertical-align: top
+}
+
+td.section {
+  background: lightgray;
+  border: 0px;
+  vertical-align: top
+}
+
+span.element {
+  color: blue
+}
+
+span.attribute {
+  color: red
+}
+
+div.message {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  width: 100%
+}
+
+div.pbox,div.pbox_s,div.pbox_e {
+  position: absolute;
+  border-width: 1px;
+  border-style: solid;
+}
+
+div.pbox {
+  border-color: #0000ff;
+}
+
+div.pbox_s {
+  border-color: #aa6600;
+}
+
+div.pbox_e {
+  border-color: #cc0000;
+}
+
+div.pboxs,div.pboxs_s,div.pboxs_e {
+  position: absolute;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+div.pboxs {
+  border-right-color: #9999ff;
+  border-bottom-color: #9999ff;
+}
+
+div.pboxs_s {
+  border-right-color: #ffaa99;
+  border-bottom-color: #ffaa99;
+}
+
+div.pboxs_e {
+  border-right-color: #660000;
+  border-bottom-color: #660000;
+}
+
+div.pboxce {
+  position: absolute;
+  overflow: hidden;
+}
+
+div.pboxc,div.pboxc_s,div.pboxc_e {
+  cursor: default;
+  font-size: 10px;
+  white-space: nowrap;
+  color: #ffffff;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+div.pboxc {
+  border-color: #0000ff;
+  background-color: #0000ff;
+}
+
+div.pboxc_s {
+  border-color: #aa6600;
+  background-color: #aa6600;
+}
+
+div.pboxc_e {
+  border-color: #cc0000;
+  background-color: #cc0000;
+}
+
+div.pboxc a,div.pboxc_s a,div.pboxc_e a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+div.pboxc a:hover,div.pboxc_s a:hover,div.pboxc_e a:hover {
+  text-decoration: underline;
+}
+</style>
+  </ui:define>
+  <ui:define name="contentDetail">
+    <a4j:form>
+      <h:commandButton action="#{esbDeadLetterController.refresh}" value="Refresh" />
+      <a4j:region renderRegionOnly="true">
+        <rich:dataTable value="#{esbDeadLetterList.messages}" var="esbDeadLetter" rowClasses="first,second"
+          columnClasses="narrow,wide" rows="20">
+          <rich:column>
+            <h:outputText value="*" rendered="#{esbDeadLetter.id == esbDeadLetterList.current.id}"/>
+          </rich:column>
+          <rich:column>
+            <f:facet name="header">Id</f:facet>
+            <a4j:commandLink action="#{esbDeadLetterController.select(esbDeadLetter)}" reRender="messageDetail"
+              rendered="#{esbDeadLetter.id != esbDeadLetterList.current.id}">
+                   #{esbDeadLetter.id}
+                </a4j:commandLink>
+            <h:outputText value="#{esbDeadLetter.id}" rendered="#{esbDeadLetter.id == esbDeadLetterList.current.id}" />
+          </rich:column>
+          <rich:column>
+            <a4j:commandButton action="#{esbDeadLetterController.delete(esbDeadLetter)}" value="Delete"/>
+          </rich:column>
+          <f:facet name="footer">
+            <rich:datascroller pageIndexVar="pageIndex" pagesVar="pages">
+              <f:facet name="pages">
+                <h:outputText value="#{pageIndex} / #{pages}"></h:outputText>
+              </f:facet>
+            </rich:datascroller>
+          </f:facet>
+        </rich:dataTable>
+        <h:panelGroup id="messageDetail" rendered="#{esbDeadLetterList.hasCurrent}">
+              <table class="message">
+                <tr class="message">
+                  <th colspan="2">Message</th>
+                </tr>
+                <tr class="message">
+                  <td class="message">Call</td>
+                  <td class="message"><h:outputText value="#{esbDeadLetterList.current.call}"/></td>
+                </tr>
+                <tr class="message">
+                  <td colspan="2" class="section">Properties</td>
+                </tr>
+                <ui:repeat var="property" value="#{esbDeadLetterList.current.propertyList}">
+                  <tr class="message">
+                    <td class="message">#{property.name}</td>
+                    <td class="message"><h:outputText value="#{property.value}" converter="logMessageValueConverter"/></td>
+                  </tr>
+                </ui:repeat>
+                <tr class="message">
+                  <td colspan="2" class="section">Body</td>
+                </tr>
+                <ui:repeat var="body" value="#{esbDeadLetterList.current.bodyList}">
+                  <tr class="message">
+                    <td class="message">#{body.name}</td>
+                    <td class="message"><h:outputText value="#{body.value}" converter="logMessageValueConverter"/></td>
+                  </tr>
+                </ui:repeat>
+                <tr class="message">
+                  <td colspan="2" class="section">Attachment</td>
+                </tr>
+                <ui:repeat var="attachment" value="#{esbDeadLetterList.current.attachmentList}">
+                  <tr class="message">
+                    <td class="message">#{attachment.name}</td>
+                    <td class="message"><h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/></td>
+                  </tr>
+                </ui:repeat>
+              </table>          
+        </h:panelGroup>
+      </a4j:region>
+    </a4j:form>
+  </ui:define>
+</ui:composition>

@@ -1,0 +1,1 @@
+﻿<%@ WebService Language="C#" CodeBehind="MsmqOutGateway.asmx.cs" Class="MsmqOutGatewayWS.MsmqOutGateway" %>

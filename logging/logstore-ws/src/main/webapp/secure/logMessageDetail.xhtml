@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+
+          <table class="message">
+            <tr class="message">
+              <th colspan="2">Message</th>
+            </tr>
+            <tr class="message">
+              <td class="message">Message ID</td>
+              <td class="message">
+                #{logMessage.id}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Correlation ID</td>
+              <td class="message">
+                #{logMessage.correlationId}
+              </td>
+            </tr>
+            <ui:fragment rendered="#{logMessage.faultReason != null || logMessage.faultCause != null}">
+              <tr class="message">
+                <td colspan="2" class="section">Fault</td>
+              </tr>
+              <tr class="message">
+                <td class="message">Fault reason</td>
+                <td class="message"><h:outputText value="#{logMessage.faultReason}"/></td>
+              </tr>
+              <tr class="message">
+                <td class="message">Fault cause</td>
+                <td class="message"><pre><h:outputText value="#{logMessage.faultCause}"/></pre></td>
+              </tr>
+            </ui:fragment>
+            <tr class="message">
+              <td colspan="2" class="section">Properties</td>
+            </tr>
+            <ui:repeat var="property" value="#{logMessage.propertyList}">
+              <tr class="message">
+                <td class="message">#{property.name}</td>
+                <td class="message"><h:outputText value="#{property.value}" converter="logMessageValueConverter"/></td>
+              </tr>
+            </ui:repeat>
+            <tr class="message">
+              <td colspan="2" class="section">Body</td>
+            </tr>
+            <ui:repeat var="body" value="#{logMessage.bodyList}">
+              <tr class="message">
+                <td class="message">#{body.name}</td>
+                <td class="message"><h:outputText value="#{body.value}" converter="logMessageValueConverter"/></td>
+              </tr>
+            </ui:repeat>
+            <tr class="message">
+              <td colspan="2" class="section">Attachment</td>
+            </tr>
+            <ui:repeat var="attachment" value="#{logMessage.attachmentList}">
+              <tr class="message">
+                <td class="message">#{attachment.name}</td>
+                <td class="message"><h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/></td>
+              </tr>
+            </ui:repeat>
+          </table>          
+</ui:component>

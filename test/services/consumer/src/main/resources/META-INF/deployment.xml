@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbossesb-deployment>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_consumer_wo_log
+	</depends>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_consumer_with_log
+	</depends>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_consumer_request
+	</depends>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_consumer_request_reply
+	</depends>
+	<depends>jboss.esb:deployment=soatools-logging-logstore.esb</depends>
+</jbossesb-deployment>

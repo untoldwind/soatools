@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+  template="template.xhtml">
+
+  <ui:define name="title">LogStore console</ui:define>
+  <ui:define name="header">
+    <style type="text/css">
+h2.message {
+  color: red
+}
+
+table.message {
+  border: 2px solid black
+}
+
+th.message {
+  background: lightgray
+}
+
+td.message {
+  border: 1px solid black;
+  vertical-align: top
+}
+
+td.section {
+  background: lightgray;
+  border: 0px;
+  vertical-align: top
+}
+
+span.element {
+  color: blue
+}
+
+span.attribute {
+  color: red
+}
+
+div.message {
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  margin-bottom: 10px;
+  padding-bottom: 5px;
+  width: 100%
+}
+
+div.pbox,div.pbox_s,div.pbox_e {
+  position: absolute;
+  border-width: 1px;
+  border-style: solid;
+}
+
+div.pbox {
+  border-color: #0000ff;
+}
+
+div.pbox_s {
+  border-color: #aa6600;
+}
+
+div.pbox_e {
+  border-color: #cc0000;
+}
+
+div.pboxs,div.pboxs_s,div.pboxs_e {
+  position: absolute;
+  border-right-width: 1px;
+  border-right-style: solid;
+  border-bottom-width: 1px;
+  border-bottom-style: solid;
+}
+
+div.pboxs {
+  border-right-color: #9999ff;
+  border-bottom-color: #9999ff;
+}
+
+div.pboxs_s {
+  border-right-color: #ffaa99;
+  border-bottom-color: #ffaa99;
+}
+
+div.pboxs_e {
+  border-right-color: #660000;
+  border-bottom-color: #660000;
+}
+
+div.pboxce {
+  position: absolute;
+  overflow: hidden;
+}
+
+div.pboxc,div.pboxc_s,div.pboxc_e {
+  cursor: default;
+  font-size: 10px;
+  white-space: nowrap;
+  color: #ffffff;
+  padding-left: 3px;
+  padding-right: 3px;
+  border-width: 1px;
+  border-style: solid;
+}
+
+div.pboxc {
+  border-color: #0000ff;
+  background-color: #0000ff;
+}
+
+div.pboxc_s {
+  border-color: #aa6600;
+  background-color: #aa6600;
+}
+
+div.pboxc_e {
+  border-color: #cc0000;
+  background-color: #cc0000;
+}
+
+div.pboxc a,div.pboxc_s a,div.pboxc_e a {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+div.pboxc a:hover,div.pboxc_s a:hover,div.pboxc_e a:hover {
+  text-decoration: underline;
+}
+
+</style>
+  </ui:define>
+  <ui:define name="contentDetail">
+    <h:form>
+          <h:commandButton action="#{messageStatisticsController.refresh}" value="Refresh" />
+            <rich:dataTable value="#{messageStatistics}" var="messageStatistic" rowClasses="first,second"
+              columnClasses="narrow,wide">
+              <rich:column>
+                <f:facet name="header">Queue name</f:facet>
+                #{messageStatistic.queueService.queueName}
+              </rich:column>
+              <!-- rich:column>
+                <f:facet name="header">Count</f:facet>
+                #{messageStatistic.count}
+              </rich:column>
+              <rich:column>
+              	<f:facet name="header">Count Delta</f:facet>
+              	#{messageStatistic.countDelta}
+              </rich:column -->
+              <rich:column>
+              	<f:facet name="header">Message Count</f:facet>
+              	#{messageStatistic.messageCount}
+              </rich:column>
+              <rich:column>
+              	<f:facet name="header">Message Count Delta</f:facet>
+              	#{messageStatistic.messageCountDelta}
+              </rich:column>
+              <!-- rich:column>
+              	<f:facet name="header">Last update</f:facet>
+              	#{messageStatistic.lastUpdate}
+              </rich:column -->
+              <f:facet name="footer">
+                <rich:datascroller pageIndexVar="pageIndex" pagesVar="pages">
+                  <f:facet name="pages">
+                    <h:outputText value="#{pageIndex} / #{pages}"></h:outputText>
+                  </f:facet>
+                </rich:datascroller>
+              </f:facet>
+            </rich:dataTable>
+    </h:form>
+  </ui:define>
+</ui:composition>
+
+  

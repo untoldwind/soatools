@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html
+  xmlns="http://www.w3.org/1999/xhtml"
+  xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:c="http://java.sun.com/jstl/core"
+  xmlns:h="http://java.sun.com/jsf/html"
+  xmlns:f="http://java.sun.com/jsf/core"
+  xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:rich="http://richfaces.org/rich"
+  xml:lang="en"
+  lang="en">
+<head>
+<title>
+  <ui:insert name="title" />
+</title>
+<ui:insert name="header" />
+</head>
+<body>
+<div id="content">
+  <ui:insert name="content" />
+</div>
+<div id="errors">
+  <ui:insert name="errors">
+    <h:messages
+      globalOnly="true"
+      layout="table"
+      styleClass="cntError" />
+  </ui:insert>
+</div>
+</body>
+</html>

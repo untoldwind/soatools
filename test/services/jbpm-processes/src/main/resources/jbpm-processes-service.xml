@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="de.objectcode.soatools.mfm.impl.JbpmDeployService"
+    name="de.objectcode.soatools.test:service=JbpmProcessDeployService">
+    <depends>jboss.esb:service=JbpmService</depends>
+    <attribute name="ProcessFiles">test-process1.par test-process2.par</attribute>
+  </mbean>
+  <mbean code="de.objectcode.soatools.test.services.jbpm.JbpmProcessCounterService"
+    name="de.objectcode.soatools.test:service=JbpmProcessCounterService">
+  </mbean>
+</server>

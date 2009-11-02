@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich"
+  template="template.xhtml">
+
+  <ui:define name="title">LogStore console</ui:define>
+  <ui:define name="contentDetail">
+    <h:form>
+      <table border="0">
+        <tr>
+          <td>Process-Instance-Id:</td>
+          <td><h:inputText id="processInstanceId" value="#{logStoreSearch.processInstanceId}">
+            <s:validate />
+          </h:inputText></td>
+          <td><h:message for="processInstanceId" /></td>
+        </tr>
+        <tr>
+          <td><h:commandButton action="#{logStoreSearch.findByProcessInstanceId}" value="Find" /></td>
+        </tr>
+      </table>
+    </h:form>
+    <h:form>
+      <table border="0">
+        <tr>
+          <td>Tag Name:</td>
+          <td>
+            <h:selectOneMenu id="tagName" value="#{logStoreSearch.tagName}">
+              <f:selectItems value="#{logStoreSearch.tagNames}"/>
+              <s:validate/>
+            </h:selectOneMenu>
+          </td>
+          <td><h:message for="tagName" /></td>
+        </tr>
+        <tr>
+          <td>Tag Value:</td>
+          <td>
+            <h:inputText id="tagValue" value="#{logStoreSearch.tagValue}">
+              <s:validate />
+            </h:inputText>
+          </td>
+          <td><h:message for="tagValue" /></td>
+        </tr>
+        <tr>
+          <td>From:</td>
+          <td>
+            <rich:calendar id="fromDate" value="#{logStoreSearch.fromDate}" datePattern="yyyy-MM-dd HH:mm" enableManualInput="true">
+              <s:validate/>
+            </rich:calendar>
+          </td>
+        </tr>
+        <tr>
+          <td>Until:</td>
+          <td>
+            <rich:calendar id="untilDate" value="#{logStoreSearch.untilDate}" datePattern="yyyy-MM-dd HH:mm" enableManualInput="true">
+              <s:validate/>
+            </rich:calendar>            
+          </td>
+        </tr>
+        <tr>
+          <td><h:commandButton action="#{logStoreSearch.findByTagValue}" value="Find" /></td>
+        </tr>
+      </table>      
+    </h:form>
+  </ui:define>
+</ui:composition>

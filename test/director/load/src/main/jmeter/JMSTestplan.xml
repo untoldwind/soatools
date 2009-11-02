@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jmeterTestPlan version="1.2" properties="2.1">
+  <hashTree>
+    <JMSSampler guiclass="JMSConfigGui" testclass="JMSSampler" testname="JMS Point-to-Point" enabled="true">
+      <stringProp name="JMSSampler.queueconnectionfactory"></stringProp>
+      <stringProp name="JMSSampler.SendQueue"></stringProp>
+      <stringProp name="JMSSampler.ReceiveQueue"></stringProp>
+      <boolProp name="JMSSampler.isFireAndForget">true</boolProp>
+      <boolProp name="JMSSampler.isNonPersistent">false</boolProp>
+      <boolProp name="JMSSampler.useReqMsgIdAsCorrelId">false</boolProp>
+      <stringProp name="JMSSampler.timeout">2000</stringProp>
+      <stringProp name="HTTPSamper.xml_data"></stringProp>
+      <stringProp name="JMSSampler.initialContextFactory">org.jnp.interfaces.NamingContextFactory</stringProp>
+      <stringProp name="JMSSampler.contextProviderUrl">jnp://localhost:1099</stringProp>
+      <elementProp name="JMSSampler.jndiProperties" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Benutzer definierte Variablen" enabled="true">
+        <collectionProp name="Arguments.arguments">
+          <elementProp name="java.naming.factory.url.pkgs" elementType="Argument">
+            <stringProp name="Argument.name">java.naming.factory.url.pkgs</stringProp>
+            <stringProp name="Argument.value">org.jboss.naming,org.jnp.interfaces</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
+        </collectionProp>
+      </elementProp>
+      <elementProp name="arguments" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="Benutzer definierte Variablen" enabled="true">
+        <collectionProp name="Arguments.arguments"/>
+      </elementProp>
+    </JMSSampler>
+    <hashTree/>
+  </hashTree>
+</jmeterTestPlan>

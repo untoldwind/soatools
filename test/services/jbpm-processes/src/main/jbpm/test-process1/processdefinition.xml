@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<process-definition  xmlns=""  name="test-process1">
+
+
+	<start-state name="start-state1">
+		<transition to="esb1"></transition>
+	</start-state>
+
+
+	<node name="esb1">
+		<action class="org.jboss.soa.esb.services.jbpm.actionhandlers.EsbActionHandler">
+			<esbCategoryName>
+				SoatoolsTest
+			</esbCategoryName>
+			<esbServiceName>
+				ConsumerRequestReply
+			</esbServiceName>
+			<bpmToEsbVars>
+				<mapping bpm="consumerTag" esb="consumerTag"></mapping>
+			</bpmToEsbVars>
+		</action>
+		<transition to="end-state1"></transition>
+	</node>
+
+
+	<end-state name="end-state1"></end-state>
+
+
+</process-definition>

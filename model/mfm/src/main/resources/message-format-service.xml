@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="de.objectcode.soatools.mfm.impl.MessageFormatRepositoryService"
+    name="de.objectcode.soatools.mfm:service=MessageFomatRepository">
+    <attribute name="DataSourceJndiName">java:/JbpmDS</attribute>
+    <attribute name="MessageFormatResources">/de/objectcode/soatools/message-format.xml</attribute>
+    <depends>jboss.jca:service=DataSourceBinding,name=JbpmDS</depends>
+  </mbean>
+</server>

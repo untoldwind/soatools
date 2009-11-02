@@ -1,0 +1,22 @@
+<publishData>
+  <publishTarget publishUrl="C:\Dokumente und Einstellungen\junglas\Eigene Dateien\t\">
+    <file relUrl="bin/MsmqOutGatewayWS.pdb" publishTime="04/10/2008 17:33:21" />
+    <file relUrl="bin/.svn/format" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="bin/MsmqOutGatewayWS.dll" publishTime="04/10/2008 17:33:21" />
+    <file relUrl="Web.config" publishTime="04/10/2008 17:20:02" />
+    <file relUrl="bin/.svn/all-wcprops" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="bin/.svn/entries" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="MsmqOutGateway.asmx" publishTime="04/10/2008 17:20:02" />
+    <file relUrl="bin/.svn/dir-prop-base" publishTime="04/10/2008 17:20:01" />
+  </publishTarget>
+  <publishTarget publishUrl="http://localhost/MsmqOutGateway/">
+    <file relUrl="bin/MsmqOutGatewayWS.pdb" publishTime="04/10/2008 17:33:21" />
+    <file relUrl="bin/MsmqOutGatewayWS.dll" publishTime="04/10/2008 17:33:21" />
+    <file relUrl="Web.config" publishTime="04/10/2008 17:20:02" />
+    <file relUrl="bin/.svn/format" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="bin/.svn/entries" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="bin/.svn/all-wcprops" publishTime="04/10/2008 17:20:01" />
+    <file relUrl="MsmqOutGateway.asmx" publishTime="04/10/2008 17:20:02" />
+    <file relUrl="bin/.svn/dir-prop-base" publishTime="04/10/2008 17:20:01" />
+  </publishTarget>
+</publishData>

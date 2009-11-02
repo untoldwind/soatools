@@ -1,0 +1,72 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<definitions name='MsmqOutGateway' targetNamespace='http://liwest.at/msmq/outgoing'
+            xmlns='http://schemas.xmlsoap.org/wsdl/'
+            xmlns:tns='http://liwest.at/msmq/outgoing'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+            xmlns:suds='http://www.w3.org/2000/wsdl/suds'
+            xmlns:wsdl='http://schemas.xmlsoap.org/wsdl/'
+            xmlns:soapenc='http://schemas.xmlsoap.org/soap/encoding/'
+            xmlns:ns1='http://schemas.microsoft.com/clr/ns/System'
+            xmlns:ns0='http://liwest.at/msmq/outgoing'
+            xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/'>
+    <types>
+        <schema targetNamespace='http://liwest.at/msmq/outgoing'
+                xmlns='http://www.w3.org/2001/XMLSchema'
+                elementFormDefault='unqualified' attributeFormDefault='unqualified'>
+            <element name='MsmqOutMessage' type='ns0:MsmqOutMessage'/>
+            <complexType name='MsmqOutMessage'>
+                <all>
+                        <element name='body' type='xsd:string'/>
+                        <element name='binary' type='xsd:boolean'/>
+                        <element name='label' type='xsd:string'/>
+
+                        <element name='correlationId' type='xsd:string'/>
+                </all>
+            </complexType>
+        </schema>
+    </types>
+
+    <message name='MsmqOutGateway.routeMessageInput'>
+        <part name='destination' type='xsd:string'/>
+        <part name='message' type='ns0:MsmqOutMessage'/>
+
+    </message>
+    <message name='MsmqOutGateway.routeMessageOutput'>
+        <part name='return' type='xsd:boolean'/>
+    </message>
+
+    <portType name='MsmqOutGatewayPortType'>
+        <operation name='routeMessage' parameterOrder='destination message'>
+            <input name='routeMessageRequest' message='tns:MsmqOutGateway.routeMessageInput'/>
+            <output name='routeMessageResponse' message='tns:MsmqOutGateway.routeMessageOutput'/>
+
+        </operation>
+    </portType>
+
+    <binding name='MsmqOutGatewayBinding' type='tns:MsmqOutGatewayPortType'>
+        <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+        <suds:class type='ns0:MsmqOutGateway' rootType='MarshalByRefObject'>
+        </suds:class>
+        <suds:class type='ns0:MsmqOutMessage'>
+        </suds:class>
+
+        <operation name='routeMessage'>
+            <soap:operation soapAction='routeMessage' style="rpc"/>
+            <suds:method attributes='public'/>
+            <input name='routeMessageRequest'>
+                <soap:body use='literal' namespace='http://liwest.at/msmq/outgoing'/>
+            </input>
+            <output name='routeMessageResponse'>
+                <soap:body use='literal' namespace='http://liwest.at/msmq/outgoing'/>
+            </output>
+
+        </operation>
+    </binding>
+
+    <service name='MsmqOutGatewayService'>
+        <port name='MsmqOutGatewayPort' binding='tns:MsmqOutGatewayBinding'>
+            <soap:address location='http://192.168.23.135:8080/gateway'/>
+        </port>
+    </service>
+</definitions>

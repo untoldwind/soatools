@@ -1,0 +1,49 @@
+<definitions name='WebserviceInWSService' targetNamespace='http://objectcode.de/test/webservicein' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://objectcode.de/test/webservicein' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://objectcode.de/test/webservicein' version='1.0' xmlns:tns='http://objectcode.de/test/webservicein' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='esbMessage'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='body' nillable='true' type='tns:keyValue'/>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='properties' nillable='true' type='tns:keyValue'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='keyValue'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='key' type='xs:string'/>
+     <xs:element minOccurs='0' name='value' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='WebserviceIn_routeMessageResponse'>
+  <part name='success' type='xsd:boolean'></part>
+ </message>
+ <message name='WebserviceIn_routeMessage'>
+  <part name='serviceCategory' type='xsd:string'></part>
+  <part name='serviceName' type='xsd:string'></part>
+  <part name='message' type='tns:esbMessage'></part>
+ </message>
+ <portType name='WebserviceIn'>
+  <operation name='routeMessage' parameterOrder='serviceCategory serviceName message'>
+   <input message='tns:WebserviceIn_routeMessage'></input>
+   <output message='tns:WebserviceIn_routeMessageResponse'></output>
+  </operation>
+ </portType>
+ <binding name='WebserviceInBinding' type='tns:WebserviceIn'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='routeMessage'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://objectcode.de/test/webservicein' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://objectcode.de/test/webservicein' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='WebserviceInWSService'>
+  <port binding='tns:WebserviceInBinding' name='WebserviceInPort'>
+   <soap:address location='http://127.0.0.1:8080/test-webservice-in/WebserviceInWS'/>
+  </port>
+ </service>
+</definitions>

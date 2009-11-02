@@ -1,0 +1,76 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jbossesb xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd"
+  parameterReloadSecs="5">
+  <providers>
+    <jms-jca-provider name="JBossMessaging" connection-factory="XAConnectionFactory">
+      <jms-bus busid="log_store_message">
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_message"/>
+      </jms-bus>
+
+      <jms-bus busid="log_store_fault">
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_fault"/>
+      </jms-bus>
+
+      <jms-bus busid="log_store_dlq">
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_dlq"/>
+      </jms-bus>
+      
+      <jms-bus busid="log_store_dlq_gw">
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/DLQ"/>
+      </jms-bus>
+    </jms-jca-provider>
+
+    <schedule-provider name="log-store-scheduler">
+      <simple-schedule scheduleid="log-store-purge-trigger" frequency="15" execCount="-1" />
+    </schedule-provider>
+  </providers>
+  <services>
+    <service category="LogStore" name="StoreMessage" description="Store message">
+      <listeners>
+        <jms-listener name="LogStoreListener" busidref="log_store_message" maxThreads="20" />
+      </listeners>
+      <actions mep="OneWay">
+        <action name="storeMessage" class="de.objectcode.soatools.logstore.actions.StoreMessage">
+        </action>
+      </actions>
+    </service>
+
+    <service category="LogStore" name="StoreFault" description="Store fault">
+      <listeners>
+        <jms-listener name="LogStoreListener" busidref="log_store_fault" maxThreads="5" />
+      </listeners>
+      <actions mep="OneWay">
+        <action name="testAction" class="org.jboss.soa.esb.actions.SystemPrintln">
+          <property name="printfull" value="true" />
+        </action>
+      </actions>
+    </service>
+   	
+    <service category="LogStore" name="StoreDLQ" description="Store DLQ messages">
+      <listeners>
+        <jms-listener name="LogStoreListener" busidref="log_store_dlq" maxThreads="1" />
+        <jms-listener name="LogStoreGatewayListener" busidref="log_store_dlq_gw" maxThreads="1" is-gateway="true">
+           <property name="composer-class" value="de.objectcode.soatools.logstore.util.JmsMessageToXml"/>
+           <property name="composer-process" value="process"/>
+        </jms-listener>
+      </listeners>
+      <actions mep="OneWay">
+        <action name="storeMessage" class="de.objectcode.soatools.logstore.actions.StoreJmsDeadLetter">
+        </action>
+      </actions>
+    </service>
+    
+   	<service category="LogStore" name="Purge" description="Purge outdated messages">
+      <listeners>
+        <scheduled-listener name="LogStorePurgeListener" scheduleidref="log-store-purge-trigger" 
+                            event-processor="de.objectcode.soatools.logstore.util.PurgeLogStoreMessageComposer" />
+      </listeners>
+      <actions mep="OneWay">
+      	<action name="purgeAction" class="de.objectcode.soatools.logstore.actions.PurgeLogStore">
+      	  <!-- 7 * 24 * 60 * 60 * 1000 = 604800000 = 7d -->
+      	  <property name="period-to-delete" value="604800000" />
+      	</action>
+      </actions>
+   	</service>
+  </services>
+</jbossesb>

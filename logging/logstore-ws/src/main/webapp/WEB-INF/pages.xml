@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pages xmlns="http://jboss.com/products/seam/pages"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://jboss.com/products/seam/pages http://jboss.com/products/seam/pages-2.0.xsd"
+  no-conversation-view-id="/secure/main.xhtml"
+  login-view-id="/login.xhtml">
+
+    <page view-id="/login.xhtml">
+        <navigation>
+            <rule if-outcome="loggedIn">
+                <redirect view-id="/secure/main.xhtml"/>
+            </rule>
+        </navigation>
+    </page>
+    
+    <page view-id="/secure/*" login-required="true">
+    </page>
+</pages>

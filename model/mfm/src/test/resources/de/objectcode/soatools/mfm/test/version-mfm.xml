@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message-format-model xmlns="http://objectcode.de/soatools/mfm">
+
+  <type name="test3" version="1">
+    <component name="val1" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+  </type>
+
+  <type name="test3" version="2">
+    <component name="val1" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+    <component name="val3" required="true">
+      <string />
+      <downgrade-drop />
+      <upgrade-set-value value="val3 default" />
+    </component>
+  </type>
+
+  <type name="test3" version="3">
+    <component name="val1NewName" required="true">
+      <string />
+      <downgrade-rename old-name="val1" />
+      <upgrade-rename old-name="val1" />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+    <component name="val3" required="true">
+      <string />
+    </component>
+  </type>
+
+  <type name="test3" version="4">
+    <component name="val1NewName" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+      <upgrade-keep/>
+      <downgrade-expression language="MVEL">
+        newVersion.val2 + newVersion.val2add
+      </downgrade-expression>
+    </component>
+    <component name="val2add">
+      <integer />
+      <upgrade-set-value value="0"/>
+      <downgrade-drop/>
+    </component>
+    <component name="val3" required="true">
+      <string />
+    </component>
+  </type>
+
+  <type name="test4" version="1">
+    <component name="val1" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+    <component name="arr1" array="true">
+      <string />
+    </component>
+    <component name="arr2" array="true">
+      <integer />
+    </component>
+    <component name="sub1">
+      <type-ref name="test3" version="1" />
+    </component>
+  </type>
+</message-format-model>

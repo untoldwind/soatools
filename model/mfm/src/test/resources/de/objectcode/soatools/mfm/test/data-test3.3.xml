@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<test3 type="test3" version="3">
+  <val1NewName>Value1</val1NewName>
+  <val2>1234</val2>
+  <val3>val3 non-default</val3>
+</test3>

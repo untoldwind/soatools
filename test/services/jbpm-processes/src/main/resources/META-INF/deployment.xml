@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbossesb-deployment>
+    <depends>jboss.esb:deployment=soatools-model-mfm.esb</depends>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_jbpm_processes_start
+	</depends>
+</jbossesb-deployment>

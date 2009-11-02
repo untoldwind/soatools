@@ -1,0 +1,52 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jbossesb
+	xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd"
+	parameterReloadSecs="5">
+	<providers>
+		<jms-jca-provider name="JBossMessaging"
+			connection-factory="XAConnectionFactory">
+			<jms-bus busid="soatool_test_jbpm_processes_start">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_jbpm_processes_start" />
+			</jms-bus>
+		</jms-jca-provider>
+	</providers>
+	<services>
+		<service category="SoatoolsTest" name="JBPMProcessesStart"
+			description="Start a jbpm process">
+			<listeners>
+				<jms-listener name="JMSGatewayListener" busidref="soatool_test_jbpm_processes_start"
+					maxThreads="20" />
+			</listeners>
+			<actions mep="OneWay">
+				<action name="logException"
+					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
+					<property name="tags">
+						<tag name="jbpmKey" object-path="body.jbpmProcessKey" />
+					</property>
+				</action>
+				
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+
+				<action name="startProcessInstance"
+					class="de.objectcode.soatools.mfm.action.NewJbpmProcessInstance">
+					<property name="start-process" value="true" />
+					<property name="parameters">
+						<process-definition object-path="body.jbpmProcessDefName" />
+						<key object-path="body.jbpmProcessKey" />
+					</property>
+					<property name="start-process" value="true" />
+				</action>
+				
+				<action name="log"
+					class="de.objectcode.soatools.logstore.actions.LogWiretap">
+					<property name="tags">
+						<tag name="jbpmKey" object-path="body.jbpmProcessKey" />
+					</property>
+				</action>
+			</actions>
+		</service>
+	</services>
+</jbossesb>

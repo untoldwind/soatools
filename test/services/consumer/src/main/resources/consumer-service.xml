@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="de.objectcode.soatools.test.services.consumer.CounterService"
+    name="de.objectcode.soatools.test:service=ConsumerCounterService">
+  </mbean>
+</server>

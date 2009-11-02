@@ -1,0 +1,35 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<jbossesb
+	xmlns="http://anonsvn.labs.jboss.com/labs/jbossesb/trunk/product/etc/schemas/xml/jbossesb-1.0.1.xsd"
+	parameterReloadSecs="5">
+	<providers>
+		<jms-jca-provider name="JBossMessaging"
+			connection-factory="XAConnectionFactory">
+			<jms-bus busid="soatool_test_jms_gateway">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_jms_gateway" />
+			</jms-bus>
+
+			<jms-bus busid="soatool_test_jms_gateway_esb">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_jms_gateway_esb" />
+			</jms-bus>
+		</jms-jca-provider>
+	</providers>
+	<services>
+		<service category="SoatoolsTest" name="JMSGateway"
+			description="JMS gateway">
+			<listeners>
+				<jms-listener name="JMSGatewayListenerGW"
+					busidref="soatool_test_jms_gateway" maxThreads="20" is-gateway="true"/>
+				<jms-listener name="JMSGatewayListener"
+					busidref="soatool_test_jms_gateway_esb" maxThreads="20"/>
+			</listeners>
+			<actions mep="OneWay">
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+			</actions>
+		</service>
+	</services>
+</jbossesb>

@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="MessageDataSet" targetNamespace="http://tempuri.org/MessageDataSet.xsd" xmlns:mstns="http://tempuri.org/MessageDataSet.xsd" xmlns="http://tempuri.org/MessageDataSet.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections />
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="MessageDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:Generator_DataSetName="MessageDataSet" msprop:Generator_UserDSName="MessageDataSet" msprop:EnableTableAdapterManager="true">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="Messages" msprop:Generator_UserTableName="Messages" msprop:Generator_RowDeletedName="MessagesRowDeleted" msprop:Generator_TableClassName="MessagesDataTable" msprop:Generator_RowChangedName="MessagesRowChanged" msprop:Generator_RowClassName="MessagesRow" msprop:Generator_RowChangingName="MessagesRowChanging" msprop:Generator_RowEvArgName="MessagesRowChangeEvent" msprop:Generator_RowEvHandlerName="MessagesRowChangeEventHandler" msprop:Generator_TablePropName="Messages" msprop:Generator_TableVarName="tableMessages" msprop:Generator_RowDeletingName="MessagesRowDeleting">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Id" msprop:Generator_UserColumnName="Id" msprop:Generator_ColumnPropNameInRow="Id" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnId" msprop:Generator_ColumnPropNameInTable="IdColumn" type="xs:string" />
+              <xs:element name="queueName" msprop:Generator_UserColumnName="queueName" msprop:Generator_ColumnPropNameInRow="queueName" msprop:nullValue="_null" msprop:Generator_ColumnVarNameInTable="columnqueueName" msprop:Generator_ColumnPropNameInTable="queueNameColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="correlationId" msprop:Generator_UserColumnName="correlationId" msprop:Generator_ColumnPropNameInRow="correlationId" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columncorrelationId" msprop:Generator_ColumnPropNameInTable="correlationIdColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="arrived" msprop:Generator_UserColumnName="arrived" msprop:Generator_ColumnPropNameInRow="arrived" msprop:Generator_ColumnVarNameInTable="columnarrived" msprop:Generator_ColumnPropNameInTable="arrivedColumn" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="label" msprop:Generator_UserColumnName="label" msprop:Generator_ColumnPropNameInRow="label" msprop:nullValue="_empty" msprop:Generator_ColumnVarNameInTable="columnlabel" msprop:Generator_ColumnPropNameInTable="labelColumn" type="xs:string" minOccurs="0" />
+              <xs:element name="body" msprop:Generator_UserColumnName="body" msprop:Generator_ColumnPropNameInRow="body" msprop:nullValue="_null" msprop:Generator_ColumnVarNameInTable="columnbody" msprop:Generator_ColumnPropNameInTable="bodyColumn" type="xs:base64Binary" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="MessagesKey" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:Messages" />
+      <xs:field xpath="mstns:Id" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

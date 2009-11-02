@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MessageListenerConsole.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="MessageQueueName" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">.\private$\MyQueue</Value>
+    </Setting>
+    <Setting Name="MessageListenerConsole_MsmqInGateway_MsmqInGatewayWSService" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://endymion.objectcode.local:8080/msmq-gateway/MsmqInGatewayWS</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

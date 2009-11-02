@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<root-container name="test-process1" width="1484" height="1055">
+  <node name="start-state1" x="466" y="54" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="esb1" x="359" y="180" width="132" height="36">
+    <edge>
+      <label x="5" y="-10"/>
+    </edge>
+  </node>
+  <node name="end-state1" x="486" y="304" width="132" height="36"/>
+</root-container>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbm-queues>
+	<jbm-queue name="log_store_message" service-name="jboss.esb.util.logstore:service=Queue,name=log_store_message"/>
+	<jbm-queue name="log_store_fault" service-name="jboss.esb.util.logstore:service=Queue,name=log_store_fault"/>
+
+	<jbm-queue name="CallbackQueue" service-name="jboss.esb.destination:service=Queue,name=CallbackQueue"/>
+  
+	<jbm-queue name="DeadMessageQueue" service-name="jboss.esb.destination:service=Queue,name=DeadMessageQueue"/>
+	<jbm-queue name="DataCollectorQueue" service-name="jboss.esb.destination:service=Queue,name=DataCollectorQueue"/>
+	<jbm-queue name="OperationsCollectorQueue" service-name="jboss.esb.destination:service=Queue,name=OperationsCollectorQueue"/>
+	<jbm-queue name="OperationsResultCollectorQueue" service-name="jboss.esb.destination:service=Queue,name=OperationsResultCollectorQueue"/>
+
+    <jbm-queue name="DLQ" service-name="jboss.messaging.destination:service=Queue,name=DLQ"/>
+</jbm-queues>

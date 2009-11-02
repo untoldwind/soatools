@@ -1,0 +1,99 @@
+<project name="Soatools integration director" default="runtest" basedir=".">
+	<target name="runtest" description="sends a JMS message to the ESB">
+		<property name="org.jboss.esb.server.home" value="/Users/junglas/workspaces/jboss-soa-p-standalone.4.3.0/jboss-esb" />
+		<property name="org.jboss.esb.server.config" value="default" />
+
+		<property name="org.jboss.esb.server.server" location="${org.jboss.esb.server.home}/server/${org.jboss.esb.server.config}" />
+		<property name="org.jboss.esb.server.deploy.dir" location="${org.jboss.esb.server.server}/deploy" />
+
+		<path id="deployment-classpath">
+			<fileset dir="${org.jboss.esb.server.home}/lib/endorsed" includes="*.jar" />
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/jbossesb.sar/lib" includes="*.jar" />
+			<!-- jbossesb config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/jbossesb.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/jbossesb.esb" />
+			<!-- jbpm config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/jbpm.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/jbpm.esb" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/cglib.jar" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/dom4j.jar" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/antlr.jar" />
+			<!-- smooks config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/smooks.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/smooks.esb" />
+			<!-- jbrules config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/jbrules.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/jbrules.esb" />
+			<!-- spring config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/spring.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/spring.esb" />
+			<!-- soap config -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/soap.esb" includes="*.jar" />
+			<pathelement location="${org.jboss.esb.server.deploy.dir}/soap.esb" />
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="activation.jar, mail.jar, jboss-ejb3x.jar" />
+			<!-- general libs -->
+			<pathelement location="${org.jboss.esb.server.home}/lib/commons-logging.jar" />
+			<pathelement location="${org.jboss.esb.server.home}/lib/commons-codec.jar" />
+			<pathelement location="${org.jboss.esb.server.home}/lib/jboss-system.jar" />
+			<pathelement location="${org.jboss.esb.server.home}/lib/jboss-xml-binding.jar" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/jbossts-common.jar" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/quartz.jar" />
+			<!-- includes for read only cache -->
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="jboss-cache*.jar" />
+			<pathelement location="${org.jboss.esb.server.server}/lib/jgroups.jar" />
+			<!-- includes for h2 -->
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="h2*.jar" />
+			<!-- common client jars -->
+			<fileset dir="${org.jboss.esb.server.home}/client" includes="jaxb-api.jar jaxb-impl.jar jaxb-xjc.jar" />
+			<fileset dir="${org.jboss.esb.server.home}/client" includes="jaxws-rt.jar jaxws-tools.jar jboss-jaxws.jar jboss-saaj.jar jbossws-common.jar jbossws-spi.jar" />
+			<fileset dir="${org.jboss.esb.server.home}/client" includes="jbossall-client.jar" />
+			<!-- common lib jars -->
+			<fileset dir="${org.jboss.esb.server.home}/lib" includes="commons-httpclient.jar" />
+		</path>
+
+		<path id="compile-classpath">
+			<fileset dir="${org.jboss.esb.server.home}/client" includes="hibernate-client.jar" />
+			<!-- Required for jbpm Client Code. -->
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="hibernate3.jar quartz-all.jar" />
+			<!-- Required for the helloworld_hibernate_action quickstart -->
+			<path refid="deployment-classpath" />
+			<fileset dir="${org.jboss.esb.server.home}/client" includes="*.jar" />
+			<!-- Required for JMS Client Code. -->
+		</path>
+
+		<path id="exec-classpath">
+			<pathelement location="." />
+			<pathelement location="${basedir}/target/test-classes" />
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="jboss-remoting.jar jboss-j2ee.jar jboss-messaging-client.jar" />
+			<!-- Required for JMS Client Code. -->
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="hibernate3.jar commons-collections.jar hsqldb.jar" />
+			<!-- Required for jbpm Client Code. -->
+			<fileset dir="${org.jboss.esb.server.server}/lib" includes="bsh.jar" />
+			<!-- Required for JMS Client Code. -->
+			<fileset dir="${org.jboss.esb.server.deploy.dir}/jboss-aop-jdk50.deployer" includes="jboss-aop-jdk50.jar" />
+			<!-- Required for JMS Client Code. -->
+			<path refid="compile-classpath" />
+			<fileset dir="${basedir}/target/dependency" includes="*.jar" />
+		</path>
+
+		<mkdir dir="target/test" />
+
+		<echo>Run Test</echo>
+
+		<junit fork="yes" showoutput="yes" printsummary="yes">
+			<classpath refid="exec-classpath" />
+			<formatter type="plain" />
+			<sysproperty key="java.endorsed.dirs" value="${org.jboss.esb.server.home}/lib/endorsed"/>
+			<sysproperty key="javax.xml.registry.ConnectionFactoryClass" value="org.apache.ws.scout.registry.ConnectionFactoryImpl" />
+
+			<batchtest toDir="target/test">
+				<fileset dir="${basedir}/src/it/java">
+					<include name="**/*Test.java" />
+				</fileset>
+			</batchtest>
+		</junit>
+		<!--java fork="yes" classname="de.objectcode.soatools.test.directory.integration.ConsumerTest" failonerror="true">
+			<classpath refid="exec-classpath" />
+		</java -->
+	</target>
+</project>

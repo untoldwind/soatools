@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message-format-model xmlns="http://objectcode.de/soatools/mfm">
+
+  <message-format name="test1-message" version="1">
+    <body-component name="part1">
+      <string />
+    </body-component>
+    <body-component name="part2">
+      <integer />
+    </body-component>
+  </message-format>
+
+  <type name="test1" version="1">
+    <component name="val1" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+  </type>
+
+  <type name="test2" version="1">
+    <component name="val1" required="true">
+      <string />
+    </component>
+    <component name="val2">
+      <integer />
+    </component>
+    <component name="arr1" array="true">
+      <string />
+    </component>
+    <component name="arr2" array="true">
+      <integer />
+    </component>
+    <component name="sub1">
+      <type>
+        <component name="subVal1">
+          <string />
+        </component>
+        <component name="subVal2">
+          <integer />
+        </component>
+      </type>
+    </component>
+  </type>
+</message-format-model>

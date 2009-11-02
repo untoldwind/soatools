@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<message-format-model xmlns="http://objectcode.de/soatools/mfm">
+  <type name="address" version="1">
+    <component name="street"><string /></component>
+    <component name="zip"><string /></component>
+    <component name="city"><string /></component>
+  </type>
+
+  <type name="contract" version="1">
+    <component name="companyId"><string /></component>
+    <component name="company"><string /></component>
+    <component name="no"><string /></component>
+  </type>
+
+  <type name="customer" version="1">
+    <component name="firstName"><string /></component>
+    <component name="lastName"><string /></component>
+    <component name="description"><string /></component>
+    <component name="address"><type-ref name="address" version="1" /></component>
+  </type>
+
+  <type name="device" version="1">
+    <component name="status"><string /></component>
+  </type>
+
+  <type name="digitv" version="1">
+    <component name="countryCode"><string /></component>
+    <component name="productID"><integer /></component>
+    <component name="subscriptionStart"><date /></component>
+    <component name="subscriptionEnd"><date /></component>
+    <component name="priority"><string /></component>
+    <component name="numberOfSmartcards"><integer /></component>
+    <component name="smartCardNumbers" array="true"><long /></component>
+  </type>
+  
+  <type name="fein" version="1">
+    <component name="pin"><string /></component>
+    <component name="epin"><string /></component>
+    <component name="timeshift_count"><string /></component>
+    <component name="timeshift_active"><string /></component>
+    <component name="pvr_hours"><string /></component>
+    <component name="pvr_active"><string /></component>
+    <component name="package_list" array="true"><string /></component>
+  </type>
+
+  <type name="dsl" version="1">
+    <component name="bandwidth"><string /></component>
+    <component name="eanName"><string /></component>
+    <component name="isDSL"><boolean /></component>
+    <component name="lineConfiguration"><string /></component>
+    <component name="mdf"><string /></component>
+    <component name="technology"><string /></component>
+    <component name="http_ret_code"><string /></component>
+    <component name="relayAgent"><string /></component>
+  </type>
+
+  <type name="email" version="1">
+    <component name="sender"><string /></component>
+    <component name="recipient"><string /></component>
+    <component name="subject"><string /></component>
+    <component name="priority"><string /></component>
+    <component name="body"><string /></component>
+  </type>
+
+  <type name="endpoint" version="1">
+    <component name="no" required="true"><string /></component>
+    <component name="crv" required="true"><string /></component>
+    <component name="ifgId" required="true"><string /></component>
+    <component name="gatewayId" required="true"><string /></component>
+    <component name="outgoingProfile"><string /></component>
+    <component name="forwardProfile"><string /></component>
+    <component name="incomingProfile"><string /></component>
+    <component name="userProfile"><string /></component>
+    <component name="gatewayP2"><string /></component>
+    <component name="gatewayP7"><string /></component>
+    <component name="gatewayP9"><string /></component>
+    <component name="reroutingNo"><string /></component>
+  </type>
+
+  <type name="internet" version="1">
+    <component name="nOfIPs"><string /></component>
+    <component name="old_qos"><string /></component>
+    <component name="qos"><string /></component>
+    <component name="qosCpd"><string /></component>
+  </type>
+
+  <type name="mailbox" version="1">
+    <component name="alias">   <string /></component><!-- basse_alias -->
+    <component name="domain">  <string /></component><!-- domain      -->
+    <component name="name">    <string /></component><!-- mailbox     -->
+    <component name="password"><string /></component><!-- password    -->
+  </type>
+
+  <type name="modem" version="1">
+    <component name="modemType"><string /></component>
+    <component name="macAddress"><string /></component>
+  </type>
+
+  <type name="mta" version="1">
+    <component name="mtaMac"><string /></component>
+    <component name="cmMac"><string /></component>
+    <component name="mtaPackage"><string /></component>
+    <component name="modemPackage"><string /></component>
+    <component name="endpoint1"><string /></component>
+    <component name="endpoint2"><string /></component>
+    <component name="blockedStatus"><string /></component>
+  </type>
+
+  <type name="order" version="1">
+    <component name="no"><string/></component>
+    <component name="service"><string/></component>
+    <component name="action"><string/></component>
+    <component name="stickyZipCode"><boolean/></component>
+  </type>
+
+  <type name="phone" version="1">
+    <component name="areaCode"><string/></component>
+    <component name="callNumber"><string/></component>
+  </type>
+
+  <type name="service" version="1">
+    <component name="type"><string/></component>
+  </type>
+</message-format-model>
