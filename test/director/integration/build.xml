@@ -1,7 +1,6 @@
 <project name="Soatools integration director" default="runtest" basedir=".">
 	<target name="runtest" description="sends a JMS message to the ESB">
-		<property name="org.jboss.esb.server.home" value="/Users/junglas/workspaces/jboss-soa-p-standalone.4.3.0/jboss-esb" />
-		<property name="org.jboss.esb.server.config" value="default" />
+		<property file="build.properties"/>
 
 		<property name="org.jboss.esb.server.server" location="${org.jboss.esb.server.home}/server/${org.jboss.esb.server.config}" />
 		<property name="org.jboss.esb.server.deploy.dir" location="${org.jboss.esb.server.server}/deploy" />
