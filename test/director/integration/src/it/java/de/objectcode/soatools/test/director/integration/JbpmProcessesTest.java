@@ -52,7 +52,7 @@ public class JbpmProcessesTest {
 		}
 		int counter = 0;
 
-		while (counter < 20 && counterService.getInvokationCounter() != 100) {
+		while (counter < 40 && counterService.getInvokationCounter() != 100) {
 			Thread.sleep(500);
 			counter++;
 		}
@@ -82,7 +82,7 @@ public class JbpmProcessesTest {
 		}
 		int counter = 0;
 
-		while (counter < 20 && counterService.getInvokationCounter() != 200) {
+		while (counter < 40 && counterService.getInvokationCounter() != 200) {
 			Thread.sleep(500);
 			counter++;
 		}
