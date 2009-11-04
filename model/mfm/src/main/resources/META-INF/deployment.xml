@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jbossesb-deployment>
-    <depends>jboss.esb:deployment=jbossesb.esb</depends>
-    <depends>jboss.esb:deployment=smooks.esb</depends>
-    <depends>jboss.esb:deployment=soap.esb</depends>
-    <depends>jboss.esb:deployment=jbpm.esb</depends>
-    <depends>de.objectcode.soatools.mfm:service=MessageFomatRepository</depends>
+	<depends>jboss.esb:deployment=jbossesb.esb</depends>
+	<depends>jboss.esb:deployment=smooks.esb</depends>
+	<depends>jboss.esb:deployment=soap.esb</depends>
+	<depends>jboss.esb:deployment=jbpm.esb</depends>
+	<depends>jboss.esb:deployment=soatools-utils-generic.esb</depends>
+	<depends>de.objectcode.soatools.mfm:service=MessageFomatRepository
+	</depends>
 </jbossesb-deployment>

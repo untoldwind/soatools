@@ -74,7 +74,12 @@
 		
     <delete dir="${jboss.deploy.dir}/soatools_services" />
     <mkdir dir="${jboss.deploy.dir}/soatools_services" />
-		
+
+  	<antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_services" />
+      <param name="srcdir" value="esb" />
+      <param name="file" value="soatools-utils-generic.esb" />
+    </antcall>		
     <antcall target="unpack">
       <param name="destdir" value="${jboss.deploy.dir}/soatools_services" />
       <param name="srcdir" value="esb" />

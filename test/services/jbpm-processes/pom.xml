@@ -12,12 +12,6 @@
 	<name>soatools-test-services-jbpm-processes</name>
 	<dependencies>
 		<dependency>
-			<groupId>de.objectcode.soatools.utils</groupId>
-			<artifactId>soatools-utils-generic</artifactId>
-			<version>${pom.version}</version>
-		</dependency>
-		
-		<dependency>
 			<groupId>org.jboss.soa.esb</groupId>
 			<artifactId>jbossesb-rosetta</artifactId>
 		</dependency>

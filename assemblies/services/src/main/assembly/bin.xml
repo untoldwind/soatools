@@ -15,6 +15,7 @@
       <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <outputDirectory>/esb</outputDirectory>
       <includes>
+		<include>de.objectcode.soatools.utils:soatools-utils-generic:esb</include>	
         <include>de.objectcode.soatools.model:soatools-model-mfm:esb</include>
         <include>de.objectcode.soatools.logging:soatools-logging-logstore:esb</include>
       </includes>

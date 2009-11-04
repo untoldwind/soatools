@@ -9,4 +9,5 @@
 	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_consumer_request_reply
 	</depends>
 	<depends>jboss.esb:deployment=soatools-logging-logstore.esb</depends>
+	<depends>jboss.esb:deployment=soatools-utils-generic.esb</depends>
 </jbossesb-deployment>

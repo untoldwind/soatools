@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jbossesb-deployment>
   <depends>jboss.esb:deployment=jbpm.esb</depends>
+  <depends>jboss.esb:deployment=soatools-model-mfm.esb</depends>
+  <depends>jboss.esb:deployment=soatools-utils-generic.esb</depends>
   <depends>de.objectcode.soatools.logstore:service=Queue,name=log_store_message</depends>
   <depends>de.objectcode.soatools.logstore:service=Queue,name=log_store_fault</depends>
   <depends>de.objectcode.soatools.logstore:service=Queue,name=log_store_dlq</depends>
-  <depends>jboss.esb:deployment=soatools-model-mfm.esb</depends>
   <depends>de.objectcode.soatools.logstore:service=LogStoreService</depends>
   <depends>jboss.messaging.destination:service=Queue,name=DLQ</depends>
 </jbossesb-deployment>
