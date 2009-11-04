@@ -12,6 +12,7 @@
 		<module>logging</module>
 		<module>msmq</module>
 		<module>test</module>
+		<module>assemblies</module>
 	</modules>
 	<properties>
 		<jmeter.version>2.3.4</jmeter.version>
