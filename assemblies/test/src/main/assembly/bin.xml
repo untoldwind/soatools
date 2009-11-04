@@ -1,0 +1,42 @@
+<assembly>
+  <!--  <id>services</id> -->
+  <formats>
+    <format>zip</format>
+    <format>tar.bz2</format>
+  </formats>
+  <fileSets>
+    <fileSet>
+      <directory>src/main/scripts</directory>
+      <outputDirectory></outputDirectory>
+    </fileSet>
+  </fileSets>
+  <dependencySets>
+    <dependencySet>
+      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+      <outputDirectory>/esb</outputDirectory>
+      <includes>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-consumer:esb</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+      <outputDirectory>/jbm</outputDirectory>
+      <unpack>true</unpack>
+      <unpackOptions>
+        <includes>
+          <include>*.xml</include>
+        </includes>
+      </unpackOptions>
+      <includes>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-consumer:jar:jbm-service</include>
+      </includes>
+    </dependencySet>
+    <dependencySet>
+      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+      <outputDirectory>/war</outputDirectory>
+      <includes>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-webservice-in:war</include>
+      </includes>
+    </dependencySet>
+  </dependencySets>
+</assembly>
