@@ -16,6 +16,8 @@
       <outputDirectory>/esb</outputDirectory>
       <includes>
         <include>de.objectcode.soatools.test.services:soatools-test-services-consumer:esb</include>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-jms-gateway:esb</include>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-jbpm-processes:esb</include>
       </includes>
     </dependencySet>
     <dependencySet>
@@ -29,6 +31,8 @@
       </unpackOptions>
       <includes>
         <include>de.objectcode.soatools.test.services:soatools-test-services-consumer:jar:jbm-service</include>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-jms-gateway:jar:jbm-service</include>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-jbpm-processes:jar:jbm-service</include>
       </includes>
     </dependencySet>
     <dependencySet>
