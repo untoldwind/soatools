@@ -12,6 +12,12 @@
 	<name>soatools-test-services-jbpm-processes</name>
 	<dependencies>
 		<dependency>
+			<groupId>de.objectcode.soatools.utils</groupId>
+			<artifactId>soatools-utils-generic</artifactId>
+			<version>${pom.version}</version>
+		</dependency>
+		
+		<dependency>
 			<groupId>org.jboss.soa.esb</groupId>
 			<artifactId>jbossesb-rosetta</artifactId>
 		</dependency>
@@ -20,7 +26,7 @@
 			<groupId>org.jbpm</groupId>
 			<artifactId>jbpm-jpdl</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jboss</groupId>
 			<artifactId>jboss-jmx</artifactId>
@@ -71,27 +77,37 @@
 						<phase>generate-resources</phase>
 						<configuration>
 							<tasks>
-								<mkdir dir="${project.build.directory}/generated-resources"/>
-								<mkdir dir="${project.build.directory}/generated-resources/test-process1"/>
-								
-								<checksum todir="${project.build.directory}/generated-resources/test-process1" algorithm="SHA" fileext=".sig">
-									<fileset dir="src/main/jbpm/test-process1" includes="*.xml"/>
+								<mkdir dir="${project.build.directory}/generated-resources" />
+								<mkdir
+									dir="${project.build.directory}/generated-resources/test-process1" />
+
+								<checksum
+									todir="${project.build.directory}/generated-resources/test-process1"
+									algorithm="SHA" fileext=".sig">
+									<fileset dir="src/main/jbpm/test-process1" includes="*.xml" />
 								</checksum>
-								
-								<zip destfile="${project.build.directory}/generated-resources/test-process1.par">
-									<fileset dir="src/main/jbpm/test-process1"/>
-									<fileset dir="${project.build.directory}/generated-resources/test-process1"/>
+
+								<zip
+									destfile="${project.build.directory}/generated-resources/test-process1.par">
+									<fileset dir="src/main/jbpm/test-process1" />
+									<fileset
+										dir="${project.build.directory}/generated-resources/test-process1" />
 								</zip>
 
-								<mkdir dir="${project.build.directory}/generated-resources/test-process2"/>
-								
-								<checksum todir="${project.build.directory}/generated-resources/test-process2" algorithm="SHA" fileext=".sig">
-									<fileset dir="src/main/jbpm/test-process2" includes="*.xml"/>
+								<mkdir
+									dir="${project.build.directory}/generated-resources/test-process2" />
+
+								<checksum
+									todir="${project.build.directory}/generated-resources/test-process2"
+									algorithm="SHA" fileext=".sig">
+									<fileset dir="src/main/jbpm/test-process2" includes="*.xml" />
 								</checksum>
-								
-								<zip destfile="${project.build.directory}/generated-resources/test-process2.par">
-									<fileset dir="src/main/jbpm/test-process2"/>
-									<fileset dir="${project.build.directory}/generated-resources/test-process2"/>
+
+								<zip
+									destfile="${project.build.directory}/generated-resources/test-process2.par">
+									<fileset dir="src/main/jbpm/test-process2" />
+									<fileset
+										dir="${project.build.directory}/generated-resources/test-process2" />
 								</zip>
 							</tasks>
 						</configuration>
