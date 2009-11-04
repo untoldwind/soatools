@@ -1,0 +1,117 @@
+
+<project name="Deploy esb services" default="usage" basedir=".">
+  <description>
+		${ant.project.name}
+		${line.separator}
+	</description>
+	
+  <property environment="env" />
+  <property name="jboss.dir" value="${env.JBOSS_HOME}" />
+  <property name="jboss.conf" value="${env.JBOSS_CONF}" />
+  <property name="jboss.deploy.dir" value="${jboss.dir}/server/${jboss.conf}/deploy" />
+  <property name="jboss.farm.dir" value="${jboss.dir}/server/${jboss.conf}/farm"/>
+	
+  <path id="deployment-classpath">
+    <fileset dir="utils" includes="*.jar"/>
+    <fileset dir="jar" includes="*.jar"/>
+    <fileset dir="${jboss.deploy.dir}/jbossesb.sar/lib" includes="*.jar" />
+		<!-- jbossesb config -->
+    <fileset dir="${jboss.deploy.dir}/jbossesb.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/jbossesb.esb" />
+		<!-- jbpm config -->
+    <fileset dir="${jboss.deploy.dir}/jbpm.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/jbpm.esb" />
+    <pathelement location="${jboss.dir}/server/${jboss.conf}/lib/cglib.jar" />
+		<!-- smooks config -->
+    <fileset dir="${jboss.deploy.dir}/smooks.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/smooks.esb" />
+		<!-- jbrules config -->
+    <fileset dir="${jboss.deploy.dir}/jbrules.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/jbrules.esb" />
+		<!-- spring config -->
+    <fileset dir="${jboss.deploy.dir}/spring.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/spring.esb" />
+		<!-- soap config -->
+    <fileset dir="${jboss.deploy.dir}/soap.esb" includes="*.jar" />
+    <pathelement location="${jboss.deploy.dir}/soap.esb" />
+    <fileset dir="${jboss.dir}/server/${jboss.conf}/lib" includes="activation.jar, mail.jar, jboss-ejb3x.jar" />
+		<!-- general libs -->
+    <pathelement location="${jboss.dir}/lib/commons-logging.jar" />
+    <pathelement location="${jboss.dir}/lib/commons-codec.jar" />
+    <pathelement location="${jboss.dir}/lib/jboss-system.jar" />
+    <pathelement location="${jboss.dir}/lib/jboss-xml-binding.jar" />
+  </path>
+	
+  <target name="check">
+    <available file="${jboss.deploy.dir}/jbossesb.sar" property="jbossesb.sar.found" />
+  </target>
+	
+  <target name="check_prereq" depends="check" unless="jbossesb.sar.found">
+    <fail message="${jboss.deploy.dir} does not seem to be a jboss esb deploy directory" />
+  </target>
+	
+  <target name="deploy" depends="check_prereq" description="Deploy">
+    <delete dir="${jboss.deploy.dir}/soatools_test_queue"/>
+    <mkdir dir="${jboss.deploy.dir}/soatools_test_queue"/>
+    <copy todir="${jboss.deploy.dir}/soatools_test_queue">
+      <fileset dir="jbm" includes="*.xml" />
+    </copy>
+    <delete dir="${jboss.deploy.dir}/soatools_test_services" />
+    <mkdir dir="${jboss.deploy.dir}/soatools_test_services" />
+    <copy todir="${jboss.deploy.dir}/soatools_test_services">
+      <fileset dir="esb" includes="*.esb" />
+      <fileset dir="sar" includes="*.sar" />
+      <fileset dir="war" includes="*.war" />
+    </copy>
+  </target>
+	
+  <target name="deploy-exploded" depends="check_prereq" description="Deploy exploded">
+    <delete dir="${jboss.deploy.dir}/soatools_test_queue"/>
+    <mkdir dir="${jboss.deploy.dir}/soatools_test_queue"/>
+    <copy todir="${jboss.deploy.dir}/soatools_test_queue">
+      <fileset dir="jbm" includes="*.xml" />
+    </copy>
+		
+    <delete dir="${jboss.deploy.dir}/soatools_test_services" />
+    <mkdir dir="${jboss.deploy.dir}/soatools_test_services" />
+		
+    <antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
+      <param name="srcdir" value="esb" />
+      <param name="file" value="soatools-test-services-consumer.esb" />
+    </antcall>
+    <antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
+      <param name="srcdir" value="esb" />
+      <param name="file" value="soatools-test-services-jms-gateway.esb" />
+    </antcall>
+    <antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
+      <param name="srcdir" value="war" />
+      <param name="file" value="soatools-test-services-jbpm-processes.war" />
+    </antcall>
+  </target>
+	
+  <target name="deploy-cluster" depends="check_prereq" description="Deploy">
+    <copy todir="${jboss.farm.dir}">
+      <fileset dir="esb" includes="*.esb" />
+      <fileset dir="jar" includes="*.jar" />
+      <fileset dir="jbm" includes="*.xml" />
+      <fileset dir="sar" includes="*.sar" />
+      <fileset dir="war" includes="*.war" />
+    </copy>
+  </target>
+		
+  <target name="undeploy" depends="check_prereq" description="Undeploy">
+    <delete dir="${jboss.deploy.dir}/soatools_test_services" />
+  </target>
+	
+  <target name="unpack">
+    <mkdir dir="${destdir}/${file}" />
+    <unjar src="${srcdir}/${file}" dest="${destdir}/${file}" />
+  </target>
+	
+  <target name="usage">
+    <echo message="Use either: ant [deploy], [deploy-cluster], [deploy-exploded], [undeploy]"/>
+  </target>
+</project>
