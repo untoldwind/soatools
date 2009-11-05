@@ -48,6 +48,9 @@
       <includes>
       	<include>de.objectcode.soatools.test.director:soatools-test-director-integration:jar:tests</include>
       	<include>de.objectcode.soatools.test.director:soatools-test-director-load:jar:tests</include>
+      	<include>de.objectcode.soatools.test.services:soatools-test-services-consumer:jar:tests</include>
+      	<include>de.objectcode.soatools.test.services:soatools-test-services-jbpm-processes:jar:tests</include>
+      	<include>junit:junit:jar</include>
       </includes>
     </dependencySet>
   </dependencySets>
