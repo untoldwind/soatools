@@ -3,11 +3,19 @@ package de.objectcode.soatools.test.director.integration;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.jms.MapMessage;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSender;
+import javax.jms.QueueSession;
+import javax.jms.Session;
+import javax.naming.InitialContext;
+
 import org.dom4j.Document;
-import org.jboss.soa.esb.client.ServiceInvoker;
-import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
-import org.jboss.soa.esb.message.format.MessageType;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -17,17 +25,13 @@ import de.objectcode.soatools.test.service.consumer.CounterServiceJMXHelper;
 
 public class ConsumerTest {
 
-	private static ServiceInvoker consumerWithoutLogServiceInvoker;
-	private static ServiceInvoker consumerWithLogServiceInvoker;
+	private static JMSGatewayHelper jmsGatewayHelper;
 	private static CounterServiceJMXHelper counterService;
 	private static LogStoreJMXHelper logStoreService;
 
 	@BeforeClass
 	public static void init() throws Exception {
-		consumerWithoutLogServiceInvoker = new ServiceInvoker("SoatoolsTest",
-				"ConsumerWithoutLog");
-		consumerWithLogServiceInvoker = new ServiceInvoker("SoatoolsTest",
-				"ConsumerWithLog");
+		jmsGatewayHelper = new JMSGatewayHelper();
 
 		counterService = new CounterServiceJMXHelper();
 		logStoreService = new LogStoreJMXHelper();
@@ -41,13 +45,13 @@ public class ConsumerTest {
 	@Test
 	public void testWithoutLog() throws Exception {
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
-			final Message message = MessageFactory.getInstance().getMessage(
-					MessageType.JAVA_SERIALIZED);
+			Map<String, Object> body = new HashMap<String, Object>();
 
-			message.getBody().add("consumerTag", String.valueOf(i));
-			message.getBody().add(i);
+			body.put("consumerTag", String.valueOf(i));
+			body.put(JMSGatewayHelper.DEFAULT_LOCATION, i);
 
-			consumerWithoutLogServiceInvoker.deliverAsync(message);
+			jmsGatewayHelper.sendSingle("SoatoolsTest", "ConsumerWithoutLog",
+					body);
 		}
 
 		int counter = 0;
@@ -67,13 +71,13 @@ public class ConsumerTest {
 		long initialLogPosition = logStoreService.getCurrentPosition();
 
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
-			final Message message = MessageFactory.getInstance().getMessage(
-					MessageType.JAVA_SERIALIZED);
+			Map<String, Object> body = new HashMap<String, Object>();
 
-			message.getBody().add("consumerTag", String.valueOf(i));
-			message.getBody().add(i);
+			body.put("consumerTag", String.valueOf(i));
+			body.put(JMSGatewayHelper.DEFAULT_LOCATION, i);
 
-			consumerWithLogServiceInvoker.deliverAsync(message);
+			jmsGatewayHelper
+					.sendSingle("SoatoolsTest", "ConsumerWithLog", body);
 		}
 		int counter = 0;
 
@@ -108,12 +112,32 @@ public class ConsumerTest {
 
 	public static void main(String[] args) {
 		try {
-			System.setProperty("javax.xml.registry.ConnectionFactoryClass",
-					"org.apache.ws.scout.registry.ConnectionFactoryImpl");
+			InitialContext ctx = new InitialContext();
 
-			ConsumerTest test = new ConsumerTest();
+			QueueConnectionFactory qcf = (QueueConnectionFactory) ctx
+					.lookup("ConnectionFactory");
+			Queue queue = (Queue) ctx.lookup("queue/soatool_test_jms_gateway");
 
-			test.testWithoutLog();
+			QueueConnection connection = qcf.createQueueConnection();
+
+			connection.start();
+
+			QueueSession session = connection.createQueueSession(false,
+					Session.AUTO_ACKNOWLEDGE);
+
+			QueueSender sender = session.createSender(queue);
+
+			MapMessage message = session.createMapMessage();
+			message.setString("bla", "blib");
+			message.setStringProperty("destServiceCategory", "SoatoolsTest");
+			message.setStringProperty("destServiceName", "ConsumerWithoutLog");
+
+			sender.send(message);
+
+			session.close();
+			connection.close();
+
+			System.out.println(">>" + queue);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

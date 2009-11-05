@@ -20,15 +20,21 @@
 		<service category="SoatoolsTest" name="JMSGateway"
 			description="JMS gateway">
 			<listeners>
-				<jms-listener name="JMSGatewayListenerGW"
-					busidref="soatool_test_jms_gateway" maxThreads="20" is-gateway="true"/>
-				<jms-listener name="JMSGatewayListener"
-					busidref="soatool_test_jms_gateway_esb" maxThreads="20"/>
+				<jms-listener name="JMSGatewayListenerGW" busidref="soatool_test_jms_gateway"
+					maxThreads="20" is-gateway="true">
+					<property name="composer-class"
+						value="de.objectcode.soatools.test.service.jmsgateway.PackageMapMessageJmsContents" />
+				</jms-listener>
+				<jms-listener name="JMSGatewayListener" busidref="soatool_test_jms_gateway_esb"
+					maxThreads="20" />
 			</listeners>
 			<actions mep="OneWay">
 				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
 					<property name="printfull" value="true" />
 				</action>
+
+				<action name="forward"
+					class="de.objectcode.soatools.test.service.jmsgateway.ForwardMessage" />
 			</actions>
 		</service>
 	</services>

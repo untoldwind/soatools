@@ -2,10 +2,9 @@ package de.objectcode.soatools.test.director.integration;
 
 import static org.junit.Assert.assertEquals;
 
-import org.jboss.soa.esb.client.ServiceInvoker;
-import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
-import org.jboss.soa.esb.message.format.MessageType;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -14,14 +13,13 @@ import de.objectcode.soatools.test.service.consumer.CounterServiceJMXHelper;
 import de.objectcode.soatools.test.service.jbpm.JbpmProcessCounterServiceJMXHelper;
 
 public class JbpmProcessesTest {
-	private static ServiceInvoker jbpmProcessesStartService;
+	private static JMSGatewayHelper jmsGatewayHelper;
 	private static CounterServiceJMXHelper counterService;
 	private static JbpmProcessCounterServiceJMXHelper jbpmProcessCounterService;
 
 	@BeforeClass
 	public static void init() throws Exception {
-		jbpmProcessesStartService = new ServiceInvoker("SoatoolsTest",
-				"JBPMProcessesStart");
+		jmsGatewayHelper = new JMSGatewayHelper();
 
 		counterService = new CounterServiceJMXHelper();
 		jbpmProcessCounterService = new JbpmProcessCounterServiceJMXHelper();
@@ -41,14 +39,14 @@ public class JbpmProcessesTest {
 				.countFinishedProcessInstances("test-process1"));
 
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
-			final Message message = MessageFactory.getInstance().getMessage(
-					MessageType.JAVA_SERIALIZED);
+			Map<String, Object> body = new HashMap<String, Object>();
 
-			message.getBody().add("jbpmProcessDefName", "test-process1");
-			message.getBody().add("consumerTag", String.valueOf(i));
-			message.getBody().add("jbpmProcessKey", String.valueOf(i));
+			body.put("jbpmProcessDefName", "test-process1");
+			body.put("consumerTag", String.valueOf(i));
+			body.put("jbpmProcessKey", String.valueOf(i));
 
-			jbpmProcessesStartService.deliverAsync(message);
+			jmsGatewayHelper.sendSingle("SoatoolsTest", "JBPMProcessesStart",
+					body);
 		}
 		int counter = 0;
 
@@ -74,14 +72,14 @@ public class JbpmProcessesTest {
 				.countFinishedProcessInstances("test-process2"));
 
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
-			final Message message = MessageFactory.getInstance().getMessage(
-					MessageType.JAVA_SERIALIZED);
+			Map<String, Object> body = new HashMap<String, Object>();
 
-			message.getBody().add("jbpmProcessDefName", "test-process2");
-			message.getBody().add("consumerTag", String.valueOf(i));
-			message.getBody().add("jbpmProcessKey", String.valueOf(i));
+			body.put("jbpmProcessDefName", "test-process2");
+			body.put("consumerTag", String.valueOf(i));
+			body.put("jbpmProcessKey", String.valueOf(i));
 
-			jbpmProcessesStartService.deliverAsync(message);
+			jmsGatewayHelper.sendSingle("SoatoolsTest", "JBPMProcessesStart",
+					body);
 		}
 		int counter = 0;
 

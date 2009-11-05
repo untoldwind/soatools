@@ -15,7 +15,7 @@
 			<groupId>org.jboss.soa.esb</groupId>
 			<artifactId>jbossesb-rosetta</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jboss</groupId>
 			<artifactId>jboss-jmx</artifactId>
@@ -30,10 +30,20 @@
 			<groupId>jboss</groupId>
 			<artifactId>jbosssx</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>jboss</groupId>
 			<artifactId>jboss-jmx-rmi-connector-client</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>javax.jms</groupId>
+			<artifactId>jms</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>commons-logging</groupId>
+			<artifactId>commons-logging</artifactId>
 		</dependency>
 	</dependencies>
 	<build>
