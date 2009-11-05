@@ -40,7 +40,7 @@ public class ConsumerTest {
 
 	@Test
 	public void testWithoutLog() throws Exception {
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			final Message message = MessageFactory.getInstance().getMessage(
 					MessageType.JAVA_SERIALIZED);
 
@@ -52,19 +52,21 @@ public class ConsumerTest {
 
 		int counter = 0;
 
-		while (counter < 20 && counterService.getInvokationCounter() != 100) {
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() != IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(100, counterService.getInvokationCounter());
+		assertEquals(IConstants.MESSAGE_COUNT, counterService
+				.getInvokationCounter());
 	}
 
 	@Test
 	public void testWithLog() throws Exception {
 		long initialLogPosition = logStoreService.getCurrentPosition();
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			final Message message = MessageFactory.getInstance().getMessage(
 					MessageType.JAVA_SERIALIZED);
 
@@ -75,24 +77,27 @@ public class ConsumerTest {
 		}
 		int counter = 0;
 
-		while (counter < 20 && counterService.getInvokationCounter() != 100) {
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() != IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(100, counterService.getInvokationCounter());
+		assertEquals(IConstants.MESSAGE_COUNT, counterService
+				.getInvokationCounter());
 
 		counter = 0;
-		while (counter < 20
-				&& logStoreService.getCurrentPosition() != initialLogPosition + 100) {
+		while (counter < IConstants.WAIT_COUNT
+				&& logStoreService.getCurrentPosition() != initialLogPosition
+						+ IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(initialLogPosition + 100, logStoreService
-				.getCurrentPosition());
+		assertEquals(initialLogPosition + IConstants.MESSAGE_COUNT,
+				logStoreService.getCurrentPosition());
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			Document logMessage = logStoreService.getLogMessagesByTag(
 					"consumerTag", String.valueOf(i), initialLogPosition);
 

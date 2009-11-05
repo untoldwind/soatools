@@ -40,7 +40,7 @@ public class JbpmProcessesTest {
 		assertEquals(processCount, jbpmProcessCounterService
 				.countFinishedProcessInstances("test-process1"));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			final Message message = MessageFactory.getInstance().getMessage(
 					MessageType.JAVA_SERIALIZED);
 
@@ -52,14 +52,17 @@ public class JbpmProcessesTest {
 		}
 		int counter = 0;
 
-		while (counter < 40 && counterService.getInvokationCounter() != 100) {
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() != IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(100, counterService.getInvokationCounter());
-		assertEquals(processCount + 100, jbpmProcessCounterService
-				.countProcessInstances("test-process1"));
+		assertEquals(IConstants.MESSAGE_COUNT, counterService
+				.getInvokationCounter());
+		assertEquals(processCount + IConstants.MESSAGE_COUNT,
+				jbpmProcessCounterService
+						.countProcessInstances("test-process1"));
 	}
 
 	@Test
@@ -70,7 +73,7 @@ public class JbpmProcessesTest {
 		assertEquals(processCount, jbpmProcessCounterService
 				.countFinishedProcessInstances("test-process2"));
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			final Message message = MessageFactory.getInstance().getMessage(
 					MessageType.JAVA_SERIALIZED);
 
@@ -82,13 +85,15 @@ public class JbpmProcessesTest {
 		}
 		int counter = 0;
 
-		while (counter < 40 && counterService.getInvokationCounter() != 200) {
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() != 200) {
 			Thread.sleep(500);
 			counter++;
 		}
 
 		assertEquals(200, counterService.getInvokationCounter());
-		assertEquals(processCount + 100, jbpmProcessCounterService
-				.countProcessInstances("test-process2"));
+		assertEquals(processCount + IConstants.MESSAGE_COUNT,
+				jbpmProcessCounterService
+						.countProcessInstances("test-process2"));
 	}
 }
