@@ -121,6 +121,7 @@
 				<artifactId>maven-jar-plugin</artifactId>
 				<executions>
 					<execution>
+						<id>compile-jar</id>
 						<phase>package</phase>
 						<goals>
 							<goal>jar</goal>
@@ -128,6 +129,13 @@
 						<configuration>
 							<classifier>compile</classifier>
 						</configuration>
+					</execution>
+					<execution>
+						<id>test-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>test-jar</goal>
+						</goals>
 					</execution>
 				</executions>
 			</plugin>

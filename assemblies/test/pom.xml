@@ -66,6 +66,22 @@
 			<classifier>jbm-service</classifier>			
 			<type>jar</type>
 		</dependency>
+
+		<dependency>
+			<groupId>de.objectcode.soatools.test.director</groupId>
+			<artifactId>soatools-test-director-integration</artifactId>
+			<version>${pom.version}</version>
+			<classifier>tests</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>de.objectcode.soatools.test.director</groupId>
+			<artifactId>soatools-test-director-load</artifactId>
+			<version>${pom.version}</version>
+			<classifier>tests</classifier>
+			<type>jar</type>
+		</dependency>
 	</dependencies>
 	<build>
 		<plugins>

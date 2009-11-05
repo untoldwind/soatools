@@ -42,5 +42,13 @@
         <include>de.objectcode.soatools.test.services:soatools-test-services-webservice-in:war</include>
       </includes>
     </dependencySet>
+    <dependencySet>
+      <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
+      <outputDirectory>/jar</outputDirectory>
+      <includes>
+      	<include>de.objectcode.soatools.test.director:soatools-test-director-integration:jar:tests</include>
+      	<include>de.objectcode.soatools.test.director:soatools-test-director-load:jar:tests</include>
+      </includes>
+    </dependencySet>
   </dependencySets>
 </assembly>
