@@ -6,7 +6,7 @@
 
 		<property name="org.jboss.esb.server.server" location="${org.jboss.esb.server.home}/server/${org.jboss.esb.server.config}" />
 		<property name="org.jboss.esb.server.deploy.dir" location="${org.jboss.esb.server.server}/deploy" />
-                <property name="org.jboss.esb.server.deployer.dir" location="${org.jboss.esb.server.server}/deployers" />
+		<property name="org.jboss.esb.server.deployer.dir" location="${org.jboss.esb.server.server}/deployers" />
 
 		<path id="deployment-classpath">
 			<fileset dir="${org.jboss.esb.server.home}/lib/endorsed" includes="*.jar" />
@@ -88,7 +88,9 @@
 			<sysproperty key="java.endorsed.dirs" value="${org.jboss.esb.server.home}/lib/endorsed" />
 			<sysproperty key="javax.xml.registry.ConnectionFactoryClass" value="org.apache.ws.scout.registry.ConnectionFactoryImpl" />
 
-                        <test name="de.objectcode.soatools.test.director.integration.WebserviceInTest"/>
+			<test name="de.objectcode.soatools.test.director.integration.WebserviceInTest" />
+			<test name="de.objectcode.soatools.test.director.integration.ConsumerTest" />
+			<test name="de.objectcode.soatools.test.director.integration.JbpmProcessesTest"/>
 		</junit>
 		<!--java fork="yes" classname="de.objectcode.soatools.test.directory.integration.ConsumerTest" failonerror="true">
 			<classpath refid="exec-classpath" />
