@@ -6,15 +6,6 @@ import static org.junit.Assert.assertNotNull;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.jms.MapMessage;
-import javax.jms.Queue;
-import javax.jms.QueueConnection;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.QueueSender;
-import javax.jms.QueueSession;
-import javax.jms.Session;
-import javax.naming.InitialContext;
-
 import org.dom4j.Document;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -92,14 +83,13 @@ public class ConsumerTest {
 
 		counter = 0;
 		while (counter < IConstants.WAIT_COUNT
-				&& logStoreService.getCurrentPosition() != initialLogPosition
-						+ IConstants.MESSAGE_COUNT) {
+				&& logStoreService.countMessages(initialLogPosition) < IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(initialLogPosition + IConstants.MESSAGE_COUNT,
-				logStoreService.getCurrentPosition());
+		assertEquals(IConstants.MESSAGE_COUNT, logStoreService
+				.countMessages(initialLogPosition));
 
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			Document logMessage = logStoreService.getLogMessagesByTag(
@@ -108,39 +98,5 @@ public class ConsumerTest {
 			assertNotNull(logMessage);
 			assertEquals(1, logMessage.getRootElement().elements().size());
 		}
-	}
-
-	public static void main(String[] args) {
-		try {
-			InitialContext ctx = new InitialContext();
-
-			QueueConnectionFactory qcf = (QueueConnectionFactory) ctx
-					.lookup("ConnectionFactory");
-			Queue queue = (Queue) ctx.lookup("queue/soatool_test_jms_gateway");
-
-			QueueConnection connection = qcf.createQueueConnection();
-
-			connection.start();
-
-			QueueSession session = connection.createQueueSession(false,
-					Session.AUTO_ACKNOWLEDGE);
-
-			QueueSender sender = session.createSender(queue);
-
-			MapMessage message = session.createMapMessage();
-			message.setString("bla", "blib");
-			message.setStringProperty("destServiceCategory", "SoatoolsTest");
-			message.setStringProperty("destServiceName", "ConsumerWithoutLog");
-
-			sender.send(message);
-
-			session.close();
-			connection.close();
-
-			System.out.println(">>" + queue);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
 	}
 }

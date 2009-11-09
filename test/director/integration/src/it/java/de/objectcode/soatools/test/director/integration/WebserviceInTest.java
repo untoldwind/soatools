@@ -106,14 +106,13 @@ public class WebserviceInTest {
 
 		counter = 0;
 		while (counter < IConstants.WAIT_COUNT
-				&& logStoreService.getCurrentPosition() != initialLogPosition
-						+ IConstants.MESSAGE_COUNT) {
+				&& logStoreService.countMessages(initialLogPosition) < IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
 
-		assertEquals(initialLogPosition + IConstants.MESSAGE_COUNT,
-				logStoreService.getCurrentPosition());
+		assertEquals(IConstants.MESSAGE_COUNT, logStoreService
+				.countMessages(initialLogPosition));
 
 		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
 			Document logMessage = logStoreService.getLogMessagesByTag(
