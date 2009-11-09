@@ -15,6 +15,8 @@ import java.util.Map;
 
 import javax.naming.InitialContext;
 import javax.sql.DataSource;
+import javax.transaction.Status;
+import javax.transaction.UserTransaction;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
@@ -56,56 +58,13 @@ import de.objectcode.soatools.logstore.persistent.LogTag;
 import de.objectcode.soatools.mfm.api.normalize.NormalizedData;
 
 public class LogStoreService implements LogStoreServiceMBean {
-	private final static class EncodedStringWriter extends Writer {
-		StringBuffer buffer = new StringBuffer();
-
-		@Override
-		public void close() throws IOException {
-		}
-
-		@Override
-		public void flush() throws IOException {
-		}
-
-		/**
-		 * {@inheritDoc}
-		 */
-		@Override
-		public String toString() {
-			return this.buffer.toString();
-		}
-
-		@Override
-		public void write(final char[] cbuf, final int off, final int len)
-				throws IOException {
-			for (int i = 0; i < len; i++) {
-				final char c = cbuf[i + off];
-
-				switch (c) {
-				case '&':
-					this.buffer.append("&amp;");
-					break;
-				case '<':
-					this.buffer.append("&lt;");
-					break;
-				case '>':
-					this.buffer.append("&gt;");
-					break;
-				case '\"':
-					this.buffer.append("&quot;");
-					break;
-				default:
-					this.buffer.append(c);
-				}
-			}
-		}
-	}
-
 	private final static Log LOG = LogFactory.getLog(LogStoreService.class);
 
 	String dataSourceJndiName = "java:/DefaultDS";
 
 	SessionFactory sessionFactory;
+
+	UserTransaction userTransaction;
 
 	private Transformer transformer;
 
@@ -352,6 +311,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			session = this.sessionFactory.openSession();
 
 			final Criteria criteria = session.createCriteria(LogMessage.class);
@@ -365,6 +325,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -395,6 +360,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			session = this.sessionFactory.openSession();
 
 			final Criteria criteria = session.createCriteria(LogMessage.class);
@@ -420,6 +386,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -463,6 +434,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			final Document document = DocumentFactory.getInstance()
 					.createDocument();
 			final Element root = document.addElement("log-messages");
@@ -495,6 +467,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -512,6 +489,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			session = this.sessionFactory.openSession();
 
 			final Criteria criteria = session.createCriteria(LogTag.class);
@@ -539,6 +517,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -555,6 +538,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			final Document document = DocumentFactory.getInstance()
 					.createDocument();
 			final Element root = document.addElement("log-messages");
@@ -589,6 +573,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -603,6 +592,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 		Session session = null;
 
 		try {
+			userTransaction.begin();
 			session = this.sessionFactory.openSession();
 
 			final Criteria criteria = session.createCriteria(LogMessage.class);
@@ -614,6 +604,11 @@ public class LogStoreService implements LogStoreServiceMBean {
 			LOG.error("Failed to store message", e);
 			throw new RuntimeException(e);
 		} finally {
+			try {
+				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
+					userTransaction.rollback();
+			} catch (Exception e) {
+			}
 			if (session != null) {
 				session.close();
 			}
@@ -627,6 +622,8 @@ public class LogStoreService implements LogStoreServiceMBean {
 		final InitialContext ctx = new InitialContext();
 
 		final DataSource ds = (DataSource) ctx.lookup(this.dataSourceJndiName);
+
+		userTransaction = (UserTransaction) ctx.lookup("UserTransaction");
 
 		final Connection connection = ds.getConnection();
 		final DatabaseMetaData metaData = connection.getMetaData();
@@ -670,6 +667,51 @@ public class LogStoreService implements LogStoreServiceMBean {
 	 */
 	public void stop() {
 		this.sessionFactory = null;
+	}
+
+	private final static class EncodedStringWriter extends Writer {
+		StringBuffer buffer = new StringBuffer();
+
+		@Override
+		public void close() throws IOException {
+		}
+
+		@Override
+		public void flush() throws IOException {
+		}
+
+		/**
+		 * {@inheritDoc}
+		 */
+		@Override
+		public String toString() {
+			return this.buffer.toString();
+		}
+
+		@Override
+		public void write(final char[] cbuf, final int off, final int len)
+				throws IOException {
+			for (int i = 0; i < len; i++) {
+				final char c = cbuf[i + off];
+
+				switch (c) {
+				case '&':
+					this.buffer.append("&amp;");
+					break;
+				case '<':
+					this.buffer.append("&lt;");
+					break;
+				case '>':
+					this.buffer.append("&gt;");
+					break;
+				case '\"':
+					this.buffer.append("&quot;");
+					break;
+				default:
+					this.buffer.append(c);
+				}
+			}
+		}
 	}
 
 }
