@@ -60,6 +60,15 @@ public class LogStoreJMXHelper {
 		return reader.read(new StringReader(result.toString()));
 	}
 
+	public int countMessages(long position) throws Exception {
+		final String[] sig = { "long" };
+		final Object[] opArgs = { position };
+		final Object result = this.server.invoke(this.logStoreName,
+				"countMessages", opArgs, sig);
+
+		return (Integer) result;
+	}
+
 	public void waitForCompletion() throws Exception {
 		waitForCompletion(Long.MAX_VALUE);
 	}

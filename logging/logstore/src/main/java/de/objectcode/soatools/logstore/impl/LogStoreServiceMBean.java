@@ -1,24 +1,25 @@
 package de.objectcode.soatools.logstore.impl;
 
-public interface LogStoreServiceMBean
-{
-  long getCurrentPosition();
+public interface LogStoreServiceMBean {
+	long getCurrentPosition();
 
-  String getDataSourceJndiName();
+	String getDataSourceJndiName();
 
-  void setDataSourceJndiName(String dataSourceJndiName);
+	void setDataSourceJndiName(String dataSourceJndiName);
 
-  String showMessagesByProcessInstanceId(long processInstanceId);
+	String showMessagesByProcessInstanceId(long processInstanceId);
 
-  String showMessagesByProcessInstanceIdAsHtml(long processInstanceId);
-  
-  String showMessagesByProcessInstanceIdAsXml(long processInstanceId);
+	String showMessagesByProcessInstanceIdAsHtml(long processInstanceId);
 
-  String showMessagesByTag(String tag, String value, long position);
+	String showMessagesByProcessInstanceIdAsXml(long processInstanceId);
 
-  String showMessagesByTagXML(String tag, String value, long position);
+	String showMessagesByTag(String tag, String value, long position);
 
-  void start() throws Exception;
+	String showMessagesByTagXML(String tag, String value, long position);
 
-  void stop();
+	int countMessages(long position);
+
+	void start() throws Exception;
+
+	void stop();
 }
