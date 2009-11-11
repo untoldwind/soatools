@@ -90,6 +90,16 @@ public class WebserviceInTest {
 			consumerTagBody.setValue(String.valueOf(i));
 			message.getBody().add(consumerTagBody);
 
+			KeyValue testCaseNameBody = new KeyValue();
+			testCaseNameBody.setKey("testCaseName");
+			testCaseNameBody.setValue("WebserviceInTest.testWithLog");
+			message.getBody().add(testCaseNameBody);
+
+			KeyValue testCaseCountBody = new KeyValue();
+			testCaseCountBody.setKey("testCaseCount");
+			testCaseCountBody.setValue(String.valueOf(i));
+			message.getBody().add(testCaseCountBody);
+
 			webserviceIn.routeMessage("SoatoolsTest", "ConsumerWithLog",
 					message);
 		}
@@ -121,5 +131,12 @@ public class WebserviceInTest {
 			assertNotNull(logMessage);
 			assertEquals(1, logMessage.getRootElement().elements().size());
 		}
+
+		Document allLogMessages = logStoreService.getLogMessagesByTag(
+				"testCaseName", "WebserviceInTest.testWithLog",
+				initialLogPosition);
+		assertNotNull(allLogMessages);
+		assertEquals(IConstants.MESSAGE_COUNT, allLogMessages.getRootElement()
+				.elements().size());
 	}
 }

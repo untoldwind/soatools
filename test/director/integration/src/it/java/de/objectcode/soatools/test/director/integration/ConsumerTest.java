@@ -66,6 +66,8 @@ public class ConsumerTest {
 
 			body.put("consumerTag", String.valueOf(i));
 			body.put(JMSGatewayHelper.DEFAULT_LOCATION, i);
+			body.put("testCaseName", "ConsumerTest.testWithLog");
+			body.put("testCaseCount", i);
 
 			jmsGatewayHelper
 					.sendSingle("SoatoolsTest", "ConsumerWithLog", body);
@@ -98,5 +100,12 @@ public class ConsumerTest {
 			assertNotNull(logMessage);
 			assertEquals(1, logMessage.getRootElement().elements().size());
 		}
+
+		Document allLogMessages = logStoreService.getLogMessagesByTag(
+				"testCaseName", "ConsumerTest.testWithLog", initialLogPosition);
+		assertNotNull(allLogMessages);
+		assertEquals(IConstants.MESSAGE_COUNT, allLogMessages.getRootElement()
+				.elements().size());
+
 	}
 }
