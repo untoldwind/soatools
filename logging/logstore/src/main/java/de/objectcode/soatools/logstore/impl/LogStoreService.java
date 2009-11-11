@@ -325,13 +325,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 		return 0;
@@ -386,13 +386,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 		return writer.toString();
@@ -467,13 +467,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 		return writer.toString();
@@ -517,13 +517,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 		return writer.toString();
@@ -573,13 +573,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 		} catch (final Exception e) {
 			LOG.error("Failed to store message", e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 		return writer.toString();
@@ -604,13 +604,13 @@ public class LogStoreService implements LogStoreServiceMBean {
 			LOG.error("Failed to store message", e);
 			throw new RuntimeException(e);
 		} finally {
+			if (session != null) {
+				session.close();
+			}
 			try {
 				if (userTransaction.getStatus() == Status.STATUS_ACTIVE)
 					userTransaction.rollback();
 			} catch (Exception e) {
-			}
-			if (session != null) {
-				session.close();
 			}
 		}
 	}

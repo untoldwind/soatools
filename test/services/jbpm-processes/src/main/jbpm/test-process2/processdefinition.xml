@@ -19,6 +19,8 @@
 			</esbCategoryName>
 			<bpmToEsbVars>
 				<mapping bpm="consumerTag" esb="consumerTag"></mapping>
+				<mapping bpm="testCaseName" esb="testCaseName"></mapping>
+				<mapping bpm="testCaseCount" esb="testCaseCount"></mapping>
 			</bpmToEsbVars>
 		</action>
 		<transition to="esb2"></transition>
@@ -35,6 +37,8 @@
 			</esbCategoryName>
 			<bpmToEsbVars>
 				<mapping bpm="consumerTag" esb="consumerTag"></mapping>
+				<mapping bpm="testCaseName" esb="testCaseName"></mapping>
+				<mapping bpm="testCaseCount" esb="testCaseCount"></mapping>
 			</bpmToEsbVars>
 		</action>
 		<transition to="end-state1"></transition>

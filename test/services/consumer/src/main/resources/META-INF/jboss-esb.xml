@@ -48,6 +48,8 @@
 					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
 					<property name="tags">
 						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
 					</property>
 				</action>
 
@@ -62,6 +64,8 @@
 					class="de.objectcode.soatools.logstore.actions.LogWiretap">
 					<property name="tags">
 						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
 					</property>
 				</action>
 			</actions>
@@ -77,6 +81,8 @@
 					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
 					<property name="tags">
 						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
 					</property>
 				</action>
 				
@@ -91,6 +97,8 @@
 					class="de.objectcode.soatools.logstore.actions.LogWiretap">
 					<property name="tags">
 						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
 					</property>
 				</action>
 			</actions>

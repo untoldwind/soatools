@@ -44,6 +44,8 @@ public class JbpmProcessesTest {
 			body.put("jbpmProcessDefName", "test-process1");
 			body.put("consumerTag", String.valueOf(i));
 			body.put("jbpmProcessKey", String.valueOf(i));
+			body.put("testCaseName", "testStartTestProcess1");
+			body.put("testCaseCount", i);
 
 			jmsGatewayHelper.sendSingle("SoatoolsTest", "JBPMProcessesStart",
 					body);
@@ -77,6 +79,8 @@ public class JbpmProcessesTest {
 			body.put("jbpmProcessDefName", "test-process2");
 			body.put("consumerTag", String.valueOf(i));
 			body.put("jbpmProcessKey", String.valueOf(i));
+			body.put("testCaseName", "testStartTestProcess2");
+			body.put("testCaseCount", i);
 
 			jmsGatewayHelper.sendSingle("SoatoolsTest", "JBPMProcessesStart",
 					body);

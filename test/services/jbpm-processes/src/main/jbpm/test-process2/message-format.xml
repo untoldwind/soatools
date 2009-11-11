@@ -4,5 +4,11 @@
 		<body-component name="consumerTag" required="false">
 			<string />
 		</body-component>
+		<body-component name="testCaseName" required="false">
+			<string />
+		</body-component>
+		<body-component name="testCaseCount" required="false">
+			<integer />
+		</body-component>
 	</message-format>
 </message-format-model>
