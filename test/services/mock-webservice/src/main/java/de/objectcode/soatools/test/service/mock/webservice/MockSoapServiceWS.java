@@ -11,5 +11,8 @@ public class MockSoapServiceWS {
 			@WebParam(name = "testCaseName") final String testCaseName,
 			@WebParam(name = "testCaseCount") final int testCaseCount,
 			@WebParam(name = "data") final String data) {
+
+		MockState.INSTANCE.addCall("simpleCallOneWay", testCaseName,
+				testCaseCount, data);
 	}
 }

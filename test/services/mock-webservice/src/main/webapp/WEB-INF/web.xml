@@ -9,8 +9,19 @@
         <servlet-class>de.objectcode.soatools.test.service.mock.webservice.MockSoapServiceWS</servlet-class>
     </servlet>
 
+    <servlet>
+        <servlet-name>MockWebServiceControlWS</servlet-name>
+        <servlet-class>de.objectcode.soatools.test.service.mock.webservice.MockWebServiceControlWS</servlet-class>
+    </servlet>
+
     <servlet-mapping>
         <servlet-name>MockSoapServiceWS</servlet-name>
         <url-pattern>/MockSoapServiceWS</url-pattern>
     </servlet-mapping>
+
+    <servlet-mapping>
+        <servlet-name>MockWebServiceControlWS</servlet-name>
+        <url-pattern>/MockWebServiceControlWS</url-pattern>
+    </servlet-mapping>
+
 </web-app>
