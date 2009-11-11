@@ -6,12 +6,17 @@ import static org.junit.Assert.assertNotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.xml.ws.BindingProvider;
+
 import org.dom4j.Document;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.objectcode.soatools.logstore.test.LogStoreJMXHelper;
+import de.objectcode.soatools.test.mock.webservice.client.CallList;
+import de.objectcode.soatools.test.mock.webservice.client.MockWebServiceControlWS;
+import de.objectcode.soatools.test.mock.webservice.client.MockWebServiceControlWSService;
 import de.objectcode.soatools.test.service.consumer.CounterServiceJMXHelper;
 import de.objectcode.soatools.test.service.jbpm.JbpmProcessCounterServiceJMXHelper;
 
@@ -21,6 +26,8 @@ public class JbpmProcessesTest {
 	private static JbpmProcessCounterServiceJMXHelper jbpmProcessCounterService;
 	private static LogStoreJMXHelper logStoreService;
 
+	private static MockWebServiceControlWS mockWebServiceControl;
+
 	@BeforeClass
 	public static void init() throws Exception {
 		jmsGatewayHelper = new JMSGatewayHelper();
@@ -28,6 +35,14 @@ public class JbpmProcessesTest {
 		counterService = new CounterServiceJMXHelper();
 		jbpmProcessCounterService = new JbpmProcessCounterServiceJMXHelper();
 		logStoreService = new LogStoreJMXHelper();
+
+		MockWebServiceControlWSService service = new MockWebServiceControlWSService();
+
+		mockWebServiceControl = service.getMockWebServiceControlWSPort();
+
+		final BindingProvider bp = (BindingProvider) mockWebServiceControl;
+		bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY,
+				"http://127.0.0.1:8080/test-mock/MockWebServiceControlWS");
 	}
 
 	@Before
@@ -132,6 +147,8 @@ public class JbpmProcessesTest {
 
 	@Test
 	public void testStartTestProcess3() throws Exception {
+		mockWebServiceControl.clearCalls();
+
 		long initialLogPosition = logStoreService.getCurrentPosition();
 
 		int processCount = jbpmProcessCounterService
@@ -179,5 +196,11 @@ public class JbpmProcessesTest {
 		assertNotNull(allLogMessages);
 		assertEquals(IConstants.MESSAGE_COUNT, allLogMessages.getRootElement()
 				.elements().size());
+
+		CallList callList = mockWebServiceControl.getCalls();
+
+		assertNotNull(callList);
+		assertNotNull(callList.getCalls());
+		assertEquals(IConstants.MESSAGE_COUNT, callList.getCalls().size());
 	}
 }

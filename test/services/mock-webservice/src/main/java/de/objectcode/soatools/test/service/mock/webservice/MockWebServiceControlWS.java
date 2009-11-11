@@ -4,7 +4,7 @@ import javax.jws.WebResult;
 import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 
-@WebService(name = "MockSoapServiceWS", targetNamespace = "http://objectcode.de/test/mock/webservice")
+@WebService(name = "MockWebServiceControlWS", targetNamespace = "http://objectcode.de/test/mock/webservice")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 public class MockWebServiceControlWS {
 	@WebResult(name = "calls")

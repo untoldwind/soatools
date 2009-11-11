@@ -1,0 +1,61 @@
+<definitions name='MockWebServiceControlWSService' targetNamespace='http://objectcode.de/test/mock/webservice' xmlns='http://schemas.xmlsoap.org/wsdl/' xmlns:soap='http://schemas.xmlsoap.org/wsdl/soap/' xmlns:tns='http://objectcode.de/test/mock/webservice' xmlns:xsd='http://www.w3.org/2001/XMLSchema'>
+ <types>
+  <xs:schema targetNamespace='http://objectcode.de/test/mock/webservice' version='1.0' xmlns:tns='http://objectcode.de/test/mock/webservice' xmlns:xs='http://www.w3.org/2001/XMLSchema'>
+   <xs:complexType name='callList'>
+    <xs:sequence>
+     <xs:element maxOccurs='unbounded' minOccurs='0' name='calls' nillable='true' type='tns:call'/>
+    </xs:sequence>
+   </xs:complexType>
+   <xs:complexType name='call'>
+    <xs:sequence>
+     <xs:element minOccurs='0' name='data' type='xs:string'/>
+     <xs:element minOccurs='0' name='methodName' type='xs:string'/>
+     <xs:element name='testCaseCount' type='xs:int'/>
+     <xs:element minOccurs='0' name='testCaseName' type='xs:string'/>
+    </xs:sequence>
+   </xs:complexType>
+  </xs:schema>
+ </types>
+ <message name='MockWebServiceControlWS_clearCalls'></message>
+ <message name='MockWebServiceControlWS_getCallsResponse'>
+  <part name='calls' type='tns:callList'></part>
+ </message>
+ <message name='MockWebServiceControlWS_getCalls'></message>
+ <message name='MockWebServiceControlWS_clearCallsResponse'></message>
+ <portType name='MockWebServiceControlWS'>
+  <operation name='clearCalls'>
+   <input message='tns:MockWebServiceControlWS_clearCalls'></input>
+   <output message='tns:MockWebServiceControlWS_clearCallsResponse'></output>
+  </operation>
+  <operation name='getCalls'>
+   <input message='tns:MockWebServiceControlWS_getCalls'></input>
+   <output message='tns:MockWebServiceControlWS_getCallsResponse'></output>
+  </operation>
+ </portType>
+ <binding name='MockWebServiceControlWSBinding' type='tns:MockWebServiceControlWS'>
+  <soap:binding style='rpc' transport='http://schemas.xmlsoap.org/soap/http'/>
+  <operation name='clearCalls'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://objectcode.de/test/mock/webservice' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://objectcode.de/test/mock/webservice' use='literal'/>
+   </output>
+  </operation>
+  <operation name='getCalls'>
+   <soap:operation soapAction=''/>
+   <input>
+    <soap:body namespace='http://objectcode.de/test/mock/webservice' use='literal'/>
+   </input>
+   <output>
+    <soap:body namespace='http://objectcode.de/test/mock/webservice' use='literal'/>
+   </output>
+  </operation>
+ </binding>
+ <service name='MockWebServiceControlWSService'>
+  <port binding='tns:MockWebServiceControlWSBinding' name='MockWebServiceControlWSPort'>
+   <soap:address location='http://127.0.0.1:8080/test-mock/MockWebServiceControlWS'/>
+  </port>
+ </service>
+</definitions>

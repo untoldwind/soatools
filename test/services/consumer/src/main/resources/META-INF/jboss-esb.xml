@@ -57,7 +57,6 @@
 					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
 
 				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
-					<property name="printfull" value="true" />
 				</action>
 
 				<action name="log"
@@ -87,7 +86,6 @@
 				</action>
 				
 				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
-					<property name="printfull" value="true" />
 				</action>
 				
 				<action name="count"

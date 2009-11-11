@@ -87,8 +87,8 @@
 			<sysproperty key="java.endorsed.dirs" value="${org.jboss.esb.server.home}/lib/endorsed" />
 			<sysproperty key="javax.xml.registry.ConnectionFactoryClass" value="org.apache.ws.scout.registry.ConnectionFactoryImpl" />
 
-            <!-- test toDir="target/test" name="de.objectcode.soatools.test.director.integration.WebserviceInTest"/>
-            <test toDir="target/test" name="de.objectcode.soatools.test.director.integration.ConsumerTest"/ -->
+            <test toDir="target/test" name="de.objectcode.soatools.test.director.integration.WebserviceInTest"/>
+            <test toDir="target/test" name="de.objectcode.soatools.test.director.integration.ConsumerTest"/>
             <test toDir="target/test" name="de.objectcode.soatools.test.director.integration.JbpmProcessesTest"/>
 			<!-- batchtest toDir="target/test">
 				<fileset dir="${basedir}/src/it/java">

@@ -13,9 +13,9 @@ import javax.jws.soap.SOAPBinding;
  * Generated source version: 2.0
  * 
  */
-@WebService(name = "MockSoapServiceWS", targetNamespace = "http://objectcode.de/test/mock/webservice")
+@WebService(name = "MockWebServiceControlWS", targetNamespace = "http://objectcode.de/test/mock/webservice")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
-public interface MockSoapServiceWS {
+public interface MockWebServiceControlWS {
 
 
     /**
