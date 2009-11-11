@@ -30,6 +30,7 @@ ln -s $BASE/test/services/jms-gateway/target/soatools-test-services-jms-gateway 
 ln -s $BASE/test/services/jbpm-processes/src/main/jbm/soatools-test-services-jbpm-processes-queue-service.xml soatools-test-services-jbpm-processes-queue-service.xml
 ln -s $BASE/test/services/jbpm-processes/target/soatools-test-services-jbpm-processes soatools-test-services-jbpm-processes.esb
 ln -s $BASE/test/services/webservice-in/target/soatools-test-services-webservice-in soatools-test-services-webservice-in.war
+ln -s $BASE/test/services/mock-webservice/target/soatools-test-services-mock-webservice soatools-test-services-mock-webservice.war
 ln -s $BASE/utils/generic/target/soatools-utils-generic soatools-utils-generic.esb
 ln -s $BASE/utils/invoker/target/soatools-utils-invoker soatools-utils-invoker.esb
 

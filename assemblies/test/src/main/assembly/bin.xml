@@ -40,6 +40,7 @@
       <outputDirectory>/war</outputDirectory>
       <includes>
         <include>de.objectcode.soatools.test.services:soatools-test-services-webservice-in:war</include>
+        <include>de.objectcode.soatools.test.services:soatools-test-services-mock-webservice:war</include>
       </includes>
     </dependencySet>
     <dependencySet>

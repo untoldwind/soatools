@@ -41,6 +41,13 @@
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
+			<artifactId>soatools-test-services-mock-webservice</artifactId>
+			<version>${pom.version}</version>
+			<type>war</type>
+		</dependency>
+
+		<dependency>
+			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jms-gateway</artifactId>
 			<version>${pom.version}</version>
 			<type>esb</type>

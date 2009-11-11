@@ -16,5 +16,6 @@
 		<module>jms-gateway</module>
 		<module>webservice-in</module>
 		<module>jbpm-processes</module>
+		<module>mock-webservice</module>
 	</modules>
 </project>

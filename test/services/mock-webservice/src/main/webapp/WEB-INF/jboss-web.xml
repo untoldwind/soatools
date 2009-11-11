@@ -1,0 +1,3 @@
+<jboss-web>
+  <context-root>/test-mock</context-root>
+</jboss-web>
