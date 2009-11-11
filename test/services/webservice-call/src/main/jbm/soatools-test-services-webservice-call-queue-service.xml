@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="org.jboss.jms.server.destination.QueueService"
+    name="de.objectcode.soatools.test:service=Queue,name=soatool_test_webservice_soapclient" xmbean-dd="xmdesc/Queue-xmbean.xml">
+    <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+    <depends>jboss.messaging:service=PostOffice</depends>
+  </mbean>
+  <mbean code="org.jboss.jms.server.destination.QueueService"
+    name="de.objectcode.soatools.test:service=Queue,name=soatool_test_webservice_soapclient_reply" xmbean-dd="xmdesc/Queue-xmbean.xml">
+    <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+    <depends>jboss.messaging:service=PostOffice</depends>
+  </mbean>
+</server>

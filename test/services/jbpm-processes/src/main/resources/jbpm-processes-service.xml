@@ -3,7 +3,7 @@
   <mbean code="de.objectcode.soatools.mfm.impl.JbpmDeployService"
     name="de.objectcode.soatools.test:service=JbpmProcessDeployService">
     <depends>jboss.esb:service=JbpmService</depends>
-    <attribute name="ProcessFiles">test-process1.par test-process2.par</attribute>
+    <attribute name="ProcessFiles">test-process1.par test-process2.par test-process3.par</attribute>
   </mbean>
   <mbean code="de.objectcode.soatools.test.services.jbpm.JbpmProcessCounterService"
     name="de.objectcode.soatools.test:service=JbpmProcessCounterService">

@@ -17,5 +17,6 @@
 		<module>webservice-in</module>
 		<module>jbpm-processes</module>
 		<module>mock-webservice</module>
+		<module>webservice-call</module>
 	</modules>
 </project>

@@ -129,4 +129,55 @@ public class JbpmProcessesTest {
 		assertEquals(2 * IConstants.MESSAGE_COUNT, allLogMessages
 				.getRootElement().elements().size());
 	}
+
+	@Test
+	public void testStartTestProcess3() throws Exception {
+		long initialLogPosition = logStoreService.getCurrentPosition();
+
+		int processCount = jbpmProcessCounterService
+				.countProcessInstances("test-process3");
+
+		assertEquals(processCount, jbpmProcessCounterService
+				.countFinishedProcessInstances("test-process3"));
+
+		for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
+			Map<String, Object> body = new HashMap<String, Object>();
+
+			body.put("jbpmProcessDefName", "test-process3");
+			body.put("consumerTag", String.valueOf(i));
+			body.put("jbpmProcessKey", String.valueOf(i));
+			body.put("testCaseName", "JbpmProcessesTest.testStartTestProcess3");
+			body.put("testCaseCount", i);
+
+			jmsGatewayHelper.sendSingle("SoatoolsTest", "JBPMProcessesStart",
+					body);
+		}
+		int counter = 0;
+
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() != IConstants.MESSAGE_COUNT) {
+			Thread.sleep(500);
+			counter++;
+		}
+
+		assertEquals(IConstants.MESSAGE_COUNT, counterService
+				.getInvokationCounter());
+		assertEquals(processCount + IConstants.MESSAGE_COUNT,
+				jbpmProcessCounterService
+						.countProcessInstances("test-process3"));
+
+		counter = 0;
+		while (counter < IConstants.WAIT_COUNT
+				&& logStoreService.countMessages(initialLogPosition) < IConstants.MESSAGE_COUNT) {
+			Thread.sleep(500);
+			counter++;
+		}
+
+		Document allLogMessages = logStoreService.getLogMessagesByTag(
+				"testCaseName", "JbpmProcessesTest.testStartTestProcess3",
+				initialLogPosition);
+		assertNotNull(allLogMessages);
+		assertEquals(IConstants.MESSAGE_COUNT, allLogMessages.getRootElement()
+				.elements().size());
+	}
 }
