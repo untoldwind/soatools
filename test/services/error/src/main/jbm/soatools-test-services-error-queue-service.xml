@@ -10,4 +10,9 @@
     <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
     <depends>jboss.messaging:service=PostOffice</depends>
   </mbean>
+  <mbean code="org.jboss.jms.server.destination.QueueService"
+    name="de.objectcode.soatools.test:service=Queue,name=soatool_test_error_redeliver_trigger" xmbean-dd="xmdesc/Queue-xmbean.xml">
+    <depends optional-attribute-name="ServerPeer">jboss.messaging:service=ServerPeer</depends>
+    <depends>jboss.messaging:service=PostOffice</depends>
+  </mbean>
 </server>

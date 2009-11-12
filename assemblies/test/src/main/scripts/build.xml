@@ -83,6 +83,11 @@
     <antcall target="unpack">
       <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
       <param name="srcdir" value="esb" />
+      <param name="file" value="soatools-test-services-error.esb" />
+    </antcall>
+    <antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
+      <param name="srcdir" value="esb" />
       <param name="file" value="soatools-test-services-jms-gateway.esb" />
     </antcall>
     <antcall target="unpack">
@@ -94,6 +99,11 @@
       <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
       <param name="srcdir" value="war" />
       <param name="file" value="soatools-test-services-webservice-in.war" />
+    </antcall>
+    <antcall target="unpack">
+      <param name="destdir" value="${jboss.deploy.dir}/soatools_test_services" />
+      <param name="srcdir" value="war" />
+      <param name="file" value="soatools-test-services-mock-webservice.war" />
     </antcall>
   </target>
 	

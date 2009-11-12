@@ -1,6 +1,10 @@
 package de.objectcode.soatools.test.services.error;
 
+import org.jboss.soa.esb.services.persistence.MessageStore;
+
 public class ErrorService implements ErrorServiceMBean {
+	MessageStore messageStore;
+
 	public String getExceptionType() {
 		return ErrorState.INSTANCE.getExceptionType().toString();
 	}

@@ -14,6 +14,11 @@
 				<jms-message-filter dest-type="QUEUE"
 					dest-name="queue/soatool_test_error_with_log" />
 			</jms-bus>
+
+			<jms-bus busid="soatool_test_error_redeliver_trigger">
+				<jms-message-filter dest-type="QUEUE"
+					dest-name="queue/soatool_test_error_redeliver_trigger" />
+			</jms-bus>
 		</jms-jca-provider>
 	</providers>
 	<services>
@@ -58,5 +63,16 @@
 				</action>
 			</actions>
 		</service>
+        <service category="SoatoolsTest" name="RedeliverTrigger" description="Manual trigger for message redeliver">
+            <listeners>
+				<jms-listener name="RedeliverTriggerListener" busidref="soatool_test_error_redeliver_trigger"
+					maxThreads="20" />
+            </listeners>
+            <actions mep="OneWay">
+                <action name="RedeliverMessagesAction" class="org.jboss.soa.esb.actions.MessageRedeliverer">
+                	<property name="max-redeliveries" value="20"/>
+                </action>
+            </actions>			
+        </service>
 	</services>
 </jbossesb>

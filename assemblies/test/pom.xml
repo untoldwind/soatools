@@ -34,6 +34,20 @@
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
+			<artifactId>soatools-test-services-error</artifactId>
+			<version>${pom.version}</version>
+			<type>esb</type>
+		</dependency>
+		<dependency>
+			<groupId>de.objectcode.soatools.test.services</groupId>
+			<artifactId>soatools-test-services-error</artifactId>
+			<version>${pom.version}</version>
+			<classifier>jbm-service</classifier>
+			<type>jar</type>
+		</dependency>
+
+		<dependency>
+			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-webservice-in</artifactId>
 			<version>${pom.version}</version>
 			<type>war</type>
