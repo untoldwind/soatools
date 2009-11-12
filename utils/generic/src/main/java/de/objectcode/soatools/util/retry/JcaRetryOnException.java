@@ -38,7 +38,7 @@ import org.jboss.soa.esb.services.persistence.MessageStore;
 public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 	private final static Log LOG = LogFactory.getLog(JcaRetryOnException.class);
 
-	public final static String RETRY_COUNT = "at.liwest.esb.retryCount";
+	public final static String RETRY_COUNT = "de.objectcode.soatools.retryCount";
 
 	Service service;
 	ServiceInvoker dlqServiceInvoker;
