@@ -185,7 +185,7 @@ public class JbpmProcessesTest {
 
 		counter = 0;
 		while (counter < IConstants.WAIT_COUNT
-				&& logStoreService.countMessages(initialLogPosition) < IConstants.MESSAGE_COUNT) {
+				&& logStoreService.countMessages(initialLogPosition) < 2 * IConstants.MESSAGE_COUNT) {
 			Thread.sleep(500);
 			counter++;
 		}
@@ -194,8 +194,8 @@ public class JbpmProcessesTest {
 				"testCaseName", "JbpmProcessesTest.testStartTestProcess3",
 				initialLogPosition);
 		assertNotNull(allLogMessages);
-		assertEquals(IConstants.MESSAGE_COUNT, allLogMessages.getRootElement()
-				.elements().size());
+		assertEquals(2 * IConstants.MESSAGE_COUNT, allLogMessages
+				.getRootElement().elements().size());
 
 		CallList callList = mockWebServiceControl.getCalls();
 

@@ -19,6 +19,15 @@
 					maxThreads="20" />
 			</listeners>
 			<actions>
+				<action name="logException"
+					class="de.objectcode.soatools.logstore.actions.ExceptionLogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
+					</property>
+				</action>
+				
 				<action name="request-mapper"
 					class="de.objectcode.soatools.test.services.webservice.SimpleParametersAction">
 				</action>
@@ -33,6 +42,15 @@
                     <!--property name="wsdlTransform" value="/consumer1-wsdl-transform.xml" / -->
                     <property name="responseAsOgnlMap" value="true" />
 					<property name="SOAPAction" value="simpleCallOneWay"/>				
+				</action>
+
+				<action name="log"
+					class="de.objectcode.soatools.logstore.actions.LogWiretap">
+					<property name="tags">
+						<tag name="consumerTag" object-path="body.consumerTag" />
+						<tag name="testCaseName" object-path="body.testCaseName" />
+						<tag name="testCaseCount" object-path="body.testCaseCount" />
+					</property>
 				</action>
 			</actions>
 		</service>
