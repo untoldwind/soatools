@@ -27,7 +27,6 @@
 				</action>
 				
 				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
-					<property name="printfull" value="true" />
 				</action>
 
 				<action name="startProcessInstance"

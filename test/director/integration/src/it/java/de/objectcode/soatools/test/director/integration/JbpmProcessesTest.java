@@ -2,9 +2,12 @@ package de.objectcode.soatools.test.director.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.ws.BindingProvider;
 
@@ -14,6 +17,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import de.objectcode.soatools.logstore.test.LogStoreJMXHelper;
+import de.objectcode.soatools.test.mock.webservice.client.Call;
 import de.objectcode.soatools.test.mock.webservice.client.CallList;
 import de.objectcode.soatools.test.mock.webservice.client.MockWebServiceControlWS;
 import de.objectcode.soatools.test.mock.webservice.client.MockWebServiceControlWSService;
@@ -201,6 +205,19 @@ public class JbpmProcessesTest {
 
 		assertNotNull(callList);
 		assertNotNull(callList.getCalls());
-		assertEquals(IConstants.MESSAGE_COUNT, callList.getCalls().size());
+
+		if (IConstants.MESSAGE_COUNT != callList.getCalls().size()) {
+			Set<Integer> counts = new LinkedHashSet<Integer>();
+
+			for (int i = 0; i < IConstants.MESSAGE_COUNT; i++) {
+				counts.add(i);
+			}
+
+			for (Call call : callList.getCalls()) {
+				counts.remove(call.getTestCaseCount());
+			}
+
+			fail("Missing: " + counts);
+		}
 	}
 }

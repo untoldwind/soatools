@@ -16,7 +16,7 @@
 			description="JMS gateway">
 			<listeners>
 				<jms-listener name="WebServiceSOAPClientListener" busidref="soatool_test_webservice_soapclient"
-					maxThreads="20" />
+					maxThreads="2" />
 			</listeners>
 			<actions>
 				<action name="logException"
@@ -42,6 +42,10 @@
                     <!--property name="wsdlTransform" value="/consumer1-wsdl-transform.xml" / -->
                     <property name="responseAsOgnlMap" value="true" />
 					<property name="SOAPAction" value="simpleCallOneWay"/>				
+				</action>
+
+				<action name="println2" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
 				</action>
 
 				<action name="log"
