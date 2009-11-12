@@ -25,8 +25,8 @@ ln -s $BASE/logging/logstore-ws/target/soatools-logging-logstore-ws soatools-log
 ln -s $BASE/model/mfm/target/soatools-model-mfm soatools-model-mfm.esb
 ln -s $BASE/test/services/consumer/src/main/jbm/soatools-test-services-consumer-queue-service.xml soatools-test-services-consumer-queue-service.xml
 ln -s $BASE/test/services/consumer/target/soatools-test-services-consumer soatools-test-services-consumer.esb
-ln -s $BASE/test/services/consumer/src/main/jbm/soatools-test-services-error-queue-service.xml soatools-test-services-error-queue-service.xml
-ln -s $BASE/test/services/consumer/target/soatools-test-services-error soatools-test-services-error.esb
+ln -s $BASE/test/services/error/src/main/jbm/soatools-test-services-error-queue-service.xml soatools-test-services-error-queue-service.xml
+ln -s $BASE/test/services/error/target/soatools-test-services-error soatools-test-services-error.esb
 ln -s $BASE/test/services/webservice-call/src/main/jbm/soatools-test-services-webservice-call-queue-service.xml soatools-test-services-webservice-call-queue-service.xml
 ln -s $BASE/test/services/webservice-call/target/soatools-test-services-webservice-call soatools-test-services-webservice-call.esb
 ln -s $BASE/test/services/jms-gateway/src/main/jbm/soatools-test-services-jms-gateway-queue-service.xml soatools-test-services-jms-gateway-queue-service.xml

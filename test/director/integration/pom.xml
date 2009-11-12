@@ -21,6 +21,14 @@
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
+			<artifactId>soatools-test-services-error</artifactId>
+			<version>${pom.version}</version>
+			<classifier>tests</classifier>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jbpm-processes</artifactId>
 			<version>${pom.version}</version>
 			<classifier>tests</classifier>

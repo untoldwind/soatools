@@ -25,10 +25,22 @@
 		<service category="SoatoolsTest" name="ErrorWithoutLog"
 			description="Test error without logging">
 			<listeners>
-				<jms-listener name="ErrorWithoutLogListener"
-					busidref="soatool_test_error_wo_log" maxThreads="20" />
+				<jms-listener name="ErrorWithoutLogListener" busidref="soatool_test_error_wo_log"
+					maxThreads="20" />
 			</listeners>
 			<actions mep="OneWay">
+				<action name="retry"
+					class="de.objectcode.soatools.util.retry.JcaRetryOnException">
+					<property name="max-retries" value="5" />
+				</action>
+
+				<action name="count"
+					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
+				
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+
 				<action name="error"
 					class="de.objectcode.soatools.test.services.error.ErrorAction" />
 
@@ -50,6 +62,18 @@
 					</property>
 				</action>
 
+				<action name="retry"
+					class="de.objectcode.soatools.util.retry.JcaRetryOnException">
+					<property name="max-retries" value="5" />
+				</action>
+
+				<action name="count"
+					class="de.objectcode.soatools.test.services.consumer.CounterAction" />
+
+				<action name="println" class="org.jboss.soa.esb.actions.SystemPrintln">
+					<property name="printfull" value="true" />
+				</action>
+
 				<action name="error"
 					class="de.objectcode.soatools.test.services.error.ErrorAction" />
 
@@ -63,16 +87,17 @@
 				</action>
 			</actions>
 		</service>
-        <service category="SoatoolsTest" name="RedeliverTrigger" description="Manual trigger for message redeliver">
-            <listeners>
-				<jms-listener name="RedeliverTriggerListener" busidref="soatool_test_error_redeliver_trigger"
-					maxThreads="20" />
-            </listeners>
-            <actions mep="OneWay">
-                <action name="RedeliverMessagesAction" class="org.jboss.soa.esb.actions.MessageRedeliverer">
-                	<property name="max-redeliveries" value="20"/>
-                </action>
-            </actions>			
-        </service>
+		<service category="SoatoolsTest" name="RedeliverTrigger"
+			description="Manual trigger for message redeliver">
+			<listeners>
+				<jms-listener name="RedeliverTriggerListener"
+					busidref="soatool_test_error_redeliver_trigger" maxThreads="20" />
+			</listeners>
+			<actions mep="OneWay">
+				<action name="RedeliverMessagesAction" class="org.jboss.soa.esb.actions.MessageRedeliverer">
+					<property name="max-redeliveries" value="20" />
+				</action>
+			</actions>
+		</service>
 	</services>
 </jbossesb>

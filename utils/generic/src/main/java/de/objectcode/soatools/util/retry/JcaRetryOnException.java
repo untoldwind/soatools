@@ -106,9 +106,7 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 				dlqServiceInvoker.deliverAsync(message);
 
 				LOG
-						.info(
-								"Send redelivered JMS message to MessageStore for retry",
-								new Exception());
+						.info("Send redelivered JMS message to MessageStore for retry");
 
 				return null;
 			} catch (MessageDeliverException e) {

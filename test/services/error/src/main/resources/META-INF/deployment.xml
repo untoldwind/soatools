@@ -4,6 +4,7 @@
 	</depends>
 	<depends>de.objectcode.soatools.test:service=Queue,name=soatool_test_error_with_log
 	</depends>
+	<depends>jboss.esb:deployment=soatools-test-services-consumer.esb</depends>
 	<depends>jboss.esb:deployment=soatools-logging-logstore.esb</depends>
 	<depends>jboss.esb:deployment=soatools-utils-generic.esb</depends>
 </jbossesb-deployment>
