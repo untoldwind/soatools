@@ -1,5 +1,7 @@
 package de.objectcode.soatools.test.director.integration;
 
+import static org.junit.Assert.assertEquals;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -45,5 +47,45 @@ public class ErrorTest {
 
 		jmsGatewayHelper.sendSingle("SoatoolsTest", "ErrorWithoutLog", body);
 
+		int counter = 0;
+
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() < 1) {
+			Thread.sleep(500);
+			counter++;
+		}
+		Thread.sleep(1000L);
+
+		assertEquals(1, counterService.getInvokationCounter());
+		assertEquals(1, counterService.getErrorCounter());
+
+		body = new HashMap<String, Object>();
+
+		jmsGatewayHelper.sendSingle("SoatoolsTest", "RedeliverTrigger", body);
+
+		counter = 0;
+
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() < 2) {
+			Thread.sleep(500);
+			counter++;
+		}
+		Thread.sleep(1000L);
+
+		assertEquals(2, counterService.getInvokationCounter());
+		assertEquals(2, counterService.getErrorCounter());
+
+		jmsGatewayHelper.sendSingle("SoatoolsTest", "RedeliverTrigger", body);
+
+		counter = 0;
+
+		while (counter < IConstants.WAIT_COUNT
+				&& counterService.getInvokationCounter() < 3) {
+			Thread.sleep(500);
+			counter++;
+		}
+
+		assertEquals(3, counterService.getInvokationCounter());
+		assertEquals(2, counterService.getErrorCounter());
 	}
 }
