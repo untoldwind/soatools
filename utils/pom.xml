@@ -14,5 +14,6 @@
 	<modules>
 	    <module>generic</module>
 		<module>invoker</module>
+		<module>smooks</module>
 	</modules>
 </project>
