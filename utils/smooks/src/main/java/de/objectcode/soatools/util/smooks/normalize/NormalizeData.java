@@ -14,7 +14,7 @@ import org.milyn.cdr.SmooksResourceConfiguration;
 import org.milyn.container.ExecutionContext;
 import org.milyn.delivery.ContentDeliveryUnit;
 import org.milyn.delivery.dom.DOMElementVisitor;
-import org.milyn.javabean.BeanAccessor;
+import org.milyn.javabean.repository.BeanRepository;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -100,10 +100,13 @@ public class NormalizeData implements DOMElementVisitor, ContentDeliveryUnit
 
   public void visitBefore(Element element, ExecutionContext context) throws SmooksException
   {
+	  System.out.println(">>> Here!");
   }
 
   public void visitAfter(Element element, ExecutionContext context) throws SmooksException
   {
+	  System.out.println(">>> There!");
+	  
     NormalizedData normalizedData = new NormalizedData();
 
     if (type != null) {
@@ -122,7 +125,7 @@ public class NormalizeData implements DOMElementVisitor, ContentDeliveryUnit
       return;
     }
 
-    BeanAccessor.addBean(beanId, normalizedData, context, addToList);
+    BeanRepository.getInstance(context).addBean(beanId, normalizedData);
   }
 
 }

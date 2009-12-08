@@ -11,6 +11,7 @@ import org.milyn.delivery.dom.DOMElementVisitor;
 import org.milyn.javabean.BeanAccessor;
 import org.milyn.javabean.DataDecodeException;
 import org.milyn.javabean.DataDecoder;
+import org.milyn.javabean.repository.BeanRepository;
 import org.milyn.xml.DomUtils;
 import org.w3c.dom.Element;
 
@@ -49,7 +50,7 @@ public class ObjectValue implements DOMElementVisitor, ContentDeliveryUnit
       decoder = getDecoder(context);
     }
 
-    BeanAccessor.addBean(beanId, decoder.decode(dataString), context, false);
+    BeanRepository.getInstance(context).addBean(beanId, decoder.decode(dataString));
   }
 
   public void visitAfter(Element element, ExecutionContext context) throws SmooksException

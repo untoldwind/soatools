@@ -19,7 +19,7 @@ import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.MessagePayloadProxy;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
-import org.milyn.javabean.BeanAccessor;
+import org.milyn.javabean.repository.BeanRepository;
 import org.milyn.resource.URIResourceLocator;
 
 import com.thoughtworks.xstream.XStream;
@@ -28,6 +28,8 @@ import de.objectcode.soatools.util.value.IValueLocator;
 import de.objectcode.soatools.util.value.ValueLocatorFactory;
 
 public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
+	private final static Log LOG = LogFactory.getLog(SimpleSmooksTransformer.class);
+	
 	private final MessagePayloadProxy payloadProxy;
 	private final Smooks smooks;
 	private final boolean ensureXmlDecl;
@@ -54,8 +56,6 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 			smooks = new Smooks();
 			smooks.addConfigurations("smooks-resource",
 					new URIResourceLocator().getResource(smooksResource));
-			smooks.addConfigurations("cdu-creators", new URIResourceLocator()
-					.getResource("/META-INF/smooks-creators.xml"));
 		} catch (Exception e) {
 			throw new ConfigurationException("Failed to initialize Smooks", e);
 		}
@@ -103,8 +103,7 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 			ExecutionContext context = smooks.createExecutionContext();
 			if (inputLocators.isEmpty()) {
 				for (String name : message.getBody().getNames()) {
-					BeanAccessor.addBean(name, message.getBody().get(name),
-							context, false);
+					BeanRepository.getInstance(context).addBean(name, message.getBody().get(name));
 				}
 			} else {
 				for (Map.Entry<String, IValueLocator> contextLocator : inputLocators
@@ -113,8 +112,7 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 							message);
 
 					if (messageValue != null) {
-						BeanAccessor.addBean(contextLocator.getKey(),
-								messageValue, context, false);
+						BeanRepository.getInstance(context).addBean(contextLocator.getKey(), messageValue);
 					} else {
 						LOGGER.info("process  : no message found for <<key: "
 								+ contextLocator.getKey() + ">>");
@@ -126,8 +124,7 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 			smooks.filter(smooksInput, new StreamResult(out), context);
 
 			if (outputLocators.isEmpty()) {
-				for (Map.Entry<?, ?> entry : ((Map<?, ?>) BeanAccessor
-						.getBeans(context)).entrySet()) {
+				for (Map.Entry<String, Object> entry : BeanRepository.getInstance(context).getBeanMap().entrySet()) {
 					if (entry.getKey() != null && entry.getValue() != null) {
 						message.getBody().add(entry.getKey().toString(),
 								entry.getValue());
@@ -136,8 +133,7 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 			} else {
 				for (Map.Entry<String, IValueLocator> contextLocator : outputLocators
 						.entrySet()) {
-					Object value = BeanAccessor.getBean(
-							contextLocator.getKey(), context);
+					Object value = BeanRepository.getInstance(context).getBean(contextLocator.getKey());
 					if (value != null) {
 						contextLocator.getValue().setValue(message, value);
 					}
@@ -155,6 +151,7 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 				}
 			}
 		} catch (Exception e) {
+			LOG.error("Exception", e);
 			throw new ActionProcessingException(e);
 		}
 		return message;

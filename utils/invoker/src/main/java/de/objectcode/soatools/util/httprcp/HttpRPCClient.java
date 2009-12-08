@@ -39,6 +39,7 @@ import org.jboss.soa.esb.message.MessagePayloadProxy;
 import org.milyn.Smooks;
 import org.milyn.container.ExecutionContext;
 import org.milyn.javabean.BeanAccessor;
+import org.milyn.javabean.repository.BeanRepository;
 import org.milyn.resource.URIResourceLocator;
 
 import com.thoughtworks.xstream.XStream;
@@ -470,8 +471,7 @@ public class HttpRPCClient extends AbstractActionPipelineProcessor {
 					final ExecutionContext context = this.requestSmooks
 							.createExecutionContext();
 					for (final String name : message.getBody().getNames()) {
-						BeanAccessor.addBean(name, message.getBody().get(name),
-								context, false);
+						BeanRepository.getInstance(context).addBean(name, message.getBody().get(name));
 					}
 
 					String input;

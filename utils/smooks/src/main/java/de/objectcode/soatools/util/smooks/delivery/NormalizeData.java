@@ -19,6 +19,7 @@ import org.milyn.delivery.dom.DOMElementVisitor;
 import org.milyn.javabean.BeanAccessor;
 import org.milyn.javabean.DataDecodeException;
 import org.milyn.javabean.DataDecoder;
+import org.milyn.javabean.repository.BeanRepository;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
@@ -96,7 +97,7 @@ public class NormalizeData implements DOMElementVisitor, ContentDeliveryUnit
   public void visitAfter(Element element, ExecutionContext context) throws SmooksException
   {
     NormalizedData normalizedData = new NormalizedData();
-    BeanAccessor.addBean(beanId, normalizedData, context, false);
+    BeanRepository.getInstance(context).addBean(beanId, normalizedData);
 
     for (AbstractValueBinding valueBinding : valueBindings) {
       try {
