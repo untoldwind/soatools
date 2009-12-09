@@ -85,8 +85,8 @@ public class SimpleSmooksTransformer extends AbstractActionPipelineProcessor {
 			if (attachOriginal && data != null) {
 				message.getAttachment().put("original-data", data);
 			}
-
-			if (data == null) {
+			
+			if (data == null || data.toString().length() == 0) {
 				smooksInput = new StreamSource(new StringReader("<document/>"));
 			} else if (data instanceof String) {
 				smooksInput = new StreamSource(
