@@ -210,11 +210,11 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 								"state",
 								"RETRY"
 										+ (message.getProperties().getProperty(
-												"at.liwest.esb.retryCount") != null ? "("
+												"de.objectcode.soatools.retryCount") != null ? "("
 												+ message
 														.getProperties()
 														.getProperty(
-																"at.liwest.esb.retryCount")
+																"de.objectcode.soatools.retryCount")
 												+ ")"
 												: ""));
 				if (message.getProperties().getProperty("log-enter-timestamp") != null) {

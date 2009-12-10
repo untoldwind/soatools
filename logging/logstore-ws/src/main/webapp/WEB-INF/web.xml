@@ -102,4 +102,9 @@
 	<security-role>
 		<role-name>JBossAdmin</role-name>
 	</security-role>
+
+	<error-page>
+		<exception-type>javax.faces.application.ViewExpiredException</exception-type>
+		<location>/sessionExpired.html</location>
+	</error-page>
 </web-app>

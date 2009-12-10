@@ -19,7 +19,7 @@ public class LogStoreLogDetailController implements Serializable {
 	LogMessageList logMessageList;
 
 	String selectedDetailTab;
-	int currentPage;
+	int currentPage = 1;
 
 	public String select(LogMessageBean logMessage) {
 		logMessageList.setCurrent(logMessage);
