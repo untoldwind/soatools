@@ -164,7 +164,7 @@ div.pboxc a:hover,div.pboxc_s a:hover,div.pboxc_e a:hover {
                 #{logMessage.logLeaveTimestamp}
               </rich:column>
               <f:facet name="footer">
-                <rich:datascroller pageIndexVar="pageIndex" pagesVar="pages">
+                <rich:datascroller pageIndexVar="pageIndex" pagesVar="pages" page="#{logStoreLogDetail.currentPage}">
                   <f:facet name="pages">
                     <h:outputText value="#{pageIndex} / #{pages}"></h:outputText>
                   </f:facet>
