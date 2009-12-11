@@ -88,6 +88,12 @@
 		<param-value>true</param-value>
 	</context-param>
 
+	<context-param>
+		<param-name>facelets.RESOURCE_RESOLVER</param-name>
+		<param-value>de.objectcode.soatools.logstore.ws.util.LogStoreResourceResolver</param-value>
+	</context-param>
+
+
 	<!--
 		Anstellen, wenn Views aus dem ViewService geladen werden sollen
 		<context-param> <param-name>facelets.RESOURCE_RESOLVER</param-name>

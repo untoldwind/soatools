@@ -14,6 +14,7 @@ import java.sql.DatabaseMetaData;
 import java.util.Map;
 
 import javax.naming.InitialContext;
+import javax.naming.NameNotFoundException;
 import javax.sql.DataSource;
 import javax.transaction.Status;
 import javax.transaction.UserTransaction;
@@ -50,11 +51,14 @@ import org.hibernate.transaction.JTATransactionFactory;
 import org.jboss.internal.soa.esb.util.Encoding;
 import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.util.Util;
+import org.jboss.util.naming.NonSerializableFactory;
 
+import de.objectcode.soatools.logstore.ILogStoreViewRepository;
 import de.objectcode.soatools.logstore.persistent.EsbMessage;
 import de.objectcode.soatools.logstore.persistent.LogJmsDeadLetter;
 import de.objectcode.soatools.logstore.persistent.LogMessage;
 import de.objectcode.soatools.logstore.persistent.LogTag;
+import de.objectcode.soatools.mfm.api.IMessageFormatRepository;
 import de.objectcode.soatools.mfm.api.normalize.NormalizedData;
 
 public class LogStoreService implements LogStoreServiceMBean {
@@ -68,6 +72,8 @@ public class LogStoreService implements LogStoreServiceMBean {
 
 	private Transformer transformer;
 
+	private ILogStoreViewRepository logStoreViewRepository = new LogStoreViewRepositoryImpl();
+	
 	private void dumpLogMessage(final Element parent,
 			final LogMessage logMessage) {
 		final Element logMessageElement = parent.addElement("log-message");
@@ -660,12 +666,20 @@ public class LogStoreService implements LogStoreServiceMBean {
 				LogStoreService.class
 						.getResourceAsStream("logstore-report.xsl")));
 
+		NonSerializableFactory.rebind(ctx, ILogStoreViewRepository.JNDI_NAME,
+				logStoreViewRepository);
+
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
 	public void stop() {
+		try {
+			NonSerializableFactory.unbind(ILogStoreViewRepository.JNDI_NAME);
+		} catch (NameNotFoundException e) {
+		}
+
 		this.sessionFactory = null;
 	}
 

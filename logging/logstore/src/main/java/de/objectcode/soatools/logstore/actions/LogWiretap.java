@@ -7,6 +7,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.naming.InitialContext;
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.jboss.internal.soa.esb.util.Encoding;
@@ -25,6 +27,7 @@ import org.jboss.soa.esb.message.format.MessageFactory;
 import org.jboss.soa.esb.message.format.MessageType;
 import org.jboss.soa.esb.util.Util;
 
+import de.objectcode.soatools.logstore.ILogStoreViewRepository;
 import de.objectcode.soatools.util.value.IValueLocator;
 import de.objectcode.soatools.util.value.ValueLocatorFactory;
 
@@ -71,6 +74,20 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 					ValueLocatorFactory.INSTANCE.createValueLocator(tagConfig));
 		}
 
+		String decoratorPath = config.getAttribute("decorator-path");
+		
+		if ( decoratorPath != null ) {
+			try {
+				InitialContext ctx = new InitialContext();
+				
+				ILogStoreViewRepository logStoreViewRepository = (ILogStoreViewRepository)ctx.lookup(ILogStoreViewRepository.JNDI_NAME);
+				
+				logStoreViewRepository.registerDecorator(serviceCategory, serviceName, decoratorPath);
+			}
+			catch ( Exception e ) {
+				throw new ConfigurationException(e);
+			}
+		}
 	}
 
 	/**
