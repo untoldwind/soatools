@@ -210,6 +210,10 @@ public class LogMessageBean implements Serializable
     return null;
   }
 
+  public boolean hasProperty(String property ) {
+	  return properties.containsKey(property);	  
+  }
+  
   public List<NameValuePair> getBodyList()
   {
     return new ArrayList<NameValuePair>(bodies.values());
@@ -226,6 +230,10 @@ public class LogMessageBean implements Serializable
     return null;
   }
 
+  public boolean hasBody(String body) {
+	  return bodies.containsKey(body);
+  }
+  
   public List<NameValuePair> getAttachmentList()
   {
     List<NameValuePair> result = new ArrayList<NameValuePair>();
@@ -245,5 +253,9 @@ public class LogMessageBean implements Serializable
     }
 
     return null;
+  }
+
+  public boolean hasAttachment(String attachment) {
+	  return namedAttachments.containsKey(attachment);
   }
 }
