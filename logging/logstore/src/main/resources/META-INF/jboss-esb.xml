@@ -4,15 +4,15 @@
   <providers>
     <jms-jca-provider name="JBossMessaging" connection-factory="XAConnectionFactory">
       <jms-bus busid="log_store_message">
-        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_message"/>
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_message" transacted="true"/>
       </jms-bus>
 
       <jms-bus busid="log_store_fault">
-        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_fault"/>
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_fault" transacted="true"/>
       </jms-bus>
 
       <jms-bus busid="log_store_dlq">
-        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_dlq"/>
+        <jms-message-filter dest-type="QUEUE" dest-name="queue/log_store_dlq" transacted="true"/>
       </jms-bus>
       
       <jms-bus busid="log_store_dlq_gw">
