@@ -56,11 +56,13 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 	final String serviceCategory;
 	final String serviceName;
 	final Map<String, IValueLocator> tagValueLocators;
+	final boolean dropAttachments;
 
 	public LogWiretap(ConfigTree config) throws ConfigurationException {
 		serviceCategory = config.getParent().getRequiredAttribute(
 				"service-category");
 		serviceName = config.getParent().getRequiredAttribute("service-name");
+		dropAttachments = config.getBooleanAttribute("drop-attachments", false);
 		try {
 			logService = new ServiceInvoker(LOG_SERVICE_CATEGORY,
 					LOG_SERVICE_NAME);
@@ -75,16 +77,17 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 		}
 
 		String decoratorPath = config.getAttribute("decorator-path");
-		
-		if ( decoratorPath != null ) {
+
+		if (decoratorPath != null) {
 			try {
 				InitialContext ctx = new InitialContext();
-				
-				ILogStoreViewRepository logStoreViewRepository = (ILogStoreViewRepository)ctx.lookup(ILogStoreViewRepository.JNDI_NAME);
-				
-				logStoreViewRepository.registerDecorator(serviceCategory, serviceName, decoratorPath);
-			}
-			catch ( Exception e ) {
+
+				ILogStoreViewRepository logStoreViewRepository = (ILogStoreViewRepository) ctx
+						.lookup(ILogStoreViewRepository.JNDI_NAME);
+
+				logStoreViewRepository.registerDecorator(serviceCategory,
+						serviceName, decoratorPath);
+			} catch (Exception e) {
 				throw new ConfigurationException(e);
 			}
 		}
@@ -141,6 +144,15 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 			LOG.warn("Unable to wiretap to logging service", e);
 		}
 
+		if (dropAttachments) {
+			for (String name : message.getAttachment().getNames()) {
+				message.getAttachment().remove(name);
+			}
+			int n = message.getAttachment().getUnnamedCount();
+			for (int i = 0; i < n; i++)
+				message.getAttachment().removeItemAt(0);
+		}
+		
 		return message;
 	}
 
