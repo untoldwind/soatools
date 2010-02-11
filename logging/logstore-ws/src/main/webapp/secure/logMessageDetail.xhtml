@@ -47,7 +47,18 @@
             <ui:repeat var="body" value="#{logMessage.bodyList}">
               <tr class="message">
                 <td class="message">#{body.name}</td>
-                <td class="message"><h:outputText value="#{body.value}" converter="logMessageValueConverter"/></td>
+                <td class="message">
+                	<h:panelGroup id="bodyValue" rendered="#{body.toggled}">
+	                	<h:panelGrid columns="1" rendered="#{body.displayState}">
+							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Hide</a4j:commandLink>
+					    	<h:outputText value="#{body.value}" converter="logMessageValueConverter"/>
+            	    	</h:panelGrid>
+                		<h:panelGroup rendered="#{!body.displayState}">
+							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Show</a4j:commandLink>
+                		</h:panelGroup>
+                	</h:panelGroup>
+					<h:outputText value="#{body.value}" converter="logMessageValueConverter" rendered="#{!body.toggled}"/>
+    			</td>
               </tr>
             </ui:repeat>
             <tr class="message">
@@ -56,7 +67,18 @@
             <ui:repeat var="attachment" value="#{logMessage.attachmentList}">
               <tr class="message">
                 <td class="message">#{attachment.name}</td>
-                <td class="message"><h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/></td>
+                <td class="message">
+                	<h:panelGroup id="attachmentValue" rendered="#{attachment.toggled}">
+	                	<h:panelGrid columns="1" rendered="#{attachment.displayState}">
+							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Hide</a4j:commandLink>
+					    	<h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/>
+            	    	</h:panelGrid>
+                		<h:panelGroup rendered="#{!attachment.displayState}">
+							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Show</a4j:commandLink>
+                		</h:panelGroup>
+                	</h:panelGroup>
+					<h:outputText value="#{attachment.value}" converter="logMessageValueConverter" rendered="#{!attachment.toggled}"/>
+                </td>
               </tr>
             </ui:repeat>
           </table>          

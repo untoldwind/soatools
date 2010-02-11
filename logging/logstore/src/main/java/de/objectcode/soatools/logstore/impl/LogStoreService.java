@@ -45,6 +45,10 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.dialect.Dialect;
 import org.hibernate.dialect.DialectFactory;
+import org.hibernate.dialect.MySQL5Dialect;
+import org.hibernate.dialect.MySQL5InnoDBDialect;
+import org.hibernate.dialect.MySQLDialect;
+import org.hibernate.dialect.MySQLInnoDBDialect;
 import org.hibernate.tool.hbm2ddl.SchemaUpdate;
 import org.hibernate.transaction.JBossTransactionManagerLookup;
 import org.hibernate.transaction.JTATransactionFactory;
@@ -58,7 +62,6 @@ import de.objectcode.soatools.logstore.persistent.EsbMessage;
 import de.objectcode.soatools.logstore.persistent.LogJmsDeadLetter;
 import de.objectcode.soatools.logstore.persistent.LogMessage;
 import de.objectcode.soatools.logstore.persistent.LogTag;
-import de.objectcode.soatools.mfm.api.IMessageFormatRepository;
 import de.objectcode.soatools.mfm.api.normalize.NormalizedData;
 
 public class LogStoreService implements LogStoreServiceMBean {
@@ -73,7 +76,7 @@ public class LogStoreService implements LogStoreServiceMBean {
 	private Transformer transformer;
 
 	private ILogStoreViewRepository logStoreViewRepository = new LogStoreViewRepositoryImpl();
-	
+
 	private void dumpLogMessage(final Element parent,
 			final LogMessage logMessage) {
 		final Element logMessageElement = parent.addElement("log-message");
@@ -637,8 +640,14 @@ public class LogStoreService implements LogStoreServiceMBean {
 		final String vendor = metaData.getDatabaseProductName();
 		connection.close();
 
-		final Dialect dialect = DialectFactory.determineDialect(vendor,
-				majorVersion);
+		Dialect dialect = DialectFactory.determineDialect(vendor, majorVersion);
+
+		// Fix: Ensure that we always use InnoDB on MySQL
+		if (dialect instanceof MySQL5Dialect) {
+			dialect = new MySQL5InnoDBDialect();
+		} else if (dialect instanceof MySQLDialect) {
+			dialect = new MySQLInnoDBDialect();
+		}
 
 		final AnnotationConfiguration cfg = new AnnotationConfiguration();
 

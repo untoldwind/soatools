@@ -36,8 +36,7 @@ public class LogMessageBean implements Serializable
   final Map<String, NameValuePair> tags;
   final Map<String, NameValuePair> properties;
   final Map<String, NameValuePair> bodies;
-  final Map<String, NameValuePair> namedAttachments;
-  final List<NameValuePair> unnamedAttachments;
+  final Map<String, NameValuePair> attachments;
 
   public LogMessageBean(LogMessage logMessage)
   {
@@ -72,8 +71,7 @@ public class LogMessageBean implements Serializable
     }
     properties = new TreeMap<String, NameValuePair>();
     bodies = new TreeMap<String, NameValuePair>();
-    namedAttachments = new TreeMap<String, NameValuePair>();
-    unnamedAttachments = new ArrayList<NameValuePair>();
+    attachments = new TreeMap<String, NameValuePair>();
     try {
       final StringBuffer encoded = new StringBuffer();
       final char buffer[] = new char[8192];
@@ -100,12 +98,12 @@ public class LogMessageBean implements Serializable
       for (final String name : message.getAttachment().getNames()) {
         final Object value = message.getAttachment().get(name);
 
-        namedAttachments.put(name, new NameValuePair(name, value));
+        attachments.put(name, new NameValuePair(name, value));
       }
       for (int i = 0; i < message.getAttachment().getUnnamedCount(); i++) {
         final Object value = message.getAttachment().itemAt(i);
 
-        unnamedAttachments.add(new NameValuePair("", value));
+        attachments.put("unnamed-" +i, new NameValuePair("unnamed-" + i, value));
       }
 
     } catch (final Exception e) {
@@ -236,17 +234,12 @@ public class LogMessageBean implements Serializable
   
   public List<NameValuePair> getAttachmentList()
   {
-    List<NameValuePair> result = new ArrayList<NameValuePair>();
-
-    result.addAll(namedAttachments.values());
-    result.addAll(unnamedAttachments);
-
-    return result;
+	  return new ArrayList<NameValuePair>(attachments.values());
   }
 
   public Object getAttachment(String attachment)
   {
-    NameValuePair value = namedAttachments.get(attachment);
+    NameValuePair value = attachments.get(attachment);
 
     if (value != null) {
       return value.getValue();
@@ -256,6 +249,27 @@ public class LogMessageBean implements Serializable
   }
 
   public boolean hasAttachment(String attachment) {
-	  return namedAttachments.containsKey(attachment);
+	  return attachments.containsKey(attachment);
+  }
+  
+  public String toggleBody(String body) {
+	    NameValuePair value = bodies.get(body);
+	    
+	    if ( value != null ) {
+	    	value.setDisplayState(!value.isDisplayState());
+	    }
+	    
+	 return LogStoreLogDetailController.VIEW_ID;
+  }
+  
+  
+  public String toggleAttachment(String attachment) {
+	    NameValuePair value = attachments.get(attachment);
+	    
+	    if ( value != null ) {
+	    	value.setDisplayState(!value.isDisplayState());
+	    }
+	    
+	 return LogStoreLogDetailController.VIEW_ID;	  
   }
 }

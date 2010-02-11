@@ -8,11 +8,15 @@ public class NameValuePair implements Serializable
 
   final String name;
   final Object value;
+  boolean displayState;
+  final boolean toggled;
 
   public NameValuePair(String name, Object value)
   {
     this.name = name;
     this.value = value;
+    
+    toggled = value != null && value.toString().length() > 1024;
   }
 
   public String getName()
@@ -25,4 +29,18 @@ public class NameValuePair implements Serializable
     return value;
   }
 
+  public boolean isDisplayState()
+  {
+	return displayState;
+  }
+  
+  public void setDisplayState(boolean displayState)
+  {
+	this.displayState = displayState;
+  }
+  
+  public boolean isToggled()
+  {
+	  return toggled;
+  }
 }
