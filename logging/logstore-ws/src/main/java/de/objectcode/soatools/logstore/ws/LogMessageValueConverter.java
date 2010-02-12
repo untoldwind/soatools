@@ -82,6 +82,12 @@ public class LogMessageValueConverter implements javax.faces.convert.Converter {
 			}
 
 			return prettyPrint(document);
+		} else if (value instanceof javax.xml.transform.Source) {
+			if (component instanceof HtmlOutputText) {
+				((HtmlOutputText) component).setEscape(false);
+			}
+
+			return prettyPrint((javax.xml.transform.Source) value);			
 		} else {
 			return value.toString();
 		}
@@ -102,6 +108,21 @@ public class LogMessageValueConverter implements javax.faces.convert.Converter {
 		return value;
 	}
 
+	String prettyPrint(javax.xml.transform.Source source) {
+		try {
+			StringWriter out = new StringWriter();
+			out.append("<pre>");
+			prettyPrint.transform(source,
+					new StreamResult(out));
+			out.append("</pre>");
+			return out.toString();
+
+		} catch (Exception e) {
+			LOG.error("Exception", e);
+		}
+		return "";
+	}
+	
 	String prettyPrint(Document document) {
 		try {
 			StringWriter out = new StringWriter();

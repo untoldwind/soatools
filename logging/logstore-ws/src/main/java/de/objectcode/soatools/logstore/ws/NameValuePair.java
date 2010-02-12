@@ -15,8 +15,14 @@ public class NameValuePair implements Serializable
   {
     this.name = name;
     this.value = value;
-    
-    toggled = value != null && value.toString().length() > 1024;
+
+    if ( value != null ) {
+    	if ( value instanceof javax.xml.transform.Source )
+    		toggled = true;
+    	else
+    		toggled = value.toString().length() > 1024;
+    } else
+    	toggled = false;
   }
 
   public String getName()
