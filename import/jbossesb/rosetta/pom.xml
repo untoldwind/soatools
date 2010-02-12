@@ -22,7 +22,38 @@
 							<artifactId>jbossesb-rosetta</artifactId>
 							<version>4.6</version>
 							<packaging>jar</packaging>
-							<file>jbossesb-rosetta.jar</file>
+							<file>jbossesb-rosetta-4.6.jar</file>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-jbossesb-rosetta-4.7</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>org.jboss.soa.esb</groupId>
+							<artifactId>jbossesb-rosetta</artifactId>
+							<version>4.7</version>
+							<packaging>jar</packaging>
+							<file>jbossesb-rosetta-4.7.jar</file>
+							<generatePom>true</generatePom>
+						</configuration>
+					</execution>
+					<execution>
+						<id>install-jbossesb-rosetta-4.7-src</id>
+						<phase>install</phase>
+						<goals>
+							<goal>install-file</goal>
+						</goals>
+						<configuration>
+							<groupId>org.jboss.soa.esb</groupId>
+							<artifactId>jbossesb-rosetta</artifactId>
+							<version>4.7</version>
+							<packaging>jar</packaging>
+							<file>jbossesb-rosetta-4.7-src.jar</file>
+							<classifier>sources</classifier>
 							<generatePom>true</generatePom>
 						</configuration>
 					</execution>
