@@ -7,6 +7,7 @@ public class NameValuePair implements Serializable
   private static final long serialVersionUID = 3377168331467359284L;
 
   final String name;
+  final String type;
   final Object value;
   boolean displayState;
   final boolean toggled;
@@ -17,12 +18,15 @@ public class NameValuePair implements Serializable
     this.value = value;
 
     if ( value != null ) {
+    	type = value.getClass().getName();
     	if ( value instanceof javax.xml.transform.Source )
     		toggled = true;
     	else
     		toggled = value.toString().length() > 1024;
-    } else
+    } else {
+    	type = "<null>";
     	toggled = false;
+    }
   }
 
   public String getName()
@@ -30,7 +34,11 @@ public class NameValuePair implements Serializable
     return name;
   }
 
-  public Object getValue()
+  public String getType() {
+	return type;
+}
+
+public Object getValue()
   {
     return value;
   }

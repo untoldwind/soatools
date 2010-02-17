@@ -51,11 +51,13 @@
                 	<h:panelGroup id="bodyValue" rendered="#{body.toggled}">
 	                	<h:panelGrid columns="1" rendered="#{body.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Hide</a4j:commandLink>
+							<h:outputText value="#{body.type}"/>
 					    	<h:outputText value="#{body.value}" converter="logMessageValueConverter"/>
             	    	</h:panelGrid>
-                		<h:panelGroup rendered="#{!body.displayState}">
+                		<h:panelGrid columns="1" rendered="#{!body.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Show</a4j:commandLink>
-                		</h:panelGroup>
+							<h:outputText value="#{body.type}"/>
+                		</h:panelGrid>
                 	</h:panelGroup>
 					<h:outputText value="#{body.value}" converter="logMessageValueConverter" rendered="#{!body.toggled}"/>
     			</td>
@@ -71,11 +73,13 @@
                 	<h:panelGroup id="attachmentValue" rendered="#{attachment.toggled}">
 	                	<h:panelGrid columns="1" rendered="#{attachment.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Hide</a4j:commandLink>
+							<h:outputText value="#{attachment.type}"/>
 					    	<h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/>
             	    	</h:panelGrid>
-                		<h:panelGroup rendered="#{!attachment.displayState}">
+                		<h:panelGrid columns="1" rendered="#{!attachment.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Show</a4j:commandLink>
-                		</h:panelGroup>
+							<h:outputText value="#{attachment.type}"/>
+                		</h:panelGrid>
                 	</h:panelGroup>
 					<h:outputText value="#{attachment.value}" converter="logMessageValueConverter" rendered="#{!attachment.toggled}"/>
                 </td>
