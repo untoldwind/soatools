@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<server>
+  <mbean code="de.objectcode.soatools.util.splitter.impl.SplitterService"
+    name="de.objectcode.soatools.generic:service=SplitterService">
+    <depends>jboss.jca:service=DataSourceBinding,name=DefaultDS</depends>
+  </mbean>
+</server>
