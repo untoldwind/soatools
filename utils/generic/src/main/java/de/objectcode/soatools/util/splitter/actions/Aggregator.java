@@ -6,7 +6,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.naming.InitialContext;
@@ -37,9 +40,23 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 	final SessionFactory sessionFactory;
 	final MessagePayloadProxy payload;
 	final Map<String, IValueLocator> valueLocators;
+	final IMessageCombiner messageCombiner;
 
 	public Aggregator(ConfigTree config) throws ConfigurationException {
 		payload = new MessagePayloadProxy(config);
+
+		String messageCombinerClass = config
+				.getAttribute("message-combiner-class");
+
+		if (messageCombinerClass != null) {
+			try {
+				messageCombiner = (IMessageCombiner) Class.forName(
+						messageCombinerClass).newInstance();
+			} catch (Exception e) {
+				throw new ConfigurationException(e);
+			}
+		} else
+			messageCombiner = null;
 
 		valueLocators = new HashMap<String, IValueLocator>();
 		ConfigTree[] valueConfigs = config.getChildren("value");
@@ -88,31 +105,44 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 
 			Map<Integer, SplitPartEntity> parts = splitEntity.getParts();
 
+			if (partIndex < 0 || partIndex >= splitEntity.getPartCount())
+				throw new ActionProcessingException("Part index " + partIndex
+						+ " out of bounds: " + splitEntity.getPartCount());
+
 			if (parts.containsKey(partIndex))
 				throw new ActionProcessingException("Part " + partIndex
 						+ "in split " + splitId + " already received");
 
 			if (parts.size() == splitEntity.getPartCount() - 1) {
-				Map<Integer, Map<String, Object>> partContents = new HashMap<Integer, Map<String,Object>>();
+				List<Map<String, Object>> partContents = new ArrayList<Map<String, Object>>(
+						Collections.<Map<String, Object>> nCopies(splitEntity
+								.getPartCount(), null));
 
-				partContents.put(partIndex, getContents(message));
-				
-				for ( Map.Entry<Integer, SplitPartEntity> entry : parts.entrySet() ) {
-					partContents.put(entry.getKey(), deserializeContent(entry.getValue().getContent()));
+				partContents.set(partIndex, getContents(message));
+
+				for (Map.Entry<Integer, SplitPartEntity> entry : parts
+						.entrySet()) {
+					partContents.set(entry.getKey(), deserializeContent(entry
+							.getValue().getContent()));
 				}
-				
+
 				session.delete(splitEntity);
 				session.flush();
-				
-				payload.setPayload(message, partContents);
-				
-				return message;
+
+				if (messageCombiner != null)
+					return messageCombiner.combine(message, partContents);
+				else {
+					payload.setPayload(message, partContents);
+
+					return message;
+				}
 			} else {
-				SplitPartEntity part = new SplitPartEntity(partIndex, splitEntity, serializeContent(message));
-				
+				SplitPartEntity part = new SplitPartEntity(partIndex,
+						splitEntity, serializeContent(message));
+
 				session.persist(part);
 				session.flush();
-				
+
 				return null;
 			}
 		} catch (final ActionProcessingException e) {
@@ -127,33 +157,35 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 		}
 	}
 
-	private Blob serializeContent(Message message) throws IOException, ActionProcessingException {
+	private Blob serializeContent(Message message) throws IOException,
+			ActionProcessingException {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutputStream oos = new ObjectOutputStream(bos);
-		
+
 		oos.writeObject(getContents(message));
 		oos.flush();
 		oos.close();
-		
 
 		return new BlobImpl(bos.toByteArray());
 	}
 
 	@SuppressWarnings("unchecked")
-	private Map<String, Object> deserializeContent(Blob content) throws IOException, SQLException, ClassNotFoundException {
+	private Map<String, Object> deserializeContent(Blob content)
+			throws IOException, SQLException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(content.getBinaryStream());
 
-		Map<String, Object> result = (Map<String, Object>)ois.readObject();
-		
+		Map<String, Object> result = (Map<String, Object>) ois.readObject();
+
 		ois.close();
-		
+
 		return result;
 	}
 
-	private Map<String, Object> getContents(Message message) throws ActionProcessingException {
+	private Map<String, Object> getContents(Message message)
+			throws ActionProcessingException {
 		Map<String, Object> contents = new HashMap<String, Object>();
-		
-		for ( Map.Entry<String, IValueLocator> entry : valueLocators.entrySet()) {
+
+		for (Map.Entry<String, IValueLocator> entry : valueLocators.entrySet()) {
 			contents.put(entry.getKey(), entry.getValue().getValue(message));
 		}
 

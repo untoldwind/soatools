@@ -1,8 +1,9 @@
 package de.objectcode.soatools.util.splitter.actions;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -12,14 +13,18 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.jboss.soa.esb.ConfigurationException;
+import org.jboss.soa.esb.Service;
 import org.jboss.soa.esb.actions.AbstractActionPipelineProcessor;
 import org.jboss.soa.esb.actions.ActionProcessingException;
+import org.jboss.soa.esb.addressing.EPR;
 import org.jboss.soa.esb.client.ServiceInvoker;
 import org.jboss.soa.esb.helpers.ConfigTree;
+import org.jboss.soa.esb.listeners.RegistryUtil;
 import org.jboss.soa.esb.listeners.message.MessageDeliverException;
 import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.MessagePayloadProxy;
-import org.jboss.soa.esb.message.format.MessageFactory;
+import org.jboss.soa.esb.services.registry.RegistryException;
+import org.jboss.soa.esb.services.registry.ServiceNotFoundException;
 
 import de.objectcode.soatools.util.splitter.IConstants;
 import de.objectcode.soatools.util.splitter.persistent.SplitEntity;
@@ -27,28 +32,39 @@ import de.objectcode.soatools.util.splitter.persistent.SplitEntity;
 public class Splitter extends AbstractActionPipelineProcessor {
 	private final static Log LOG = LogFactory.getLog(Splitter.class);
 
-	final ServiceInvoker targetService;
 	final String serviceCategory;
 	final String serviceName;
-	final int additionalSplitCount;
 	final MessagePayloadProxy payload;
 	final SessionFactory sessionFactory;
+	final IMessageSplitter messageSplitter;
+	final Service aggregatorService;
 
 	public Splitter(ConfigTree config) throws ConfigurationException {
 		serviceCategory = config.getParent().getRequiredAttribute(
 				"service-category");
 		serviceName = config.getParent().getRequiredAttribute("service-name");
 
-		additionalSplitCount = (int) config.getLongAttribute(
-				"additional-split-count", 0);
-		String targetCategory = config.getRequiredAttribute("target-category");
-		String targetName = config.getRequiredAttribute("target-name");
+		String messageSplitterClass = config
+				.getAttribute("message-splitter-class");
 
-		try {
-			targetService = new ServiceInvoker(targetCategory, targetName);
-		} catch (MessageDeliverException e) {
-			throw new ConfigurationException(e);
-		}
+		if (messageSplitterClass != null) {
+			try {
+				messageSplitter = (IMessageSplitter) Class.forName(
+						messageSplitterClass).newInstance();
+			} catch (Exception e) {
+				throw new ConfigurationException(e);
+			}
+		} else
+			messageSplitter = null;
+		
+		if (config.getAttribute("aggregator-category") != null
+				&& config.getAttribute("aggregator-name") != null) {
+			aggregatorService = new Service(config
+					.getAttribute("aggregator-category"), config
+					.getAttribute("aggregator-name"));
+		} else
+			aggregatorService = null;
+
 
 		payload = new MessagePayloadProxy(config);
 
@@ -63,40 +79,47 @@ public class Splitter extends AbstractActionPipelineProcessor {
 	}
 
 	public Message process(Message message) throws ActionProcessingException {
-		Collection<?> splitMessages;
+		List<?> splitMessages;
 
-		try {
-			Object data = payload.getPayload(message);
+		if (messageSplitter != null)
+			splitMessages = messageSplitter.split(message);
+		else {
+			try {
+				Object data = payload.getPayload(message);
 
-			if (data instanceof Collection<?>)
-				splitMessages = (Collection<?>) data;
-			else if (data instanceof Object[])
-				splitMessages = Arrays.asList((Object[]) data);
-			else
-				throw new ActionProcessingException(data
-						+ " is neither collection or array");
-		} catch (MessageDeliverException e) {
-			LOG.error("Exception", e);
+				if (data instanceof Collection<?>)
+					splitMessages = new ArrayList<Object>((Collection<?>) data);
+				else if (data instanceof Object[])
+					splitMessages = Arrays.asList((Object[]) data);
+				else
+					throw new ActionProcessingException(data
+							+ " is neither collection or array");
+			} catch (MessageDeliverException e) {
+				LOG.error("Exception", e);
 
-			throw new ActionProcessingException(e);
+				throw new ActionProcessingException(e);
+			}
 		}
+
 		Session session = null;
 
 		try {
+			EPR aggregatorEPR = findAggregatorEPR();
+
 			session = sessionFactory.openSession();
 
-			int partCount = additionalSplitCount + splitMessages.size();
+			int partCount = splitMessages.size();
 			SplitEntity splitEntity = new SplitEntity(serviceCategory,
 					serviceName, partCount);
 
 			session.persist(splitEntity);
 			session.flush();
+			
+			int partIndex = 0;
 
-			int partIndex = additionalSplitCount;
-
-			for (Object splitMessage : splitMessages) {
+			for (Object element : splitMessages) {
 				doSend(splitEntity.getId(), partIndex++, partCount,
-						splitMessage);
+						(SplitMessage) element, aggregatorEPR);
 			}
 		} catch (final Exception e) {
 			LOG.error("Exception", e);
@@ -110,26 +133,24 @@ public class Splitter extends AbstractActionPipelineProcessor {
 		return message;
 	}
 
-	private void doSend(long splitId, int partIndex, int partCount,
-			Object splitMessage) throws MessageDeliverException {
-		Message message;
+	private EPR findAggregatorEPR () throws RegistryException, ServiceNotFoundException {
+		if (aggregatorService != null) {
+			List<EPR> eprs = RegistryUtil.getEprs(aggregatorService
+					.getCategory(), aggregatorService.getName());
 
-		if (splitMessage instanceof Message) {
-			message = (Message) splitMessage;
-		} else if (splitMessage instanceof Map<?, ?>) {
-			Map<?, ?> map = (Map<?, ?>) splitMessage;
-
-			message = MessageFactory.getInstance().getMessage();
-
-			for (Map.Entry<?, ?> entry : map.entrySet()) {
-				message.getBody().add(entry.getKey().toString(),
-						entry.getValue());
-			}
-		} else {
-			message = MessageFactory.getInstance().getMessage();
-
-			message.getBody().add(splitMessage);
+			if (eprs.isEmpty())
+				throw new RuntimeException("No epr found for service: "
+						+ aggregatorService);
+			
+			return eprs.get(0);
 		}
+		return null;
+		
+	}
+	
+	private void doSend(long splitId, int partIndex, int partCount,
+			SplitMessage splitMessage, EPR aggregatorEPR) throws MessageDeliverException {
+		Message message = splitMessage.getMessage();
 
 		message.getProperties().setProperty(IConstants.SPLITTER_ID, splitId);
 		message.getProperties().setProperty(IConstants.SPLITTER_PART_INDEX,
@@ -137,6 +158,14 @@ public class Splitter extends AbstractActionPipelineProcessor {
 		message.getProperties().setProperty(IConstants.SPLITTER_PART_COUNT,
 				partCount);
 
-		targetService.deliverAsync(message);
+		if ( aggregatorEPR != null ) {
+			message.getHeader().getCall().setReplyTo(aggregatorEPR);
+			message.getHeader().getCall().setFaultTo(aggregatorEPR);
+		}
+		
+		ServiceInvoker invoker = new ServiceInvoker(splitMessage
+				.getTargetService());
+
+		invoker.deliverAsync(message);
 	}
 }

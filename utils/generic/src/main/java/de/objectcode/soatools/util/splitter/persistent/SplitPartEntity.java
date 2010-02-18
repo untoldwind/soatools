@@ -24,9 +24,9 @@ public class SplitPartEntity {
 	Date receivedAt;
 
 	protected SplitPartEntity() {
-		
+
 	}
-	
+
 	public SplitPartEntity(int partIndex, SplitEntity split, Blob content) {
 		this.partIndex = partIndex;
 		this.split = split;
@@ -54,7 +54,8 @@ public class SplitPartEntity {
 	public void setPartIndex(int partIndex) {
 		this.partIndex = partIndex;
 	}
-	@Column(name="RECEIVED_AT")
+
+	@Column(name = "RECEIVED_AT")
 	public Date getReceivedAt() {
 		return receivedAt;
 	}
@@ -72,7 +73,6 @@ public class SplitPartEntity {
 	public void setSplit(SplitEntity split) {
 		this.split = split;
 	}
-
 
 	@Column(name = "CONTENT")
 	public Blob getContent() {
