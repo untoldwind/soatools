@@ -21,6 +21,8 @@ public class SplitPartEntity {
 	int partIndex;
 	SplitEntity split;
 	Blob content;
+	String faultReason;
+	String faultCode;
 	Date receivedAt;
 
 	protected SplitPartEntity() {
@@ -81,5 +83,23 @@ public class SplitPartEntity {
 
 	public void setContent(Blob content) {
 		this.content = content;
+	}
+
+	@Column(name = "FAULT_REASON")
+	public String getFaultReason() {
+		return faultReason;
+	}
+
+	public void setFaultReason(String faultReason) {
+		this.faultReason = faultReason;
+	}
+
+	@Column(name = "FAULT_CODE")
+	public String getFaultCode() {
+		return faultCode;
+	}
+
+	public void setFaultCode(String faultCode) {
+		this.faultCode = faultCode;
 	}
 }

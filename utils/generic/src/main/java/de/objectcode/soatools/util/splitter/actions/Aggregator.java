@@ -140,6 +140,15 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 				SplitPartEntity part = new SplitPartEntity(partIndex,
 						splitEntity, serializeContent(message));
 
+				if (message.getFault() != null) {
+					if (message.getFault().getReason() != null) {
+						part.setFaultReason(message.getFault().getReason());
+					}
+					if (message.getFault().getCode() != null) {
+						part.setFaultCode(message.getFault().getCode().toString());
+					}
+				}
+
 				session.persist(part);
 				session.flush();
 
