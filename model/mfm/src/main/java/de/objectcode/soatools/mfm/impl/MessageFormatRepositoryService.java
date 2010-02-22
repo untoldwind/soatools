@@ -77,6 +77,13 @@ public class MessageFormatRepositoryService implements
 			}
 		}
 
+		// Fix: Ensure that we always use InnoDB on MySQL
+		if ("org.hibernate.dialect.MySQL5Dialect".equals(dialect)) {
+			dialect = "org.hibernate.dialect.MySQL5InnoDBDialect";
+		} else if ("org.hibernate.dialect.MySQLDialect".equals(dialect)) {
+			dialect = "org.hibernate.dialect.MySQLInnoDBDialect";
+		}
+
 		AnnotationConfiguration cfg = new AnnotationConfiguration();
 
 		cfg.addAnnotatedClass(Type.class);

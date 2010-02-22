@@ -3,7 +3,9 @@ package de.objectcode.soatools.util.splitter.actions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -38,6 +40,8 @@ public class Splitter extends AbstractActionPipelineProcessor {
 	final SessionFactory sessionFactory;
 	final IMessageSplitter messageSplitter;
 	final Service aggregatorService;
+	
+    private Map<Service, ServiceInvoker> invokers = new LinkedHashMap<Service, ServiceInvoker>();
 
 	public Splitter(ConfigTree config) throws ConfigurationException {
 		serviceCategory = config.getParent().getRequiredAttribute(
@@ -149,7 +153,7 @@ public class Splitter extends AbstractActionPipelineProcessor {
 	}
 	
 	private void doSend(long splitId, int partIndex, int partCount,
-			SplitMessage splitMessage, EPR aggregatorEPR) throws MessageDeliverException {
+			SplitMessage splitMessage, EPR aggregatorEPR) throws RegistryException, MessageDeliverException {
 		Message message = splitMessage.getMessage();
 
 		message.getProperties().setProperty(IConstants.SPLITTER_ID, splitId);
@@ -163,9 +167,21 @@ public class Splitter extends AbstractActionPipelineProcessor {
 			message.getHeader().getCall().setFaultTo(aggregatorEPR);
 		}
 		
-		ServiceInvoker invoker = new ServiceInvoker(splitMessage
+		ServiceInvoker invoker = getInvoker(splitMessage
 				.getTargetService());
 
 		invoker.deliverAsync(message);
 	}
+	
+    private ServiceInvoker getInvoker(Service recipient) throws RegistryException, MessageDeliverException {
+        ServiceInvoker invoker = invokers.get(recipient);
+
+        // We lazilly create the invokers...
+        if(invoker == null) {
+            invoker = new ServiceInvoker(recipient);
+            invokers.put(recipient, invoker);
+        }
+
+        return invoker;
+    }
 }
