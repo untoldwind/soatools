@@ -23,6 +23,7 @@ import org.jboss.soa.esb.client.ServiceInvoker;
 import org.jboss.soa.esb.helpers.ConfigTree;
 import org.jboss.soa.esb.listeners.RegistryUtil;
 import org.jboss.soa.esb.listeners.message.MessageDeliverException;
+import org.jboss.soa.esb.message.Context;
 import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.MessagePayloadProxy;
 import org.jboss.soa.esb.services.registry.RegistryException;
@@ -40,6 +41,7 @@ public class Splitter extends AbstractActionPipelineProcessor {
 	final SessionFactory sessionFactory;
 	final IMessageSplitter messageSplitter;
 	final Service aggregatorService;
+	final boolean copyContext;
 	
     private Map<Service, ServiceInvoker> invokers = new LinkedHashMap<Service, ServiceInvoker>();
 
@@ -48,6 +50,8 @@ public class Splitter extends AbstractActionPipelineProcessor {
 				"service-category");
 		serviceName = config.getParent().getRequiredAttribute("service-name");
 
+		copyContext = config.getBooleanAttribute("copy-context", true);
+		
 		String messageSplitterClass = config
 				.getAttribute("message-splitter-class");
 
@@ -122,7 +126,7 @@ public class Splitter extends AbstractActionPipelineProcessor {
 			int partIndex = 0;
 
 			for (Object element : splitMessages) {
-				doSend(splitEntity.getId(), partIndex++, partCount,
+				doSend(message.getContext(), splitEntity.getId(), partIndex++, partCount,
 						(SplitMessage) element, aggregatorEPR);
 			}
 		} catch (final Exception e) {
@@ -152,10 +156,15 @@ public class Splitter extends AbstractActionPipelineProcessor {
 		
 	}
 	
-	private void doSend(long splitId, int partIndex, int partCount,
+	private void doSend(Context context, long splitId, int partIndex, int partCount,
 			SplitMessage splitMessage, EPR aggregatorEPR) throws RegistryException, MessageDeliverException {
 		Message message = splitMessage.getMessage();
 
+		if ( copyContext ) {
+			for ( String name : context.getContextKeys() )
+				message.getContext().setContext(name, context.getContext(name));
+		}
+		
 		message.getProperties().setProperty(IConstants.SPLITTER_ID, splitId);
 		message.getProperties().setProperty(IConstants.SPLITTER_PART_INDEX,
 				partIndex);

@@ -34,6 +34,7 @@ public class LogMessageBean implements Serializable
   final String faultReason;
   final String faultCause;
   final Map<String, NameValuePair> tags;
+  final Map<String, NameValuePair> contexts;
   final Map<String, NameValuePair> properties;
   final Map<String, NameValuePair> bodies;
   final Map<String, NameValuePair> attachments;
@@ -69,6 +70,7 @@ public class LogMessageBean implements Serializable
     } else {
       faultCause = null;
     }
+    contexts = new TreeMap<String, NameValuePair>();
     properties = new TreeMap<String, NameValuePair>();
     bodies = new TreeMap<String, NameValuePair>();
     attachments = new TreeMap<String, NameValuePair>();
@@ -85,6 +87,11 @@ public class LogMessageBean implements Serializable
 
       final Message message = Util.deserialize(Encoding.decodeToObject(encoded.toString()));
 
+      for (final String name : message.getContext().getContextKeys() ) {
+    	  final Object value = message.getContext().getContext(name);
+
+    	  contexts.put(name, new NameValuePair(name, value));
+      }
       for (final String name : message.getProperties().getNames()) {
         final Object value = message.getProperties().getProperty(name);
 
@@ -192,6 +199,24 @@ public class LogMessageBean implements Serializable
     return new ArrayList<NameValuePair>(tags.values());
   }
 
+  public List<NameValuePair> getContextList() {
+	  return new ArrayList<NameValuePair>(contexts.values());
+  }
+  
+  public Object getContext(String context) {
+	    NameValuePair value = contexts.get(context);
+
+	    if (value != null) {
+	      return value.getValue();
+	    }
+
+	    return null;
+  }
+  
+  public boolean hasContext(String context) {
+	  return contexts.containsKey(context);
+  }
+  
   public List<NameValuePair> getPropertyList()
   {
     return new ArrayList<NameValuePair>(properties.values());

@@ -33,6 +33,15 @@
               </tr>
             </ui:fragment>
             <tr class="message">
+              <td colspan="2" class="section">Context</td>
+            </tr>
+            <ui:repeat var="context" value="#{logMessage.contextList}">
+              <tr class="message">
+                <td class="message">#{context.name}</td>
+                <td class="message"><h:outputText value="#{context.value}" converter="logMessageValueConverter"/></td>
+              </tr>
+            </ui:repeat>
+            <tr class="message">
               <td colspan="2" class="section">Properties</td>
             </tr>
             <ui:repeat var="property" value="#{logMessage.propertyList}">
