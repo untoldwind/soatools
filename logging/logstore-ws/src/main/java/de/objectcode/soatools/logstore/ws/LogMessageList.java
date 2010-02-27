@@ -12,7 +12,7 @@ public class LogMessageList implements Serializable
   private static final long serialVersionUID = -717019075517069164L;
 
   List<LogMessageBean> logMessages;
-  LogMessageBean current;
+  LogMessageDetailBean current;
 
   public List<LogMessageBean> getLogMessages()
   {
@@ -29,12 +29,12 @@ public class LogMessageList implements Serializable
     return current != null;
   }
 
-  public LogMessageBean getCurrent()
+  public LogMessageDetailBean getCurrent()
   {
     return current;
   }
 
-  public void setCurrent(LogMessageBean current)
+  public void setCurrent(LogMessageDetailBean current)
   {
     this.current = current;
   }
