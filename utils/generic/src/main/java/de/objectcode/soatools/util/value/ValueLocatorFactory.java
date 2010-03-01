@@ -76,14 +76,15 @@ public class ValueLocatorFactory {
 
 		String expression = config.getAttribute("expression");
 		String objectPath = config.getAttribute("object-path");
+		String contextValue = config.getAttribute("context-value");
 		String xpath = config.getAttribute("xpath");
 		String defaultValue = config.getAttribute("default-value");
 		String value = config.getAttribute("value");
 
-		if ((objectPath == null && expression == null && value == null && xpath == null)
+		if ((objectPath == null && expression == null && value == null && xpath == null && contextValue == null )
 				|| (objectPath != null && value != null)) {
 			throw new ConfigurationException(
-					"parameter needs either object-path, expression, xpath or value");
+					"parameter needs either object-path, expression, xpath, value or context-value");
 		}
 
 		if (objectPath != null) {
@@ -92,6 +93,8 @@ public class ValueLocatorFactory {
 			return new MVELValueLocator(expression);
 		} else if (xpath != null) {
 			return new XPathValueLocator(xpath);
+		} else if ( contextValue != null ) {
+			return new ContextValueLocator(contextValue, defaultValue);
 		} else {
 			return new StaticValueLocator(value);
 		}
