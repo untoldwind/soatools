@@ -19,6 +19,36 @@
                 #{logMessage.correlationId}
               </td>
             </tr>
+            <tr class="message">
+              <td class="message">Message To</td>
+              <td class="message">
+                #{logMessage.messageTo}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message From</td>
+              <td class="message">
+                #{logMessage.messageFrom}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message ReplyTo</td>
+              <td class="message">
+                #{logMessage.messageReplyTo}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message FaultTo</td>
+              <td class="message">
+                #{logMessage.messageFaultTo}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message Type</td>
+              <td class="message">
+                #{logMessage.messageType}
+              </td>
+            </tr>
             <ui:fragment rendered="#{logMessage.faultReason != null || logMessage.faultCause != null}">
               <tr class="message">
                 <td colspan="2" class="section">Fault</td>

@@ -128,6 +128,11 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()
 							.toString() : "");
+			logMessage.getBody().add("message-to", call.getTo() != null ? call.getTo().toString() : "");
+			logMessage.getBody().add("message-from", call.getFrom() != null ? call.getFrom().toString() : "");
+			logMessage.getBody().add("message-replyTo", call.getReplyTo() != null ? call.getReplyTo().toString() : "");
+			logMessage.getBody().add("message-faultTo", call.getFaultTo() != null ? call.getFaultTo().toString() : "");			
+			logMessage.getBody().add("message-type", message.getType().toString());
 			logMessage.getBody().add("service-category", serviceCategory);
 			logMessage.getBody().add("service-name", serviceName);
 			logMessage.getBody().add("state", "ERROR");

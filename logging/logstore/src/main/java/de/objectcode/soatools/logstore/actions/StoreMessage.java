@@ -69,6 +69,11 @@ public class StoreMessage extends AbstractActionPipelineProcessor {
 					.get("message-id"));
 			logMessage.setCorrelationId((String) message.getBody().get(
 					"correlation-id"));
+			logMessage.setMessageTo((String)message.getBody().get("message-to"));
+			logMessage.setMessageFrom((String)message.getBody().get("message-from"));
+			logMessage.setMessageReplyTo((String)message.getBody().get("message-replyTo"));
+			logMessage.setMessageFaultTo((String)message.getBody().get("message-faultTo"));
+			logMessage.setMessageType((String)message.getBody().get("message-type"));
 			logMessage.setJbpmProcessInstanceId((Long) message.getBody().get(
 					"jbpm-process-instance-id"));
 			logMessage.setJbpmTokenId((Long) message.getBody().get(

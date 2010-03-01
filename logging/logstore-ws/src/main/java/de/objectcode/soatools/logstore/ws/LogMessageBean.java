@@ -16,6 +16,11 @@ public class LogMessageBean implements Serializable {
 	final Date logLeaveTimestamp;
 	final String messageId;
 	final String correlationId;
+	final String messageTo;
+	final String messageFrom;
+	final String messageReplyTo;
+	final String messageFaultTo;
+	final String messageType;
 	final Long jbpmProcessInstanceId;
 	final Long jbpmTokenId;
 	final Long jbpmNodeId;
@@ -29,6 +34,11 @@ public class LogMessageBean implements Serializable {
 		logLeaveTimestamp = logMessage.getLogLeaveTimestamp();
 		messageId = logMessage.getMessageId();
 		correlationId = logMessage.getCorrelationId();
+		messageTo = logMessage.getMessageTo();
+		messageFrom = logMessage.getMessageFrom();
+		messageReplyTo = logMessage.getMessageReplyTo();
+		messageFaultTo = logMessage.getMessageFaultTo();
+		messageType = logMessage.getMessageType();
 		jbpmProcessInstanceId = logMessage.getJbpmProcessInstanceId();
 		jbpmTokenId = logMessage.getJbpmTokenId();
 		jbpmNodeId = logMessage.getJbpmNodeId();
@@ -56,6 +66,26 @@ public class LogMessageBean implements Serializable {
 
 	public String getCorrelationId() {
 		return correlationId;
+	}
+
+	public String getMessageTo() {
+		return messageTo;
+	}
+
+	public String getMessageFrom() {
+		return messageFrom;
+	}
+
+	public String getMessageReplyTo() {
+		return messageReplyTo;
+	}
+
+	public String getMessageFaultTo() {
+		return messageFaultTo;
+	}
+
+	public String getMessageType() {
+		return messageType;
 	}
 
 	public Long getJbpmProcessInstanceId() {
