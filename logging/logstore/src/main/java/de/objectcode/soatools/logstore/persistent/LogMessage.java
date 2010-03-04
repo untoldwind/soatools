@@ -80,7 +80,7 @@ public class LogMessage {
 		this.correlationId = correlationId;
 	}
 
-	@Column(name = "MESSAGE_TO")
+	@Column(name = "MESSAGE_TO", length = 1000)
 	public String getMessageTo() {
 		return messageTo;
 	}
@@ -89,7 +89,7 @@ public class LogMessage {
 		this.messageTo = messageTo;
 	}
 
-	@Column(name = "MESSAGE_FROM")
+	@Column(name = "MESSAGE_FROM", length = 1000)
 	public String getMessageFrom() {
 		return messageFrom;
 	}
@@ -98,7 +98,7 @@ public class LogMessage {
 		this.messageFrom = messageFrom;
 	}
 
-	@Column(name = "MESSAGE_REPLYTO")
+	@Column(name = "MESSAGE_REPLYTO", length = 1000)
 	public String getMessageReplyTo() {
 		return messageReplyTo;
 	}
@@ -107,7 +107,7 @@ public class LogMessage {
 		this.messageReplyTo = messageReplyTo;
 	}
 
-	@Column(name = "MESSAGE_FAULTTO")
+	@Column(name = "MESSAGE_FAULTTO", length = 1000)
 	public String getMessageFaultTo() {
 		return messageFaultTo;
 	}
@@ -200,7 +200,7 @@ public class LogMessage {
 		this.tags = tags;
 	}
 
-	@Column(name = "FAULT_REASON")
+	@Column(name = "FAULT_REASON", length = 1000)
 	public String getFaultReason() {
 		return faultReason;
 	}
