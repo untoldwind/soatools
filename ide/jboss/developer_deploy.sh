@@ -22,6 +22,7 @@ rm -rf soatools-*
 ln -s $BASE/logging/logstore/src/main/jbm/soatools-logging-logstore-queue-service.xml soatools-logging-logstore-queue-service.xml
 ln -s $BASE/logging/logstore/target/soatools-logging-logstore soatools-logging-logstore.esb
 ln -s $BASE/logging/logstore-ws/target/soatools-logging-logstore-ws soatools-logging-logstore-ws.war
+ln -s $BASE/logging/logstore-ui/target/soatools-logging-logstore-ui soatools-logging-logstore-ui.war
 ln -s $BASE/model/mfm/target/soatools-model-mfm soatools-model-mfm.esb
 ln -s $BASE/test/services/consumer/src/main/jbm/soatools-test-services-consumer-queue-service.xml soatools-test-services-consumer-queue-service.xml
 ln -s $BASE/test/services/consumer/target/soatools-test-services-consumer soatools-test-services-consumer.esb

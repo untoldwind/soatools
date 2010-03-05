@@ -1,0 +1,11 @@
+<jboss-web>
+  <context-root>/logstore</context-root>
+  <depends>de.objectcode.soatools.logstore:service=LogStoreService</depends>
+  <security-domain>java:/jaas/jmx-console</security-domain>
+  <class-loading java2ClassLoadingCompliance="false">
+    <loader-repository>
+      jboss.esb.util.logstore:loader=LogStoreServiceLoader
+      <loader-repository-config>java2ParentDelegation=false</loader-repository-config>
+    </loader-repository>
+  </class-loading>
+</jboss-web>

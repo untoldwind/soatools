@@ -37,6 +37,7 @@
       <outputFileNameMapping>${artifact.artifactId}${dashClassifier?}.${artifact.extension}</outputFileNameMapping>
       <outputDirectory>/war</outputDirectory>
       <includes>
+        <include>de.objectcode.soatools.logging:soatools-logging-logstore-ui:war</include>
         <include>de.objectcode.soatools.logging:soatools-logging-logstore-ws:war</include>
       </includes>
     </dependencySet>
