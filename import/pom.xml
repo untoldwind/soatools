@@ -8,5 +8,6 @@
 	<name>soatools-imported</name>
 	<modules>
 		<module>jbossesb</module>
+		<module>jmeter</module>
 	</modules>
 </project>

@@ -642,13 +642,6 @@ public class LogStoreService implements LogStoreServiceMBean {
 
 		Dialect dialect = DialectFactory.determineDialect(vendor, majorVersion);
 
-		// Fix: Ensure that we always use InnoDB on MySQL
-		if (dialect instanceof MySQL5Dialect) {
-			dialect = new MySQL5InnoDBDialect();
-		} else if (dialect instanceof MySQLDialect) {
-			dialect = new MySQLInnoDBDialect();
-		}
-
 		final AnnotationConfiguration cfg = new AnnotationConfiguration();
 
 		cfg.addAnnotatedClass(LogTag.class);

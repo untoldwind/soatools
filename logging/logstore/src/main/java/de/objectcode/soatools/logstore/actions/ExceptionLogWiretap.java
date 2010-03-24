@@ -30,6 +30,7 @@ import org.jboss.soa.esb.message.format.MessageFactory;
 import org.jboss.soa.esb.message.format.MessageType;
 import org.jboss.soa.esb.util.Util;
 
+import de.objectcode.soatools.util.retry.ExceptionCache;
 import de.objectcode.soatools.util.value.IValueLocator;
 import de.objectcode.soatools.util.value.ValueLocatorFactory;
 
@@ -232,6 +233,17 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 				logMessage.getBody().add("tags", tags);
 				logMessage.getBody().add("content",
 						Encoding.encodeObject(Util.serialize(message)));
+				Throwable th = ExceptionCache.getInstance().findException(call.getMessageID().toString());
+				
+				if ( th != null ) {
+				StringWriter writer = new StringWriter();
+				PrintWriter out = new PrintWriter(writer);
+				th.printStackTrace(out);
+				out.flush();
+				out.close();
+				logMessage.getBody().add("fault-cause", writer.toString());
+				logMessage.getBody().add("fault-reason", th.getMessage());
+				}
 
 				logService.deliverAsync(logMessage);
 			} catch (Exception e) {

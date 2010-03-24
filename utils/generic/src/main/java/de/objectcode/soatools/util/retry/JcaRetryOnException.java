@@ -40,9 +40,10 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 
 	public final static String RETRY_COUNT = "de.objectcode.soatools.retryCount";
 
-	Service service;
-	ServiceInvoker dlqServiceInvoker;
-	int maxRetries;
+	private final Service service;
+	private final ServiceInvoker dlqServiceInvoker;
+	private final int maxRetries;
+	private final boolean throwFault;
 
 	public JcaRetryOnException(ConfigTree config) throws ConfigurationException {
 		String serviceCategory = config.getParent().getRequiredAttribute(
@@ -52,6 +53,7 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 
 		service = new Service(serviceCategory, serviceName);
 		maxRetries = (int) config.getLongAttribute("max-retries", 20);
+		throwFault = config.getBooleanAttribute("throw-fault", true);
 
 		try {
 			dlqServiceInvoker = new ServiceInvoker(ServiceInvoker.dlqService);
@@ -70,6 +72,10 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 		// transaction
 		if (th instanceof RuntimeException) {
 			LOG.info("Got RuntimeException that will lead to a retry", th);
+			ExceptionCache.getInstance()
+					.addException(
+							message.getHeader().getCall().getMessageID()
+									.toString(), th);
 		}
 	}
 
@@ -89,9 +95,27 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 
 			if (retryCount >= maxRetries) {
 				LOG.error("Failed to process message " + retryCount + " times");
-				message.getProperties().setProperty(
-						MessageStore.CLASSIFICATION,
-						MessageStore.CLASSIFICATION_DLQ);
+				if (throwFault) {
+					Throwable cause = ExceptionCache.getInstance()
+							.findException(
+									message.getHeader().getCall()
+											.getMessageID().toString());
+					if (cause != null) {
+						throw new ActionProcessingException(
+								"Max redeliver count reached in service ("
+										+ service.getCategory() + ","
+										+ service.getName() + ") cause: " + cause.getMessage(), cause);
+					} else {
+						throw new ActionProcessingException(
+								"Max redeliver count reached in service ("
+										+ service.getCategory() + ","
+										+ service.getName() + ")");
+					}
+				} else {
+					message.getProperties().setProperty(
+							MessageStore.CLASSIFICATION,
+							MessageStore.CLASSIFICATION_DLQ);
+				}
 			} else {
 				message.getProperties().setProperty(
 						MessageStore.CLASSIFICATION,

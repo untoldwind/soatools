@@ -3,6 +3,7 @@ package de.objectcode.soatools.logstore.ws.soap;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 
+import de.objectcode.soatools.logstore.ws.soap.types.LogMessageDetail;
 import de.objectcode.soatools.logstore.ws.soap.types.LogMessageList;
 import de.objectcode.soatools.logstore.ws.soap.types.Query;
 import de.objectcode.soatools.logstore.ws.soap.types.TagList;
@@ -14,4 +15,7 @@ public interface LogStoreService {
 
 	@WebMethod
 	LogMessageList queryLogMessages(Query query);
+
+	@WebMethod
+	LogMessageDetail logMessageDetail(long logId);
 }

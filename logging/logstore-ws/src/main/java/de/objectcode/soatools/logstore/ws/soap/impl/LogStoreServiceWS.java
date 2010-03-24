@@ -9,6 +9,7 @@ import javax.jws.WebService;
 import javax.jws.soap.SOAPBinding;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.xml.ws.BindingType;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -22,6 +23,7 @@ import org.hibernate.criterion.Restrictions;
 import de.objectcode.soatools.logstore.persistent.LogTag;
 import de.objectcode.soatools.logstore.ws.soap.LogStoreService;
 import de.objectcode.soatools.logstore.ws.soap.types.LogMessage;
+import de.objectcode.soatools.logstore.ws.soap.types.LogMessageDetail;
 import de.objectcode.soatools.logstore.ws.soap.types.LogMessageList;
 import de.objectcode.soatools.logstore.ws.soap.types.Query;
 import de.objectcode.soatools.logstore.ws.soap.types.TagCondition;
@@ -29,6 +31,7 @@ import de.objectcode.soatools.logstore.ws.soap.types.TagList;
 
 @WebService(name = "LogStoreService", targetNamespace = "http://objectcode.de/soatools/logstore", endpointInterface = "de.objectcode.soatools.logstore.ws.soap.LogStoreService")
 @SOAPBinding(style = SOAPBinding.Style.DOCUMENT, use = SOAPBinding.Use.LITERAL, parameterStyle = SOAPBinding.ParameterStyle.BARE)
+@BindingType(value = "http://schemas.xmlsoap.org/wsdl/soap/http?mtom=true")
 public class LogStoreServiceWS implements LogStoreService {
 	private final static Log LOGGER = LogFactory
 			.getLog(LogStoreServiceWS.class);
@@ -96,6 +99,11 @@ public class LogStoreServiceWS implements LogStoreService {
 			if (session != null)
 				session.close();
 		}
+	}
+
+	public LogMessageDetail logMessageDetail(long logId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	LogMessageList transform(List<?> result) {

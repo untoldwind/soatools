@@ -8,9 +8,15 @@
               <th colspan="2">Message</th>
             </tr>
             <tr class="message">
-              <td class="message">Message ID</td>
+              <td class="message">ID</td>
               <td class="message">
                 #{logMessage.id}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message ID</td>
+              <td class="message">
+                #{logMessage.messageId}
               </td>
             </tr>
             <tr class="message">
@@ -91,11 +97,23 @@
 	                	<h:panelGrid columns="1" rendered="#{body.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Hide</a4j:commandLink>
 							<h:outputText value="#{body.type}"/>
+							<h:outputLink value="../seam/resource/logMessagePart">
+								<f:param name="cid" value="#{conversation.id}"/>
+								<f:param name="type" value="body"/>
+								<f:param name="name" value="#{body.name}"/>
+								Download
+							</h:outputLink>
 					    	<h:outputText value="#{body.value}" converter="logMessageValueConverter"/>
             	    	</h:panelGrid>
                 		<h:panelGrid columns="1" rendered="#{!body.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleBody(body.name)}" reRender="bodyValue">Show</a4j:commandLink>
 							<h:outputText value="#{body.type}"/>
+							<h:outputLink value="../seam/resource/logMessagePart">
+								<f:param name="cid" value="#{conversation.id}"/>
+								<f:param name="type" value="body"/>
+								<f:param name="name" value="#{body.name}"/>
+								Download
+							</h:outputLink>
                 		</h:panelGrid>
                 	</h:panelGroup>
 					<h:outputText value="#{body.value}" converter="logMessageValueConverter" rendered="#{!body.toggled}"/>
@@ -113,11 +131,23 @@
 	                	<h:panelGrid columns="1" rendered="#{attachment.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Hide</a4j:commandLink>
 							<h:outputText value="#{attachment.type}"/>
+							<h:outputLink value="../seam/resource/logMessagePart">
+								<f:param name="cid" value="#{conversation.id}"/>
+								<f:param name="type" value="attachment"/>
+								<f:param name="name" value="#{attachment.name}"/>
+								Download
+							</h:outputLink>
 					    	<h:outputText value="#{attachment.value}" converter="logMessageValueConverter"/>
             	    	</h:panelGrid>
                 		<h:panelGrid columns="1" rendered="#{!attachment.displayState}">
 							<a4j:commandLink action="#{logMessage.toggleAttachment(attachment.name)}" reRender="attachmentValue">Show</a4j:commandLink>
 							<h:outputText value="#{attachment.type}"/>
+							<h:outputLink value="../seam/resource/logMessagePart">
+								<f:param name="cid" value="#{conversation.id}"/>
+								<f:param name="type" value="attachment"/>
+								<f:param name="name" value="#{attachment.name}"/>
+								Download
+							</h:outputLink>
                 		</h:panelGrid>
                 	</h:panelGroup>
 					<h:outputText value="#{attachment.value}" converter="logMessageValueConverter" rendered="#{!attachment.toggled}"/>
