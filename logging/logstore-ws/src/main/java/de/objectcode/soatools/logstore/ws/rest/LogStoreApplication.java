@@ -22,6 +22,7 @@ public class LogStoreApplication extends Application{
 		result.add(new JcaResource());
 		result.add(new JbmResource());
 		result.add(new EsbResource());
+		result.add(new VersionsResource());
 
 		return result;
 	}

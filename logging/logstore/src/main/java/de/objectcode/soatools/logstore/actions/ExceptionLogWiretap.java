@@ -129,11 +129,20 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()
 							.toString() : "");
-			logMessage.getBody().add("message-to", call.getTo() != null ? call.getTo().toString() : "");
-			logMessage.getBody().add("message-from", call.getFrom() != null ? call.getFrom().toString() : "");
-			logMessage.getBody().add("message-replyTo", call.getReplyTo() != null ? call.getReplyTo().toString() : "");
-			logMessage.getBody().add("message-faultTo", call.getFaultTo() != null ? call.getFaultTo().toString() : "");			
-			logMessage.getBody().add("message-type", message.getType().toString());
+			logMessage.getBody().add("message-to",
+					call.getTo() != null ? call.getTo().toString() : "");
+			logMessage.getBody().add("message-from",
+					call.getFrom() != null ? call.getFrom().toString() : "");
+			logMessage.getBody().add(
+					"message-replyTo",
+					call.getReplyTo() != null ? call.getReplyTo().toString()
+							: "");
+			logMessage.getBody().add(
+					"message-faultTo",
+					call.getFaultTo() != null ? call.getFaultTo().toString()
+							: "");
+			logMessage.getBody().add("message-type",
+					message.getType().toString());
 			logMessage.getBody().add("service-category", serviceCategory);
 			logMessage.getBody().add("service-name", serviceName);
 			logMessage.getBody().add("state", "ERROR");
@@ -215,8 +224,10 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 						.add(
 								"state",
 								"RETRY"
-										+ (message.getProperties().getProperty(
-												"de.objectcode.soatools.retryCount") != null ? "("
+										+ (message
+												.getProperties()
+												.getProperty(
+														"de.objectcode.soatools.retryCount") != null ? "("
 												+ message
 														.getProperties()
 														.getProperty(
@@ -233,16 +244,17 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 				logMessage.getBody().add("tags", tags);
 				logMessage.getBody().add("content",
 						Encoding.encodeObject(Util.serialize(message)));
-				Throwable th = ExceptionCache.getInstance().findException(call.getMessageID().toString());
-				
-				if ( th != null ) {
-				StringWriter writer = new StringWriter();
-				PrintWriter out = new PrintWriter(writer);
-				th.printStackTrace(out);
-				out.flush();
-				out.close();
-				logMessage.getBody().add("fault-cause", writer.toString());
-				logMessage.getBody().add("fault-reason", th.getMessage());
+				Throwable th = ExceptionCache.getInstance().findException(
+						call.getMessageID().toString());
+
+				if (th != null) {
+					StringWriter writer = new StringWriter();
+					PrintWriter out = new PrintWriter(writer);
+					th.printStackTrace(out);
+					out.flush();
+					out.close();
+					logMessage.getBody().add("fault-cause", writer.toString());
+					logMessage.getBody().add("fault-reason", th.getMessage());
 				}
 
 				logService.deliverAsync(logMessage);

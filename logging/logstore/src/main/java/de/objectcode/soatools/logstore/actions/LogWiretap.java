@@ -28,6 +28,7 @@ import org.jboss.soa.esb.message.format.MessageType;
 import org.jboss.soa.esb.util.Util;
 
 import de.objectcode.soatools.logstore.ILogStoreViewRepository;
+import de.objectcode.soatools.logstore.VersionStore;
 import de.objectcode.soatools.util.value.IValueLocator;
 import de.objectcode.soatools.util.value.ValueLocatorFactory;
 
@@ -91,6 +92,12 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 				throw new ConfigurationException(e);
 			}
 		}
+
+		String serviceVersion = config.getAttribute("service-version");
+		
+		if ( serviceVersion != null ) {
+			VersionStore.getInstance().registerVersion(serviceCategory + "-" + serviceName, serviceVersion);
+		}
 	}
 
 	/**
@@ -126,11 +133,20 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()
 							.toString() : "");
-			logMessage.getBody().add("message-to", call.getTo() != null ? call.getTo().toString() : "");
-			logMessage.getBody().add("message-from", call.getFrom() != null ? call.getFrom().toString() : "");
-			logMessage.getBody().add("message-replyTo", call.getReplyTo() != null ? call.getReplyTo().toString() : "");
-			logMessage.getBody().add("message-faultTo", call.getFaultTo() != null ? call.getFaultTo().toString() : "");			
-			logMessage.getBody().add("message-type", message.getType().toString());
+			logMessage.getBody().add("message-to",
+					call.getTo() != null ? call.getTo().toString() : "");
+			logMessage.getBody().add("message-from",
+					call.getFrom() != null ? call.getFrom().toString() : "");
+			logMessage.getBody().add(
+					"message-replyTo",
+					call.getReplyTo() != null ? call.getReplyTo().toString()
+							: "");
+			logMessage.getBody().add(
+					"message-faultTo",
+					call.getFaultTo() != null ? call.getFaultTo().toString()
+							: "");
+			logMessage.getBody().add("message-type",
+					message.getType().toString());
 			logMessage.getBody().add("service-category", serviceCategory);
 			logMessage.getBody().add("service-name", serviceName);
 			logMessage.getBody().add("state", "OK");
@@ -157,7 +173,7 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 			for (int i = 0; i < n; i++)
 				message.getAttachment().removeItemAt(0);
 		}
-		
+
 		return message;
 	}
 
