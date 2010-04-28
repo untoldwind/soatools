@@ -7,4 +7,3 @@ mkdir -p $RPM_TOPDIR/RPMS
 
 rm -rf /tmp/jbossesb*
 rpmbuild --define "_topdir $RPM_TOPDIR" -bb $RPM_TOPDIR/SPECS/oc-soatools.spec
-rpmbuild --define "_topdir $RPM_TOPDIR" -bb $RPM_TOPDIR/SPECS/bettermarks-esb.spec

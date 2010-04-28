@@ -1,7 +1,7 @@
 Summary: OC soatools
 Name: oc-soatools
 Version: ${rpm.version}
-Release: 1
+Release: 2
 License: MIT
 Group: Productivity/Networking/Web/Servers
 Source: http://github.org

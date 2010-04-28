@@ -64,6 +64,20 @@
 									<version>${pom.version}</version>
 									<type>esb</type>
 								</artifactItem>
+								
+								<artifactItem>
+									<groupId>de.objectcode.soatools.utils</groupId>
+									<artifactId>soatools-utils-smooks</artifactId>
+									<version>${pom.version}</version>
+									<type>esb</type>
+								</artifactItem>
+
+								<artifactItem>
+									<groupId>de.objectcode.soatools.utils</groupId>
+									<artifactId>soatools-utils-invoker</artifactId>
+									<version>${pom.version}</version>
+									<type>esb</type>
+								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.model</groupId>
