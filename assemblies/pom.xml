@@ -12,6 +12,7 @@
 	<name>soatools-assemblies</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>rpm</module>
 		<module>services</module>
 		<module>test</module>
 	</modules>

@@ -15,6 +15,7 @@
 		<module>assemblies</module>
 	</modules>
 	<properties>
+		<rpm.version>1.0</rpm.version>
 		<jmeter.version>2.3.4</jmeter.version>
 	</properties>
 	<dependencyManagement>
