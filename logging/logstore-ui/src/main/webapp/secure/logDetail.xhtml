@@ -11,6 +11,7 @@
       <rich:tabPanel>
         <rich:tab label="Single">
           <h:commandButton action="#{logStoreLogDetail.close}" value="Close" />
+          <h:commandButton action="#{logStoreLogDetail.refresh}" value="Refresh" />
           <a4j:region renderRegionOnly="true">
             <rich:dataTable value="#{logMessageList.logMessages}" var="logMessage" rowClasses="first,second"
               columnClasses="narrow,wide" rows="20">

@@ -4,46 +4,54 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Session;
+
 import de.objectcode.soatools.logstore.persistent.LogMessage;
 
+public class LogMessageList implements Serializable {
+	private static final long serialVersionUID = -717019075517069164L;
 
-public class LogMessageList implements Serializable
-{
-  private static final long serialVersionUID = -717019075517069164L;
+	List<LogMessageBean> logMessages;
+	LogMessageDetailBean current;
+	IRefreshCommand refreshCommand;
 
-  List<LogMessageBean> logMessages;
-  LogMessageDetailBean current;
+	public LogMessageList(IRefreshCommand refreshCommand) {
+		this.refreshCommand = refreshCommand;
+	}
 
-  public List<LogMessageBean> getLogMessages()
-  {
-    return logMessages;
-  }
+	public List<LogMessageBean> getLogMessages() {
+		return logMessages;
+	}
 
-  public void setLogMessages(List<LogMessageBean> logMessages)
-  {
-    this.logMessages = logMessages;
-  }
+	public void setLogMessages(List<LogMessageBean> logMessages) {
+		this.logMessages = logMessages;
+	}
 
-  public boolean isHasCurrent()
-  {
-    return current != null;
-  }
+	public boolean isHasCurrent() {
+		return current != null;
+	}
 
-  public LogMessageDetailBean getCurrent()
-  {
-    return current;
-  }
+	public LogMessageDetailBean getCurrent() {
+		return current;
+	}
 
-  public void setCurrent(LogMessageDetailBean current)
-  {
-    this.current = current;
-  }
+	public void setCurrent(LogMessageDetailBean current) {
+		this.current = current;
+	}
 
-  void fill(List<?> result)
-  {
-    logMessages = new ArrayList<LogMessageBean>();
-    for (Object obj : result) {
-      logMessages.add(new LogMessageBean((LogMessage) obj));
-    }
-  }
+	void fill(List<?> result) {
+		logMessages = new ArrayList<LogMessageBean>();
+		for (Object obj : result) {
+			logMessages.add(new LogMessageBean((LogMessage) obj));
+		}
+	}
+
+	void refresh(Session logStoreSession) {
+		if (refreshCommand != null)
+			refreshCommand.refresh(this, logStoreSession);
+	}
+
+	public interface IRefreshCommand {
+		public void refresh(LogMessageList list, Session logStoreSession);
+	}
 }

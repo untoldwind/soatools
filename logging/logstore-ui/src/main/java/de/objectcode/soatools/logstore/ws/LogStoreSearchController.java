@@ -24,133 +24,134 @@ import org.jboss.seam.annotations.Transactional;
 import de.objectcode.soatools.logstore.persistent.LogMessage;
 import de.objectcode.soatools.logstore.persistent.LogTag;
 
-
 @Name("logStoreSearch")
 @Scope(ScopeType.CONVERSATION)
-public class LogStoreSearchController implements Serializable
-{
-  private static final long serialVersionUID = 1L;
+public class LogStoreSearchController implements Serializable {
+	private static final long serialVersionUID = 1L;
 
-  public final static String VIEW_ID = "/secure/main.xhtml";
+	public final static String VIEW_ID = "/secure/main.xhtml";
 
-  private String processInstanceId;
-  private String tagName;
-  private String tagValue;
-  private Date fromDate;
-  private Date untilDate;
+	private String processInstanceId;
+	private String tagName;
+	private String tagValue;
+	private Date fromDate;
+	private Date untilDate;
 
-  @In
-  Session logStoreDatabase;
+	@In
+	Session logStoreDatabase;
 
-  @Out(required = false)
-  LogMessageList logMessageList;
+	@Out(required = false)
+	LogMessageList logMessageList;
 
-  @End
-  public String enter()
-  {
-    return VIEW_ID;
-  }
+	@End
+	public String enter() {
+		return VIEW_ID;
+	}
 
-  public String getProcessInstanceId()
-  {
-    return processInstanceId;
-  }
+	public String getProcessInstanceId() {
+		return processInstanceId;
+	}
 
-  public void setProcessInstanceId(String processInstanceId)
-  {
-    this.processInstanceId = processInstanceId;
-  }
+	public void setProcessInstanceId(String processInstanceId) {
+		this.processInstanceId = processInstanceId;
+	}
 
-  @Begin
-  @Transactional
-  public String findByProcessInstanceId()
-  {
-    final Criteria criteria = logStoreDatabase.createCriteria(LogMessage.class);
+	@Begin
+	@Transactional
+	public String findByProcessInstanceId() {
+		logMessageList = new LogMessageList(new LogMessageList.IRefreshCommand() {
+			public void refresh(LogMessageList list, Session logStoreSession) {
+				final Criteria criteria = logStoreSession
+						.createCriteria(LogMessage.class);
 
-    criteria.add(Restrictions.eq("jbpmProcessInstanceId", Long.parseLong(processInstanceId)));
-    criteria.addOrder(Order.asc("id"));
+				criteria.add(Restrictions.eq("jbpmProcessInstanceId", Long
+						.parseLong(processInstanceId)));
+				criteria.addOrder(Order.asc("id"));
 
-    logMessageList = new LogMessageList();
-    logMessageList.fill(criteria.list());
+				logMessageList.fill(criteria.list());
+			}
+		});
+		logMessageList.refresh(logStoreDatabase);
 
-    return LogStoreLogDetailController.VIEW_ID;
-  }
+		return LogStoreLogDetailController.VIEW_ID;
+	}
 
-  @Begin
-  @Transactional
-  public String findByTagValue()
-  {
-    final Criteria criteria = logStoreDatabase.createCriteria(LogTag.class);
+	@Begin
+	@Transactional
+	public String findByTagValue() {
+		logMessageList = new LogMessageList(new LogMessageList.IRefreshCommand() {
+			public void refresh(LogMessageList list, Session logStoreSession) {
+				final Criteria criteria = logStoreSession
+						.createCriteria(LogTag.class);
 
-    criteria.setProjection(Projections.property("logMessage"));
-    criteria.add(Restrictions.and(Restrictions.eq("name", tagName), Restrictions.eq("tagValue", tagValue)));
-    Criteria logMessageCriteria = criteria.createCriteria("logMessage");
-    if (fromDate != null) {
-      logMessageCriteria.add(Restrictions.ge("logEnterTimestamp", fromDate));
-    }
-    if (untilDate != null) {
-      logMessageCriteria.add(Restrictions.le("logEnterTimestamp", untilDate));
-    }
-    criteria.addOrder(Order.asc("logMessage.id"));
+				criteria.setProjection(Projections.property("logMessage"));
+				criteria.add(Restrictions.and(Restrictions.eq("name", tagName),
+						Restrictions.eq("tagValue", tagValue)));
+				Criteria logMessageCriteria = criteria
+						.createCriteria("logMessage");
+				if (fromDate != null) {
+					logMessageCriteria.add(Restrictions.ge("logEnterTimestamp",
+							fromDate));
+				}
+				if (untilDate != null) {
+					logMessageCriteria.add(Restrictions.le("logEnterTimestamp",
+							untilDate));
+				}
+				criteria.addOrder(Order.asc("logMessage.id"));
 
-    logMessageList = new LogMessageList();
-    logMessageList.fill(criteria.list());
+				logMessageList.fill(criteria.list());
+			}
+		});
+		logMessageList.refresh(logStoreDatabase);
 
-    return LogStoreLogDetailController.VIEW_ID;
-  }
+		return LogStoreLogDetailController.VIEW_ID;
 
-  public String getTagName()
-  {
-    return tagName;
-  }
+	}
 
-  public void setTagName(String tagName)
-  {
-    this.tagName = tagName;
-  }
+	public String getTagName() {
+		return tagName;
+	}
 
-  public String getTagValue()
-  {
-    return tagValue;
-  }
+	public void setTagName(String tagName) {
+		this.tagName = tagName;
+	}
 
-  public void setTagValue(String tagValue)
-  {
-    this.tagValue = tagValue;
-  }
+	public String getTagValue() {
+		return tagValue;
+	}
 
-  public Date getFromDate()
-  {
-    return fromDate;
-  }
+	public void setTagValue(String tagValue) {
+		this.tagValue = tagValue;
+	}
 
-  public void setFromDate(Date fromDate)
-  {
-    this.fromDate = fromDate;
-  }
+	public Date getFromDate() {
+		return fromDate;
+	}
 
-  public Date getUntilDate()
-  {
-    return untilDate;
-  }
+	public void setFromDate(Date fromDate) {
+		this.fromDate = fromDate;
+	}
 
-  public void setUntilDate(Date untilDate)
-  {
-    this.untilDate = untilDate;
-  }
+	public Date getUntilDate() {
+		return untilDate;
+	}
 
-  @Transactional
-  public List<SelectItem> getTagNames()
-  {
-    final Criteria criteria = logStoreDatabase.createCriteria(LogTag.class);
-    criteria.setProjection(Projections.distinct(Projections.property("name")));
+	public void setUntilDate(Date untilDate) {
+		this.untilDate = untilDate;
+	}
 
-    List<SelectItem> items = new ArrayList<SelectItem>();
+	@Transactional
+	public List<SelectItem> getTagNames() {
+		final Criteria criteria = logStoreDatabase.createCriteria(LogTag.class);
+		criteria.setProjection(Projections.distinct(Projections
+				.property("name")));
 
-    for (Object name : criteria.list()) {
-      items.add(new SelectItem(name.toString(), name.toString()));
-    }
+		List<SelectItem> items = new ArrayList<SelectItem>();
 
-    return items;
-  }
+		for (Object name : criteria.list()) {
+			items.add(new SelectItem(name.toString(), name.toString()));
+		}
+
+		return items;
+	}
 }

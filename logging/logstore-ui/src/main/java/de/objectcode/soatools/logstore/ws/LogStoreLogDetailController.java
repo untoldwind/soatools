@@ -37,6 +37,13 @@ public class LogStoreLogDetailController implements Serializable {
 		return VIEW_ID;
 	}
 
+	@Transactional
+	public String refresh() {
+		logMessageList.refresh(logStoreDatabase);
+
+		return VIEW_ID;
+	}
+	
 	public String getSelectedDetailTab() {
 		return selectedDetailTab;
 	}
