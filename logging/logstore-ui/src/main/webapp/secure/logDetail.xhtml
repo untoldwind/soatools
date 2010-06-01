@@ -50,6 +50,7 @@
               </f:facet>
             </rich:dataTable>
             <h:panelGroup id="logMessageDetail" rendered="#{logMessageList.hasCurrent}">
+              <a4j:commandButton action="#{logStoreLogDetail.resend}" value="Resend"/>
               <rich:tabPanel switchType="ajax" selectedTab="#{logStoreLogDetail.selectedDetailTab}">
                 <rich:tab label="Summary">
                   <ui:include src="decorators/decorators.xhtml">
