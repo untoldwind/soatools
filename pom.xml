@@ -464,6 +464,12 @@
 					<showWarnings>true</showWarnings>
 				</configuration>
 			</plugin>
+			<plugin>
+			  <artifactId>maven-release-plugin</artifactId>
+			  <configuration>
+			    <preparationGoals>clean</preparationGoals>
+			  </configuration>
+			</plugin>
 		</plugins>
 		<pluginManagement>
 			<plugins>
