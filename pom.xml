@@ -18,6 +18,10 @@
 		<rpm.version>1.0</rpm.version>
 		<jmeter.version>2.3.4</jmeter.version>
 	</properties>
+	<scm>
+	  <connection>scm:git:http://github.com/untoldwind/soatools.git</connection>
+	  <developerConnection>scm:git:ssh://git@github.com/untoldwind/soatools.git</developerConnection>
+	</scm>
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
