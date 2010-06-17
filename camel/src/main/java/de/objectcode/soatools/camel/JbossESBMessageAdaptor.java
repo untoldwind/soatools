@@ -5,7 +5,6 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 
-import org.apache.camel.impl.DefaultMessage;
 import org.jboss.soa.esb.message.Body;
 import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.format.MessageFactory;
@@ -44,9 +43,7 @@ public class JbossESBMessageAdaptor {
 		return esbMessage;
 	}
 
-	public static org.apache.camel.Message esbToCamel(Message esbMessage) {
-		DefaultMessage camelMessage = new DefaultMessage();
-
+	public static void esbToCamel(org.apache.camel.Message camelMessage, Message esbMessage) {
 		String[] names = esbMessage.getBody().getNames();
 
 		if (names.length == 1)
@@ -66,7 +63,5 @@ public class JbossESBMessageAdaptor {
 		for(String key : esbMessage.getContext().getContextKeys()) {
 			camelMessage.setHeader(key, esbMessage.getContext().getContext(key));
 		}
-
-		return camelMessage;
 	}
 }
