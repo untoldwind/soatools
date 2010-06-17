@@ -13,20 +13,20 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.model</groupId>
 			<artifactId>soatools-model-mfm</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>esb</type>
 		</dependency>
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-consumer</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>esb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-consumer</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>jbm-service</classifier>
 			<type>jar</type>
 		</dependency>
@@ -34,13 +34,13 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-error</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>esb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-error</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>jbm-service</classifier>
 			<type>jar</type>
 		</dependency>
@@ -48,27 +48,27 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-webservice-in</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-mock-webservice</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>war</type>
 		</dependency>
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jms-gateway</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>esb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jms-gateway</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>jbm-service</classifier>
 			<type>jar</type>
 		</dependency>
@@ -76,13 +76,13 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jbpm-processes</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<type>esb</type>
 		</dependency>
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jbpm-processes</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>jbm-service</classifier>
 			<type>jar</type>
 		</dependency>
@@ -90,7 +90,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.director</groupId>
 			<artifactId>soatools-test-director-integration</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 			<type>jar</type>
 		</dependency>
@@ -98,7 +98,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.director</groupId>
 			<artifactId>soatools-test-director-load</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 			<type>jar</type>
 		</dependency>
@@ -106,21 +106,21 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-consumer</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 		</dependency>
 
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-jbpm-processes</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 		</dependency>
 
 		<dependency>
 			<groupId>de.objectcode.soatools.logging</groupId>
 			<artifactId>soatools-logging-logstore</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 		</dependency>
 		

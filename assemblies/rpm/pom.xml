@@ -60,49 +60,49 @@
 								<artifactItem>
 									<groupId>de.objectcode.soatools.utils</groupId>
 									<artifactId>soatools-utils-generic</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
 								
 								<artifactItem>
 									<groupId>de.objectcode.soatools.utils</groupId>
 									<artifactId>soatools-utils-smooks</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.utils</groupId>
 									<artifactId>soatools-utils-invoker</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.model</groupId>
 									<artifactId>soatools-model-mfm</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.logging</groupId>
 									<artifactId>soatools-logging-logstore</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.logging</groupId>
 									<artifactId>soatools-logging-logstore-ui</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>war</type>
 								</artifactItem>
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools.logging</groupId>
 									<artifactId>soatools-logging-logstore-ws</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<type>war</type>
 								</artifactItem>
 							</artifactItems>
@@ -121,7 +121,7 @@
 								<artifactItem>
 									<groupId>de.objectcode.soatools.logging</groupId>
 									<artifactId>soatools-logging-logstore</artifactId>
-									<version>${pom.version}</version>
+									<version>${project.version}</version>
 									<classifier>jbm-service</classifier>
 									<type>jar</type>
 								</artifactItem>
