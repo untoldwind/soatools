@@ -11,6 +11,7 @@ import org.jboss.soa.esb.message.Message;
 import org.jboss.soa.esb.message.format.MessageFactory;
 
 public class JbossESBMessageAdaptor {
+	@SuppressWarnings("unchecked")
 	public static Message camelToESB(org.apache.camel.Message camelMessage) {
 		Message esbMessage = MessageFactory.getInstance().getMessage();
 
