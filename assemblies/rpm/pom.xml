@@ -105,6 +105,13 @@
 									<version>${project.version}</version>
 									<type>war</type>
 								</artifactItem>
+
+								<artifactItem>
+									<groupId>de.objectcode.soatools</groupId>
+									<artifactId>soatools-esb-camel</artifactId>
+									<version>${project.version}</version>
+									<type>esb</type>
+								</artifactItem>
 							</artifactItems>
 						</configuration>
 					</execution>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jbossesb-deployment>
+	<depends>de.objectcode.soatools.test:service=Queue,name=soatools_test_camel1_oneway
+	</depends>
+	<depends>jboss.esb:deployment=soatools-logging-logstore.esb</depends>
+	<depends>jboss.esb:deployment=soatools-utils-generic.esb</depends>
+	<depends>jboss.esb:deployment=soatools-camel.esb</depends>
+</jbossesb-deployment>

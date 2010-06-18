@@ -24,20 +24,9 @@ ln -s $BASE/logging/logstore/target/soatools-logging-logstore soatools-logging-l
 ln -s $BASE/logging/logstore-ws/target/soatools-logging-logstore-ws soatools-logging-logstore-ws.war
 ln -s $BASE/logging/logstore-ui/target/soatools-logging-logstore-ui soatools-logging-logstore-ui.war
 ln -s $BASE/model/mfm/target/soatools-model-mfm soatools-model-mfm.esb
-ln -s $BASE/test/services/consumer/src/main/jbm/soatools-test-services-consumer-queue-service.xml soatools-test-services-consumer-queue-service.xml
-ln -s $BASE/test/services/consumer/target/soatools-test-services-consumer soatools-test-services-consumer.esb
-ln -s $BASE/test/services/error/src/main/jbm/soatools-test-services-error-queue-service.xml soatools-test-services-error-queue-service.xml
-ln -s $BASE/test/services/error/target/soatools-test-services-error soatools-test-services-error.esb
-ln -s $BASE/test/services/webservice-call/src/main/jbm/soatools-test-services-webservice-call-queue-service.xml soatools-test-services-webservice-call-queue-service.xml
-ln -s $BASE/test/services/webservice-call/target/soatools-test-services-webservice-call soatools-test-services-webservice-call.esb
-ln -s $BASE/test/services/jms-gateway/src/main/jbm/soatools-test-services-jms-gateway-queue-service.xml soatools-test-services-jms-gateway-queue-service.xml
-ln -s $BASE/test/services/jms-gateway/target/soatools-test-services-jms-gateway soatools-test-services-jms-gateway.esb
-ln -s $BASE/test/services/jbpm-processes/src/main/jbm/soatools-test-services-jbpm-processes-queue-service.xml soatools-test-services-jbpm-processes-queue-service.xml
-ln -s $BASE/test/services/jbpm-processes/target/soatools-test-services-jbpm-processes soatools-test-services-jbpm-processes.esb
-ln -s $BASE/test/services/webservice-in/target/soatools-test-services-webservice-in soatools-test-services-webservice-in.war
-ln -s $BASE/test/services/mock-webservice/target/soatools-test-services-mock-webservice soatools-test-services-mock-webservice.war
 ln -s $BASE/utils/generic/target/soatools-utils-generic soatools-utils-generic.esb
 ln -s $BASE/utils/invoker/target/soatools-utils-invoker soatools-utils-invoker.esb
 ln -s $BASE/utils/smooks/target/soatools-utils-smooks soatools-utils-smooks.esb
+ln -s $BASE/camel/target/soatools-camel soatools-camel.esb
 
 cd $CURRENT
