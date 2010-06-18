@@ -5,6 +5,7 @@ import org.apache.camel.impl.DefaultProducer;
 import org.jboss.soa.esb.client.ServiceInvoker;
 import org.jboss.soa.esb.listeners.message.MessageDeliverException;
 import org.jboss.soa.esb.message.Message;
+import org.jboss.soa.esb.message.format.MessageFactory;
 import org.jboss.soa.esb.services.registry.RegistryException;
 
 public class JbossESBProducer extends DefaultProducer {
@@ -27,17 +28,21 @@ public class JbossESBProducer extends DefaultProducer {
 	}
 
 	private void processInOnly(Exchange exchange) throws Exception {
-		Message message = JbossESBMessageAdaptor.camelToESB(exchange.getIn());
+		Message message = MessageFactory.getInstance().getMessage();
+		
+		JbossESBMessageAdaptor.exchangeToEsb(message, exchange, false);
 		
 		getServiceInvoker().deliverAsync(message);
 	}
 
 	private void processInOut(Exchange exchange) throws Exception {
-		Message request = JbossESBMessageAdaptor.camelToESB(exchange.getIn());
+		Message request = MessageFactory.getInstance().getMessage();
+		
+		JbossESBMessageAdaptor.exchangeToEsb(request, exchange, false);
 		
 		Message reply = getServiceInvoker().deliverSync(request, endpoint.getTimeout());
 		
-		JbossESBMessageAdaptor.esbToCamel(exchange.getOut(), reply);
+		JbossESBMessageAdaptor.esbToExchange(exchange, reply, true);
 	}
 	
     private ServiceInvoker getServiceInvoker() throws RegistryException, MessageDeliverException {

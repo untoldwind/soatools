@@ -5,15 +5,14 @@ import java.util.Map;
 
 import javax.activation.DataHandler;
 
+import org.apache.camel.Exchange;
 import org.jboss.soa.esb.message.Body;
 import org.jboss.soa.esb.message.Message;
-import org.jboss.soa.esb.message.format.MessageFactory;
 
 public class JbossESBMessageAdaptor {
 	@SuppressWarnings("unchecked")
-	public static Message camelToESB(org.apache.camel.Message camelMessage) {
-		Message esbMessage = MessageFactory.getInstance().getMessage();
-
+	public static void camelToESB(Message esbMessage,
+			org.apache.camel.Message camelMessage) {
 		Object body = camelMessage.getBody();
 
 		if (body instanceof Map<?, ?>) {
@@ -40,28 +39,53 @@ public class JbossESBMessageAdaptor {
 			esbMessage.getAttachment().put(attachment.getKey(),
 					attachment.getValue());
 		}
-		return esbMessage;
 	}
 
-	public static void esbToCamel(org.apache.camel.Message camelMessage, Message esbMessage) {
+	public static void exchangeToEsb(Message esbMessage, Exchange exchange,  boolean useOut) {
+		if (useOut && exchange.hasOut()) {
+			camelToESB(esbMessage, exchange.getOut());
+		} else {
+			camelToESB(esbMessage, exchange.getIn());
+		}
+
+		for (String name : esbMessage.getProperties().getNames())
+			exchange.setProperty(name, esbMessage.getProperties().getProperty(
+					name));
+	}
+
+	public static void esbToCamel(org.apache.camel.Message camelMessage,
+			Message esbMessage) {
 		String[] names = esbMessage.getBody().getNames();
 
 		if (names.length == 1)
 			camelMessage.setBody(esbMessage.getBody().get(names[0]));
 		else {
 			Map<String, Object> keyValue = new HashMap<String, Object>();
-			
-			for (String name: names ) {
-				if ( Body.DEFAULT_LOCATION.equals(name))
+
+			for (String name : names) {
+				if (Body.DEFAULT_LOCATION.equals(name))
 					keyValue.put(null, esbMessage.getBody().get(name));
 				else
 					keyValue.put(name, esbMessage.getBody().get(name));
 			}
 			camelMessage.setBody(keyValue);
 		}
-		
-		for(String key : esbMessage.getContext().getContextKeys()) {
-			camelMessage.setHeader(key, esbMessage.getContext().getContext(key));
+
+		for (String key : esbMessage.getContext().getContextKeys()) {
+			camelMessage
+					.setHeader(key, esbMessage.getContext().getContext(key));
 		}
+	}
+
+	public static void esbToExchange(Exchange exchange, Message esbMessage, boolean useOut) {
+		if (useOut && exchange.hasOut()) {
+			esbToCamel(exchange.getOut(), esbMessage);
+		} else {
+			esbToCamel(exchange.getIn(), esbMessage);
+		}
+
+		for (String name : esbMessage.getProperties().getNames())
+			exchange.setProperty(name, esbMessage.getProperties().getProperty(
+					name));
 	}
 }
