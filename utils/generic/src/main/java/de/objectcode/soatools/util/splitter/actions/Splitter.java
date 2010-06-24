@@ -42,8 +42,9 @@ public class Splitter extends AbstractActionPipelineProcessor {
 	final IMessageSplitter messageSplitter;
 	final Service aggregatorService;
 	final boolean copyContext;
-	
-    private Map<Service, ServiceInvoker> invokers = new LinkedHashMap<Service, ServiceInvoker>();
+	final boolean hasAggregator;
+
+	private Map<Service, ServiceInvoker> invokers = new LinkedHashMap<Service, ServiceInvoker>();
 
 	public Splitter(ConfigTree config) throws ConfigurationException {
 		serviceCategory = config.getParent().getRequiredAttribute(
@@ -51,7 +52,8 @@ public class Splitter extends AbstractActionPipelineProcessor {
 		serviceName = config.getParent().getRequiredAttribute("service-name");
 
 		copyContext = config.getBooleanAttribute("copy-context", true);
-		
+		hasAggregator = config.getBooleanAttribute("has-aggregator", true);
+
 		String messageSplitterClass = config
 				.getAttribute("message-splitter-class");
 
@@ -64,7 +66,7 @@ public class Splitter extends AbstractActionPipelineProcessor {
 			}
 		} else
 			messageSplitter = null;
-		
+
 		if (config.getAttribute("aggregator-category") != null
 				&& config.getAttribute("aggregator-name") != null) {
 			aggregatorService = new Service(config
@@ -72,7 +74,6 @@ public class Splitter extends AbstractActionPipelineProcessor {
 					.getAttribute("aggregator-name"));
 		} else
 			aggregatorService = null;
-
 
 		payload = new MessagePayloadProxy(config);
 
@@ -111,37 +112,54 @@ public class Splitter extends AbstractActionPipelineProcessor {
 
 		Session session = null;
 
-		try {
-			EPR aggregatorEPR = findAggregatorEPR();
+		if (hasAggregator) {
+			try {
+				EPR aggregatorEPR = findAggregatorEPR();
 
-			session = sessionFactory.openSession();
+				session = sessionFactory.openSession();
 
+				int partCount = splitMessages.size();
+				SplitEntity splitEntity = new SplitEntity(serviceCategory,
+						serviceName, partCount);
+
+				session.persist(splitEntity);
+				session.flush();
+
+				int partIndex = 0;
+
+				for (Object element : splitMessages) {
+					doSend(message.getContext(), splitEntity.getId(),
+							partIndex++, partCount, (SplitMessage) element,
+							aggregatorEPR);
+				}
+			} catch (final Exception e) {
+				LOG.error("Exception", e);
+				throw new RuntimeException(e);
+			} finally {
+				if (session != null) {
+					session.close();
+				}
+			}
+		} else {
 			int partCount = splitMessages.size();
-			SplitEntity splitEntity = new SplitEntity(serviceCategory,
-					serviceName, partCount);
-
-			session.persist(splitEntity);
-			session.flush();
-			
 			int partIndex = 0;
 
-			for (Object element : splitMessages) {
-				doSend(message.getContext(), splitEntity.getId(), partIndex++, partCount,
-						(SplitMessage) element, aggregatorEPR);
-			}
-		} catch (final Exception e) {
-			LOG.error("Exception", e);
-			throw new RuntimeException(e);
-		} finally {
-			if (session != null) {
-				session.close();
+			try {
+				for (Object element : splitMessages) {
+					doSend(message.getContext(), null, partIndex++, partCount,
+							(SplitMessage) element, null);
+				}
+			} catch (final Exception e) {
+				LOG.error("Exception", e);
+				throw new RuntimeException(e);
 			}
 		}
 
 		return message;
 	}
 
-	private EPR findAggregatorEPR () throws RegistryException, ServiceNotFoundException {
+	private EPR findAggregatorEPR() throws RegistryException,
+			ServiceNotFoundException {
 		if (aggregatorService != null) {
 			List<EPR> eprs = RegistryUtil.getEprs(aggregatorService
 					.getCategory(), aggregatorService.getName());
@@ -149,48 +167,52 @@ public class Splitter extends AbstractActionPipelineProcessor {
 			if (eprs.isEmpty())
 				throw new RuntimeException("No epr found for service: "
 						+ aggregatorService);
-			
+
 			return eprs.get(0);
 		}
 		return null;
-		
+
 	}
-	
-	private void doSend(Context context, long splitId, int partIndex, int partCount,
-			SplitMessage splitMessage, EPR aggregatorEPR) throws RegistryException, MessageDeliverException {
+
+	private void doSend(Context context, Long splitId, int partIndex,
+			int partCount, SplitMessage splitMessage, EPR aggregatorEPR)
+			throws RegistryException, MessageDeliverException {
 		Message message = splitMessage.getMessage();
 
-		if ( copyContext ) {
-			for ( String name : context.getContextKeys() )
+		if (copyContext) {
+			for (String name : context.getContextKeys())
 				message.getContext().setContext(name, context.getContext(name));
 		}
+
+		if (splitId != null)
+			message.getProperties()
+					.setProperty(IConstants.SPLITTER_ID, splitId);
 		
-		message.getProperties().setProperty(IConstants.SPLITTER_ID, splitId);
 		message.getProperties().setProperty(IConstants.SPLITTER_PART_INDEX,
 				partIndex);
 		message.getProperties().setProperty(IConstants.SPLITTER_PART_COUNT,
 				partCount);
 
-		if ( aggregatorEPR != null ) {
+		if (aggregatorEPR != null) {
 			message.getHeader().getCall().setReplyTo(aggregatorEPR);
 			message.getHeader().getCall().setFaultTo(aggregatorEPR);
 		}
-		
-		ServiceInvoker invoker = getInvoker(splitMessage
-				.getTargetService());
+
+		ServiceInvoker invoker = getInvoker(splitMessage.getTargetService());
 
 		invoker.deliverAsync(message);
 	}
-	
-    private ServiceInvoker getInvoker(Service recipient) throws RegistryException, MessageDeliverException {
-        ServiceInvoker invoker = invokers.get(recipient);
 
-        // We lazilly create the invokers...
-        if(invoker == null) {
-            invoker = new ServiceInvoker(recipient);
-            invokers.put(recipient, invoker);
-        }
+	private ServiceInvoker getInvoker(Service recipient)
+			throws RegistryException, MessageDeliverException {
+		ServiceInvoker invoker = invokers.get(recipient);
 
-        return invoker;
-    }
+		// We lazilly create the invokers...
+		if (invoker == null) {
+			invoker = new ServiceInvoker(recipient);
+			invokers.put(recipient, invoker);
+		}
+
+		return invoker;
+	}
 }
