@@ -1,3 +1,6 @@
 target
 jmeter.log
 root.log
+.project
+.settings
+.classpath
