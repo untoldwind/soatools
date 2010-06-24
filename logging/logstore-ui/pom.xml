@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.logging</groupId>
 			<artifactId>soatools-logging-logstore</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>compile</classifier>
 			<scope>provided</scope>
 		</dependency>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.model</groupId>
 			<artifactId>soatools-model-mfm</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>compile</classifier>
 			<scope>provided</scope>
 		</dependency>
@@ -102,7 +102,7 @@
 
 	</dependencies>
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

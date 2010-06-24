@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.utils</groupId>
 			<artifactId>soatools-utils-generic</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>compile</classifier>
 			<scope>provided</scope>
 		</dependency>
@@ -69,7 +69,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>

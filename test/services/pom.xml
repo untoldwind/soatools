@@ -11,6 +11,7 @@
 	<name>soatools-test-services</name>
 	<packaging>pom</packaging>
 	<modules>
+		<module>camel1</module>
 		<module>consumer</module>
 		<module>jms-gateway</module>
 		<module>webservice-in</module>

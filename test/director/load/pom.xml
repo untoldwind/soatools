@@ -13,7 +13,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.test.services</groupId>
 			<artifactId>soatools-test-services-consumer</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
@@ -21,7 +21,7 @@
 		<dependency>
 			<groupId>de.objectcode.soatools.logging</groupId>
 			<artifactId>soatools-logging-logstore</artifactId>
-			<version>${pom.version}</version>
+			<version>${project.version}</version>
 			<classifier>tests</classifier>
 			<scope>test</scope>
 		</dependency>
@@ -77,7 +77,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>${artifactId}</finalName>
+		<finalName>${project.artifactId}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
