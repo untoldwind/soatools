@@ -57,6 +57,11 @@
                     <ui:param name="logMessage" value="#{logMessageList.current}" />
                   </ui:include>
                 </rich:tab>
+                <rich:tab label="Tags">
+                  <ui:include src="logMessageTags.xhtml">
+                    <ui:param name="logMessage" value="#{logMessageList.current}" />
+                  </ui:include>
+                </rich:tab>
                 <rich:tab label="Detail">
                   <ui:include src="logMessageDetail.xhtml">
                     <ui:param name="logMessage" value="#{logMessageList.current}" />
