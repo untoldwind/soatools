@@ -47,7 +47,7 @@ public class LogStoreLogDetailController implements Serializable {
 
 	@Transactional
 	public String refresh() {
-		logMessageList.refresh(logStoreDatabase);
+		logMessageList.refresh();
 
 		return VIEW_ID;
 	}

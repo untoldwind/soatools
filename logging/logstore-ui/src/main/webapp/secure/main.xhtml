@@ -60,5 +60,45 @@
         </tr>
       </table>      
     </h:form>
+    <h:form>
+      <table border="0">
+        <tr>
+          <td>Service Category:</td>
+          <td>
+            <h:inputText id="serviceCategory" value="#{logStoreSearch.serviceCategory}">
+              <s:validate />
+            </h:inputText>
+          </td>
+          <td><h:message for="tagName" /></td>
+        </tr>
+        <tr>
+          <td>Service Name:</td>
+          <td>
+            <h:inputText id="serviceName" value="#{logStoreSearch.serviceName}">
+              <s:validate />
+            </h:inputText>
+          </td>
+          <td><h:message for="tagValue" /></td>
+        </tr>
+        <tr>
+          <td>From:</td>
+          <td>
+            <rich:calendar id="fromDate" value="#{logStoreSearch.fromDate}" datePattern="yyyy-MM-dd HH:mm" enableManualInput="true">
+            </rich:calendar>
+          </td>
+        </tr>
+        <tr>
+          <td>Until:</td>
+          <td>
+            <rich:calendar id="untilDate" value="#{logStoreSearch.untilDate}" datePattern="yyyy-MM-dd HH:mm" enableManualInput="true">
+            </rich:calendar>            
+          </td>
+        </tr>
+        <tr>
+          <td><h:commandButton action="#{logStoreSearch.findByServiceName}" value="Find" /></td>
+        </tr>
+      </table>      
+    </h:form>
+
   </ui:define>
 </ui:composition>
