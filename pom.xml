@@ -468,6 +468,8 @@
 			  <version>2.0</version>
 			  <configuration>
 			    <preparationGoals>clean</preparationGoals>
+			    <autoVersionSubmodules>true</autoVersionSubmodules>
+			    <goals>install</goals>
 			  </configuration>
 			</plugin>
 		</plugins>
