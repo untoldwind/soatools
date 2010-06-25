@@ -116,9 +116,8 @@ public class LogStoreSearchController implements Serializable {
 		logMessageList.refresh();
 
 		return LogStoreLogDetailController.VIEW_ID;
-
 	}
-
+	
 	public String getTagName() {
 		return tagName;
 	}

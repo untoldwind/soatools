@@ -3,11 +3,14 @@ package de.objectcode.soatools.logstore.ws;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.faces.context.FacesContext;
 
 import org.ajax4jsf.model.DataVisitor;
+import org.ajax4jsf.model.ExtendedDataModel;
 import org.ajax4jsf.model.Range;
 import org.ajax4jsf.model.SequenceRange;
 import org.hibernate.Criteria;
@@ -19,22 +22,22 @@ import org.jboss.seam.annotations.In;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 import org.jboss.seam.annotations.Transactional;
-import org.richfaces.model.ScrollableTableDataModel;
-import org.richfaces.model.ScrollableTableDataRange;
-import org.richfaces.model.SortOrder;
 
 import de.objectcode.soatools.logstore.persistent.LogMessage;
 
 @Name("logMessageList")
 @Scope(ScopeType.CONVERSATION)
 @AutoCreate
-public class LogMessageList extends ScrollableTableDataModel<LogMessageBean>
-		implements Serializable {
+public class LogMessageList extends ExtendedDataModel implements Serializable {
 	private static final long serialVersionUID = -717019075517069164L;
 
 	LogMessageDetailBean current;
 	IFetchCommand fetchCommand;
 	int rowCount;
+
+	private Object rowKey;
+
+	private Map<Object, LogMessageBean> mapping;
 
 	@In
 	Session logStoreDatabase;
@@ -61,12 +64,10 @@ public class LogMessageList extends ScrollableTableDataModel<LogMessageBean>
 	@Transactional
 	public void refresh() {
 		rowCount = fetchCommand.getRowCount(logStoreDatabase);
+		mapping = null;
 	}
 
-	@Override
-	@Transactional
-	public List<LogMessageBean> loadData(int startRow, int endRow,
-			SortOrder sortOrder) {
+	public List<LogMessageBean> loadData(int startRow, int endRow) {
 
 		List<LogMessageBean> result = new ArrayList<LogMessageBean>();
 
@@ -77,23 +78,40 @@ public class LogMessageList extends ScrollableTableDataModel<LogMessageBean>
 		return result;
 	}
 
+	/**
+	 * Load data range, and iterate over it
+	 */
 	@Transactional
-	@Override
 	public void walk(FacesContext context, DataVisitor visitor, Range range,
 			Object argument) throws IOException {
 
-		if (range instanceof SequenceRange) {
-			SequenceRange sequenceRange = (SequenceRange) range;
+		SequenceRange sequenceRange = (SequenceRange) range;
 
-			ScrollableTableDataRange newRange = new ScrollableTableDataRange();
+		int firstRow = sequenceRange.getFirstRow();
+		int rows = sequenceRange.getRows();
 
-			newRange.setFirst(sequenceRange.getFirstRow());
-			newRange.setLast(sequenceRange.getFirstRow()
-					+ sequenceRange.getRows());
-			
-			super.walk(context, visitor, newRange, argument);			
-		} else
-			super.walk(context, visitor, range, argument);
+		List<LogMessageBean> objects = loadData(firstRow, rows);
+
+		mapping = new HashMap<Object, LogMessageBean>();
+
+		for (int i = 0; i < objects.size(); i++) {
+			LogMessageBean data = objects.get(i);
+			Object key = data.getId();
+
+			mapping.put(key, data);
+
+			visitor.process(context, key, argument);
+		}
+	}
+
+	@Override
+	public Object getRowKey() {
+		return rowKey;
+	}
+
+	@Override
+	public void setRowKey(Object key) {
+		rowKey = key;
 	}
 
 	@Override
@@ -102,18 +120,57 @@ public class LogMessageList extends ScrollableTableDataModel<LogMessageBean>
 	}
 
 	@Override
+	@Transactional
+	public Object getRowData() {
+		if (mapping != null && mapping.containsKey(rowKey)) {
+			return mapping.get(rowKey);
+		} else if (rowKey != null) {
+			LogMessage logMessage = (LogMessage) logStoreDatabase.get(
+					LogMessage.class, (Long) rowKey);
+
+			if (logMessage != null) {
+				LogMessageBean messageBean = new LogMessageBean(logMessage);
+				if (mapping == null) {
+					mapping = new HashMap<Object, LogMessageBean>();
+				}
+				mapping.put(rowKey, messageBean);
+
+				return messageBean;
+			}
+			return null;
+		}
+
+		return null;
+	}
+
+	@Override
+	public int getRowIndex() {
+		return -1;
+	}
+
+	@Override
 	public Object getWrappedData() {
 		return null;
 	}
 
 	@Override
+	public boolean isRowAvailable() {
+		return getRowData() != null;
+	}
+
+	@Override
+	public void setRowIndex(int index) {
+	}
+
+	@Override
 	public void setWrappedData(Object data) {
+
 	}
 
 	public interface IFetchCommand {
 		int getRowCount(Session logStoreSession);
 
-		List<LogMessage> retrieve(int startRow, int endRow,
+		List<LogMessage> retrieve(int startRow, int rows,
 				Session logStoreSession);
 	}
 
@@ -127,12 +184,12 @@ public class LogMessageList extends ScrollableTableDataModel<LogMessageBean>
 		}
 
 		@SuppressWarnings("unchecked")
-		public List<LogMessage> retrieve(int startRow, int endRow,
+		public List<LogMessage> retrieve(int startRow, int rows,
 				Session logStoreSession) {
 			Criteria criteria = createCriteria(logStoreSession, true);
 
 			criteria.setFirstResult(startRow);
-			criteria.setMaxResults(endRow - startRow);
+			criteria.setMaxResults(rows);
 
 			return criteria.list();
 		}
