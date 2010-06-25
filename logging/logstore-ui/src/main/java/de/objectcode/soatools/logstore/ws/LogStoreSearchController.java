@@ -34,6 +34,8 @@ public class LogStoreSearchController implements Serializable {
 	private String processInstanceId;
 	private String tagName;
 	private String tagValue;
+	private String serviceCategory;
+	private String serviceName;
 	private Date fromDate;
 	private Date untilDate;
 
@@ -117,7 +119,50 @@ public class LogStoreSearchController implements Serializable {
 
 		return LogStoreLogDetailController.VIEW_ID;
 	}
-	
+
+	@Begin
+	public String findByServiceName() {
+		logMessageList
+				.setFetchCommand(new LogMessageList.CriteriaFetchCommand() {
+					@Override
+					protected Criteria createCriteria(Session logStoreSession,
+							boolean order) {
+						final Criteria criteria = logStoreSession
+						.createCriteria(LogMessage.class);
+
+						if(serviceCategory != null && serviceCategory.length() > 0) {
+							if ( serviceCategory.indexOf('*') > 0 ) 
+								criteria.add(Restrictions.like("serviceCategory", serviceCategory.replace('*', '%')));
+							else
+								criteria.add(Restrictions.eq("serviceCategory", serviceCategory));
+						}
+						if(serviceName != null && serviceName.length() > 0) {
+							if ( serviceName.indexOf('*') > 0 ) 
+								criteria.add(Restrictions.like("serviceName", serviceName.replace('*', '%')));
+							else
+								criteria.add(Restrictions.eq("serviceName", serviceName));
+						}
+						if (fromDate != null) {
+							criteria.add(Restrictions.ge(
+									"logEnterTimestamp", fromDate));
+						}
+						if (untilDate != null) {
+							criteria.add(Restrictions.le(
+									"logEnterTimestamp", untilDate));
+						}
+						if (order)
+							criteria.addOrder(Order.asc("id"));
+
+
+						return criteria;
+					}
+				});
+
+		logMessageList.refresh();
+
+		return LogStoreLogDetailController.VIEW_ID;
+	}
+
 	public String getTagName() {
 		return tagName;
 	}
@@ -148,6 +193,22 @@ public class LogStoreSearchController implements Serializable {
 
 	public void setUntilDate(Date untilDate) {
 		this.untilDate = untilDate;
+	}
+
+	public String getServiceCategory() {
+		return serviceCategory;
+	}
+
+	public void setServiceCategory(String serviceCategory) {
+		this.serviceCategory = serviceCategory;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	@Transactional
