@@ -95,9 +95,14 @@ public class LogStoreSearchController implements Serializable {
 
 						criteria.setProjection(Projections
 								.property("logMessage"));
-						criteria.add(Restrictions
-								.and(Restrictions.eq("name", tagName),
-										Restrictions.eq("tagValue", tagValue)));
+						if (tagValue != null && tagValue.indexOf('*') > 0)
+							criteria.add(Restrictions.and(Restrictions.eq(
+									"name", tagName), Restrictions.like(
+									"tagValue", tagValue.replace('*', '%'))));
+						else
+							criteria.add(Restrictions.and(Restrictions.eq(
+									"name", tagName), Restrictions.eq(
+									"tagValue", tagValue)));
 						Criteria logMessageCriteria = criteria
 								.createCriteria("logMessage");
 						if (fromDate != null) {
@@ -128,31 +133,36 @@ public class LogStoreSearchController implements Serializable {
 					protected Criteria createCriteria(Session logStoreSession,
 							boolean order) {
 						final Criteria criteria = logStoreSession
-						.createCriteria(LogMessage.class);
+								.createCriteria(LogMessage.class);
 
-						if(serviceCategory != null && serviceCategory.length() > 0) {
-							if ( serviceCategory.indexOf('*') > 0 ) 
-								criteria.add(Restrictions.like("serviceCategory", serviceCategory.replace('*', '%')));
+						if (serviceCategory != null
+								&& serviceCategory.length() > 0) {
+							if (serviceCategory.indexOf('*') > 0)
+								criteria.add(Restrictions.like(
+										"serviceCategory", serviceCategory
+												.replace('*', '%')));
 							else
-								criteria.add(Restrictions.eq("serviceCategory", serviceCategory));
+								criteria.add(Restrictions.eq("serviceCategory",
+										serviceCategory));
 						}
-						if(serviceName != null && serviceName.length() > 0) {
-							if ( serviceName.indexOf('*') > 0 ) 
-								criteria.add(Restrictions.like("serviceName", serviceName.replace('*', '%')));
+						if (serviceName != null && serviceName.length() > 0) {
+							if (serviceName.indexOf('*') > 0)
+								criteria.add(Restrictions.like("serviceName",
+										serviceName.replace('*', '%')));
 							else
-								criteria.add(Restrictions.eq("serviceName", serviceName));
+								criteria.add(Restrictions.eq("serviceName",
+										serviceName));
 						}
 						if (fromDate != null) {
-							criteria.add(Restrictions.ge(
-									"logEnterTimestamp", fromDate));
+							criteria.add(Restrictions.ge("logEnterTimestamp",
+									fromDate));
 						}
 						if (untilDate != null) {
-							criteria.add(Restrictions.le(
-									"logEnterTimestamp", untilDate));
+							criteria.add(Restrictions.le("logEnterTimestamp",
+									untilDate));
 						}
 						if (order)
 							criteria.addOrder(Order.asc("id"));
-
 
 						return criteria;
 					}
