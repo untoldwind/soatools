@@ -14,5 +14,6 @@
 		<module>logstore</module>
 		<module>logstore-ui</module>
 		<module>logstore-ws</module>
+		<module>logstore-gwt</module>
 	</modules>
 </project>
