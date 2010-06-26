@@ -1,0 +1,32 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	
+	ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+	ui:generateKeys="com.google.gwt.i18n.rebind.keygen.MD5KeyGenerator"
+	ui:generateLocales="default">
+
+	<g:DecoratorPanel>
+		<g:HTMLPanel>
+			<table>
+				<tr>
+					<td><ui:msg key="login.userId.label">UserId:</ui:msg></td>
+					<td>
+						<g:TextBox ui:field="userId" />
+					</td>
+				</tr>
+				<tr>
+					<td><ui:msg key="login.password.label">Password:</ui:msg></td>
+					<td>
+						<g:PasswordTextBox ui:field="password" />
+					</td>
+				</tr>
+				<tr>
+					<td colspan="2" align="center">
+						<g:Button ui:field="login" enabled="false"><ui:msg key="login.login.label">Login</ui:msg></g:Button>
+					</td>
+				</tr>
+			</table>
+		</g:HTMLPanel>
+	</g:DecoratorPanel>
+</ui:UiBinder>
