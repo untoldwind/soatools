@@ -8,4 +8,6 @@ public interface LoginServiceAsync {
 
 	void logout(AsyncCallback<Void> callback);
 
+	void getAuthenticatedUserId(AsyncCallback<String> callback);
+
 }

@@ -1,4 +1,6 @@
 tomcat
 de.objectcode.soatools.*
+Utils
 LoginUI
 MainUI
+Log

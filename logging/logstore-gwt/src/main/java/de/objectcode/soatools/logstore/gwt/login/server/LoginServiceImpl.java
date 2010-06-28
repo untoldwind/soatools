@@ -23,4 +23,10 @@ public class LoginServiceImpl extends GwtController implements LoginService {
 		System.out.println("Logout");
 	}
 
+	@Override
+	public String getAuthenticatedUserId() {
+		// TODO
+		return "admin";
+	}
+
 }

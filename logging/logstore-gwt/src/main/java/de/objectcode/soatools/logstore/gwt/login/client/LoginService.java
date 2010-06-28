@@ -8,4 +8,6 @@ public interface LoginService extends RemoteService {
 	boolean login(String userId, String password);
 
 	void logout();
+	
+	String getAuthenticatedUserId();
 }
