@@ -26,7 +26,7 @@ public class MainPage implements EntryPoint {
 	}
 
 	private final LoginServiceAsync loginService = GWT
-	.create(LoginService.class);
+			.create(LoginService.class);
 
 	@UiField
 	MenuBar mainMenu;
