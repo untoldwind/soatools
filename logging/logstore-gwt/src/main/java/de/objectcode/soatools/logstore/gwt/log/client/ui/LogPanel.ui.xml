@@ -1,10 +1,44 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui"
-	xmlns:lc="urn:import:de.objectcode.soatools.logstore.gwt.log.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:lc="urn:import:de.objectcode.soatools.logstore.gwt.log.client.ui">
 
-	<g:VerticalPanel>
+	<g:SplitLayoutPanel>
+		<g:north size="200">
 			<lc:LogListPanel></lc:LogListPanel>
-			<g:Label>Center</g:Label>
-	</g:VerticalPanel>
+		</g:north>
+		<g:center>
+			<g:ScrollPanel>
+				<g:VerticalPanel>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+					<g:Label>Center</g:Label>
+				</g:VerticalPanel>
+			</g:ScrollPanel>
+		</g:center>
+	</g:SplitLayoutPanel>
 </ui:UiBinder>
