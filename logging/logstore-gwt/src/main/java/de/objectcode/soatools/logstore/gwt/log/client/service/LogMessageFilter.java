@@ -8,14 +8,12 @@ public class LogMessageFilter implements IsSerializable {
 	List<Criteria> criterias;
 
 	public enum CriteriaType {
-		TAGVALUE,
-		SERVICE,
-		TIMESTAMP
+		TAGVALUE, SERVICE, TIMESTAMP
 	}
-	
+
 	public LogMessageFilter() {
 	}
-	
+
 	public LogMessageFilter(List<Criteria> criterias) {
 		this.criterias = criterias;
 	}
@@ -25,6 +23,7 @@ public class LogMessageFilter implements IsSerializable {
 	}
 
 	public static abstract class Criteria implements IsSerializable {
+		public abstract CriteriaType getType();
 	}
 
 	public static class ServiceCriteria extends Criteria {
@@ -33,7 +32,7 @@ public class LogMessageFilter implements IsSerializable {
 
 		public ServiceCriteria() {
 		}
-		
+
 		public ServiceCriteria(String serviceCategory, String serviceName) {
 			this.serviceCategory = serviceCategory;
 			this.serviceName = serviceName;
@@ -46,15 +45,20 @@ public class LogMessageFilter implements IsSerializable {
 		public String getServiceName() {
 			return serviceName;
 		}
+
+		@Override
+		public CriteriaType getType() {
+			return CriteriaType.SERVICE;
+		}
 	}
-	
+
 	public static class TagCriteria extends Criteria {
 		String tagName;
 		String tagValue;
-		
+
 		public TagCriteria() {
 		}
-		
+
 		public TagCriteria(String tagName, String tagValue) {
 			this.tagName = tagName;
 			this.tagValue = tagValue;
@@ -66,6 +70,11 @@ public class LogMessageFilter implements IsSerializable {
 
 		public String getTagValue() {
 			return tagValue;
+		}
+
+		@Override
+		public CriteriaType getType() {
+			return CriteriaType.TAGVALUE;
 		}
 	}
 }

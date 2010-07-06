@@ -110,7 +110,7 @@ public class LogListPanel extends Composite {
 	private void loadData(int pageStart, int pageSize,
 			final ListView<LogMessageSummary> logMessageTable) {
 
-		logMessageService.getLogMessages(null, pageStart, pageSize,
+		logMessageService.getLogMessages(logFilterPanel.getValue(), pageStart, pageSize,
 				new AsyncCallback<LogMessageSummary.Page>() {
 					@Override
 					public void onSuccess(LogMessageSummary.Page logMessagePage) {

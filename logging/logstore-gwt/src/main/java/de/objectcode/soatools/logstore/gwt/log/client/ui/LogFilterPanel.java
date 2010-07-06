@@ -20,7 +20,9 @@ import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageFilter
 import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageServiceFilterPanel;
 import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageTagFilterPanel;
 
-public class LogFilterPanel extends Composite  implements HasValue<LogMessageFilter>, ValueChangeHandler<LogMessageFilter.Criteria> {
+public class LogFilterPanel extends Composite implements
+		HasValue<LogMessageFilter>,
+		ValueChangeHandler<LogMessageFilter.Criteria> {
 	FlexTable criteriaTable;
 	ListBox newCriteriaList;
 	Button addButton;
@@ -62,8 +64,8 @@ public class LogFilterPanel extends Composite  implements HasValue<LogMessageFil
 	@Override
 	public void setValue(LogMessageFilter logMessageFilter, boolean fireEvent) {
 		setValue(logMessageFilter);
-		
-		if ( fireEvent )
+
+		if (fireEvent)
 			ValueChangeEvent.fire(this, logMessageFilter);
 	}
 
@@ -77,15 +79,16 @@ public class LogFilterPanel extends Composite  implements HasValue<LogMessageFil
 			ValueChangeHandler<LogMessageFilter> handler) {
 		return addHandler(handler, ValueChangeEvent.getType());
 	}
-	
+
 	@Override
 	public void onValueChange(ValueChangeEvent<Criteria> event) {
 		List<LogMessageFilter.Criteria> critierias = new ArrayList<LogMessageFilter.Criteria>();
-		
-		for ( LogMessageFilterComponent<?> filterComponent : filterComponents) {
-			critierias.add(filterComponent.getValue());
+
+		for (LogMessageFilterComponent<?> filterComponent : filterComponents) {
+			if (filterComponent.getValue() != null)
+				critierias.add(filterComponent.getValue());
 		}
-		
+
 		setValue(new LogMessageFilter(critierias), true);
 	}
 
@@ -102,19 +105,28 @@ public class LogFilterPanel extends Composite  implements HasValue<LogMessageFil
 			newFilterComponent = new LogMessageTagFilterPanel();
 			break;
 		}
-		
-		if ( newFilterComponent != null ) {
+
+		if (newFilterComponent != null) {
 			filterComponents.add(newFilterComponent);
 			newFilterComponent.addValueChangeHandler(this);
-			
+
 			updateCriteriaTable();
 		}
 	}
 
-	private void removeCriteria(LogMessageFilterComponent<?> filterComponent) {
-		filterComponents.remove(filterComponent);
+	private void removeCriteria(LogMessageFilterComponent<?> toRemove) {
+		filterComponents.remove(toRemove);
 
 		updateCriteriaTable();
+
+		List<LogMessageFilter.Criteria> critierias = new ArrayList<LogMessageFilter.Criteria>();
+
+		for (LogMessageFilterComponent<?> filterComponent : filterComponents) {
+			if (filterComponent.getValue() != null)
+				critierias.add(filterComponent.getValue());
+		}
+
+		setValue(new LogMessageFilter(critierias), true);
 	}
 
 	private void updateCriteriaTable() {

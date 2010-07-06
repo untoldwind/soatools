@@ -17,8 +17,7 @@ public abstract class LogMessageFilterComponent<T extends LogMessageFilter.Crite
 
 	@Override
 	public T getValue() {
-		// TODO Auto-generated method stub
-		return null;
+		return criteria;
 	}
 
 	@Override

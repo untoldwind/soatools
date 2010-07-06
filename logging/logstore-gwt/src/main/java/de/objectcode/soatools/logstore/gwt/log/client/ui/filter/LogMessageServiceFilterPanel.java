@@ -57,7 +57,7 @@ public class LogMessageServiceFilterPanel extends
 		}
 	}
 
-	@UiHandler("serviceCategoryList")
+	@UiHandler("serviceNameList")
 	void handleNameSelection(ChangeEvent event) {
 		if (!getServiceCategory().equals(criteria.getServiceCategory())
 				|| !getServiceName().equals(criteria.getServiceName())) {
