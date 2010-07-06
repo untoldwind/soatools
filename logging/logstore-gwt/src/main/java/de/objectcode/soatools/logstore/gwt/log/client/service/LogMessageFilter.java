@@ -7,6 +7,12 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 public class LogMessageFilter implements IsSerializable {
 	List<Criteria> criterias;
 
+	public enum CriteriaType {
+		TAGVALUE,
+		SERVICE,
+		TIMESTAMP
+	}
+	
 	public static abstract class Criteria implements IsSerializable {
 	}
 

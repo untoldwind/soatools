@@ -12,6 +12,7 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DockLayoutPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.view.client.ListView;
 import com.google.gwt.view.client.ListView.Delegate;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
@@ -42,9 +43,14 @@ public class LogListPanel extends Composite {
 			}
 		});
 
+		LogFilterPanel filterPanel = new LogFilterPanel();
+		
 		container.addSouth(new SimplePager<LogMessageSummary>(logMessageTable,
 				SimplePager.TextLocation.CENTER), 2);
-		container.add(new ScrollPanel(logMessageTable));
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(filterPanel);
+		panel.add(logMessageTable);
+		container.add(new ScrollPanel(panel));
 
 		logMessageTable.refresh();
 	}
