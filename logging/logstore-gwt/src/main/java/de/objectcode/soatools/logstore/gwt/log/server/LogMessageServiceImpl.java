@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageFilter;
-import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessagePagingData;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageService;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageSummary;
 import de.objectcode.soatools.logstore.gwt.log.server.dao.ILogMessageDao;
@@ -25,7 +24,7 @@ public class LogMessageServiceImpl extends GwtController implements LogMessageSe
 	private ILogMessageDao logMessageDao;
 	
 	@Override
-	public LogMessagePagingData getLogMessages(LogMessageFilter filter,
+	public LogMessageSummary.Page getLogMessages(LogMessageFilter filter,
 			int pageStart, int pageSize){
 		System.out.println(">>>> " + logMessageDao);
 		List<LogMessageSummary> page = new ArrayList<LogMessageSummary>();
@@ -42,7 +41,7 @@ public class LogMessageServiceImpl extends GwtController implements LogMessageSe
 			e.printStackTrace();
 		}
 		
-		return new LogMessagePagingData(pageStart, pageSize, 1000, page);
+		return new LogMessageSummary.Page(pageStart, pageSize, 1000, page);
 	}
 
 }

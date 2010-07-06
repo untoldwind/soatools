@@ -1,8 +1,13 @@
 package de.objectcode.soatools.logstore.gwt.log.client.service;
 
+import java.util.List;
+
 import com.google.gwt.user.client.rpc.IsSerializable;
 
+import de.objectcode.soatools.logstore.gwt.utils.client.service.BaseDataPage;
+
 public class LogMessageSummary implements IsSerializable {
+	private static final long serialVersionUID = 1L;
 	private String id;
 	private String serviceCategory;
 	private String serviceName;
@@ -52,4 +57,22 @@ public class LogMessageSummary implements IsSerializable {
 		return true;
 	}
 
+	public static class Page extends BaseDataPage<LogMessageSummary> {
+
+		public Page() {
+		}
+
+		public Page(int pageStart, int pageSize, int totalNumber,
+				List<LogMessageSummary> pageData) {
+			super(pageStart, pageSize, totalNumber);
+
+			this.pageData = pageData;
+		}
+
+		private List<LogMessageSummary> pageData;
+
+		public List<LogMessageSummary> getPageData() {
+			return pageData;
+		}
+	}
 }

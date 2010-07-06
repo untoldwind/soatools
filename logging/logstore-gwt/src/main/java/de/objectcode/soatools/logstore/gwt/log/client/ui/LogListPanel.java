@@ -17,7 +17,6 @@ import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeHandler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
-import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessagePagingData;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageService;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageServiceAsync;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageSummary;
@@ -84,16 +83,16 @@ public class LogListPanel extends Composite {
 			final ListView<LogMessageSummary> logMessageTable) {
 
 		logMessageService.getLogMessages(null, pageStart, pageSize,
-				new AsyncCallback<LogMessagePagingData>() {
+				new AsyncCallback<LogMessageSummary.Page>() {
 					@Override
 					public void onSuccess(
-							LogMessagePagingData logMessagePagingData) {
+							LogMessageSummary.Page logMessagePage) {
 						logMessageTable.setDataSize(
-								logMessagePagingData.getDataSize(), true);
+								logMessagePage.getTotalNumber(), true);
 						logMessageTable.setData(
-								logMessagePagingData.getPageStart(),
-								logMessagePagingData.getPageStart(),
-								logMessagePagingData.getLogMessages());
+								logMessagePage.getPageStart(),
+								logMessagePage.getPageSize(),
+								logMessagePage.getPageData());
 					}
 
 					@Override

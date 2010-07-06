@@ -5,6 +5,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public interface LogMessageServiceAsync {
 
 	void getLogMessages(LogMessageFilter filter, int pageStart, int pageSize,
-			AsyncCallback<LogMessagePagingData> callback);
+			AsyncCallback<LogMessageSummary.Page> callback);
 
 }

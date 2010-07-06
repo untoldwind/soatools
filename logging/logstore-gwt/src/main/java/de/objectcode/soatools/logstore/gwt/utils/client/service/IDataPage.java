@@ -5,7 +5,7 @@ import java.util.List;
 public interface IDataPage<T> {
 	public int getTotalNumber();
 
-	public int getPageNumber();
+	public int getPageStart();
 
 
 	public int getPageSize();
