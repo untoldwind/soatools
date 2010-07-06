@@ -1,24 +1,25 @@
 package de.objectcode.soatools.logstore.gwt.log.client.ui;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.i18n.client.DateTimeFormat;
+import com.google.gwt.uibinder.client.UiBinder;
+import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
-import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.cellview.client.TextHeader;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.DockLayoutPanel;
-import com.google.gwt.user.client.ui.ScrollPanel;
-import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.ListView;
 import com.google.gwt.view.client.ListView.Delegate;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeEvent;
 import com.google.gwt.view.client.SelectionModel.SelectionChangeHandler;
 import com.google.gwt.view.client.SingleSelectionModel;
 
+import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageFilter;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageService;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageServiceAsync;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageSummary;
@@ -27,12 +28,22 @@ public class LogListPanel extends Composite {
 	private final LogMessageServiceAsync logMessageService = GWT
 			.create(LogMessageService.class);
 
-	public LogListPanel() {
-		DockLayoutPanel container = new DockLayoutPanel(Unit.EM);
-		initWidget(container);
+	private static UI uiBinder = GWT.create(UI.class);
 
-		CellTable<LogMessageSummary> logMessageTable = new CellTable<LogMessageSummary>(
-				20);
+	interface UI extends UiBinder<Widget, LogListPanel> {
+	}
+	
+	@UiField
+	CellTable<LogMessageSummary> logMessageTable;
+	
+	@UiField
+	LogFilterPanel logFilterPanel;
+	
+	public LogListPanel() {
+		initWidget(uiBinder.createAndBindUi(this));
+		
+		logMessageTable.setPageSize(20);
+
 		setColumns(logMessageTable);
 		setSelectionModel(logMessageTable);
 		logMessageTable.setDelegate(new Delegate<LogMessageSummary>() {
@@ -43,15 +54,11 @@ public class LogListPanel extends Composite {
 			}
 		});
 
-		LogFilterPanel filterPanel = new LogFilterPanel();
-		
-		container.addSouth(new SimplePager<LogMessageSummary>(logMessageTable,
-				SimplePager.TextLocation.CENTER), 2);
-		VerticalPanel panel = new VerticalPanel();
-		panel.add(filterPanel);
-		panel.add(logMessageTable);
-		container.add(new ScrollPanel(panel));
-
+		logMessageTable.refresh();
+	}
+	
+	@UiHandler("logFilterPanel")
+	public void handleFilterChange(ValueChangeEvent<LogMessageFilter> event) {
 		logMessageTable.refresh();
 	}
 

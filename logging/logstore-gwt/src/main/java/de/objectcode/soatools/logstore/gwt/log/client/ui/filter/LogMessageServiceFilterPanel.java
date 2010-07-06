@@ -12,10 +12,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.Widget;
 
+import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageFilter;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageService;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageServiceAsync;
 
-public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
+public class LogMessageServiceFilterPanel extends
+		LogMessageFilterComponent<LogMessageFilter.ServiceCriteria> {
 	private static UI uiBinder = GWT.create(UI.class);
 
 	private final LogMessageServiceAsync logMessageService = GWT
@@ -26,6 +28,7 @@ public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
 
 	@UiField
 	ListBox serviceCategoryList;
+
 	@UiField
 	ListBox serviceNameList;
 
@@ -33,6 +36,9 @@ public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
 		initWidget(uiBinder.createAndBindUi(this));
 
 		updateCategoryList();
+
+		criteria = new LogMessageFilter.ServiceCriteria(getServiceCategory(),
+				getServiceName());
 	}
 
 	@Override
@@ -43,10 +49,39 @@ public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
 	@UiHandler("serviceCategoryList")
 	void handleCategorySelection(ChangeEvent event) {
 		updateNameList();
+
+		if (!getServiceCategory().equals(criteria.getServiceCategory())
+				|| !getServiceName().equals(criteria.getServiceName())) {
+			setValue(new LogMessageFilter.ServiceCriteria(getServiceCategory(),
+					getServiceName()), true);
+		}
 	}
 
 	@UiHandler("serviceCategoryList")
 	void handleNameSelection(ChangeEvent event) {
+		if (!getServiceCategory().equals(criteria.getServiceCategory())
+				|| !getServiceName().equals(criteria.getServiceName())) {
+			setValue(new LogMessageFilter.ServiceCriteria(getServiceCategory(),
+					getServiceName()), true);
+		}
+	}
+
+	private String getServiceCategory() {
+		int idx = serviceCategoryList.getSelectedIndex();
+
+		if (idx > 0)
+			return serviceCategoryList.getValue(idx);
+
+		return "*";
+	}
+
+	private String getServiceName() {
+		int idx = serviceNameList.getSelectedIndex();
+
+		if (idx > 0)
+			return serviceNameList.getValue(idx);
+
+		return "*";
 	}
 
 	private void updateCategoryList() {
@@ -77,7 +112,7 @@ public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
 
 		serviceNameList.clear();
 		serviceNameList.addItem("<any>", "");
-		
+
 		if (idx > 0) {
 			String serviceCategory = serviceCategoryList.getValue(idx);
 			logMessageService.getServiceNames(serviceCategory,
@@ -86,7 +121,7 @@ public class LogMessageServiceFilterPanel extends LogMessageFilterComponent {
 						public void onSuccess(List<String> serviceNames) {
 							serviceNameList.clear();
 							serviceNameList.addItem("<any>", "");
-							
+
 							for (String serviceName : serviceNames)
 								serviceNameList.addItem(serviceName,
 										serviceName);

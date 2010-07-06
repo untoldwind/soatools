@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:cv="urn:import:com.google.gwt.user.cellview.client"
+	xmlns:lc="urn:import:de.objectcode.soatools.logstore.gwt.log.client.ui">
+
+	<g:DockLayoutPanel unit="EM">
+		<g:center>
+			<g:ScrollPanel>
+				<g:VerticalPanel>
+					<lc:LogFilterPanel ui:field="logFilterPanel"/>
+					<cv:CellTable ui:field="logMessageTable" />
+				</g:VerticalPanel>
+			</g:ScrollPanel>
+		</g:center>
+		<g:south size="2">
+			<cv:SimplePager view="{logMessageTable}" location="CENTER" />
+		</g:south>
+	</g:DockLayoutPanel>
+</ui:UiBinder>

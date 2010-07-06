@@ -13,6 +13,5 @@ public class LogPanel extends ResizeComposite {
 
 	public LogPanel() {
 		initWidget(uiBinder.createAndBindUi(this));
-
 	}
 }
