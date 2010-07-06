@@ -13,6 +13,7 @@ import com.google.gwt.user.client.ui.ListBox;
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageFilter;
 import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageFilterComponent;
 import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageServiceFilterPanel;
+import de.objectcode.soatools.logstore.gwt.log.client.ui.filter.LogMessageTagFilterPanel;
 
 public class LogFilterPanel extends Composite {
 	FlexTable criteriaTable;
@@ -56,12 +57,15 @@ public class LogFilterPanel extends Composite {
 		case SERVICE:
 			filterComponents.add(new LogMessageServiceFilterPanel());
 			break;
+		case TAGVALUE:
+			filterComponents.add(new LogMessageTagFilterPanel());
+			break;
 		}
-		
+
 		updateCriteriaTable();
 	}
-	private void removeCriteria(
-			LogMessageFilterComponent filterComponent) {
+
+	private void removeCriteria(LogMessageFilterComponent filterComponent) {
 		filterComponents.remove(filterComponent);
 
 		updateCriteriaTable();
@@ -73,7 +77,7 @@ public class LogFilterPanel extends Composite {
 		for (final LogMessageFilterComponent filterComponent : filterComponents) {
 			criteriaTable.setText(row, 0, filterComponent.getLabel());
 			criteriaTable.setWidget(row, 1, filterComponent);
-			
+
 			Button removeButton = new Button();
 			removeButton.setText("-");
 			removeButton.addClickHandler(new ClickHandler() {
@@ -84,7 +88,7 @@ public class LogFilterPanel extends Composite {
 			});
 
 			criteriaTable.setWidget(row, 2, removeButton);
-			
+
 			row++;
 		}
 

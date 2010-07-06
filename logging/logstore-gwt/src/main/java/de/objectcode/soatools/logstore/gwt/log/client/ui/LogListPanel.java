@@ -117,7 +117,6 @@ public class LogListPanel extends Composite {
 					@Override
 					public void onFailure(Throwable caught) {
 						Window.alert("Server error: " + caught);
-
 					}
 				});
 	}

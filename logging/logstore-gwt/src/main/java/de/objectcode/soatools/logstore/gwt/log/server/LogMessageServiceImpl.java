@@ -1,6 +1,5 @@
 package de.objectcode.soatools.logstore.gwt.log.server;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
@@ -25,6 +24,24 @@ public class LogMessageServiceImpl extends GwtController implements LogMessageSe
 	@Resource
 	private ILogMessageDao logMessageDao;
 	
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public List<String> getTagNames() {
+		return logMessageDao.findTagNames();
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public List<String> getServiceCategories() {
+		return logMessageDao.findServiceCategories();
+	}
+
+	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
+	public List<String> getServiceNames(String serviceCategory) {
+		return logMessageDao.findServiceNames(serviceCategory);
+	}
+
 	@Override
 	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public LogMessageSummary.Page getLogMessages(LogMessageFilter filter,

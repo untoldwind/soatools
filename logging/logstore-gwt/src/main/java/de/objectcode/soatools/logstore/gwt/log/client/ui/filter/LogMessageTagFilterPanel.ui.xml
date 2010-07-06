@@ -1,0 +1,11 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+
+	<g:HorizontalPanel>
+		<g:Label>Tag:</g:Label>
+		<g:ListBox ui:field="tagNameList" />
+		<g:Label>Value:</g:Label>
+		<g:SuggestBox ui:field="tagValueText"/>
+	</g:HorizontalPanel>
+</ui:UiBinder>
