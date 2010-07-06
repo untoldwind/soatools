@@ -2,6 +2,7 @@ package de.objectcode.soatools.logstore.gwt.log.client.ui;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.SimplePager;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -49,10 +50,12 @@ public class LogListPanel extends Composite {
 	}
 
 	private void setColumns(CellTable<LogMessageSummary> logMessageTable) {
+		final DateTimeFormat timestampFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm:ss");
+		
 		logMessageTable.addColumn(new TextColumn<LogMessageSummary>() {
 			@Override
 			public String getValue(LogMessageSummary logMessage) {
-				return logMessage.getId();
+				return String.valueOf(logMessage.getId());
 			}
 		}, new TextHeader("Id"));
 		logMessageTable.addColumn(new TextColumn<LogMessageSummary>() {
@@ -62,6 +65,18 @@ public class LogListPanel extends Composite {
 						+ logMessage.getServiceName();
 			}
 		}, new TextHeader("Service"));
+		logMessageTable.addColumn(new TextColumn<LogMessageSummary>() {
+			@Override
+			public String getValue(LogMessageSummary logMessage) {
+				return timestampFormat.format(logMessage.getLogEnterTimestamp());
+			}			
+		}, new TextHeader("Enter"));
+		logMessageTable.addColumn(new TextColumn<LogMessageSummary>() {
+			@Override
+			public String getValue(LogMessageSummary logMessage) {
+				return timestampFormat.format(logMessage.getLogLeaveTimestamp());
+			}			
+		}, new TextHeader("Leave"));
 	}
 
 	private void setSelectionModel(CellTable<LogMessageSummary> logMessageTable) {
@@ -71,7 +86,7 @@ public class LogListPanel extends Composite {
 			public void onSelectionChange(SelectionChangeEvent event) {
 				LogMessageSummary logMessage = selectionModel
 						.getSelectedObject();
-				Window.alert(logMessage.getId());
+				Window.alert(String.valueOf(logMessage.getId()));
 			}
 		};
 		selectionModel.addSelectionChangeHandler(selectionHandler);
@@ -85,12 +100,10 @@ public class LogListPanel extends Composite {
 		logMessageService.getLogMessages(null, pageStart, pageSize,
 				new AsyncCallback<LogMessageSummary.Page>() {
 					@Override
-					public void onSuccess(
-							LogMessageSummary.Page logMessagePage) {
+					public void onSuccess(LogMessageSummary.Page logMessagePage) {
 						logMessageTable.setDataSize(
 								logMessagePage.getTotalNumber(), true);
-						logMessageTable.setData(
-								logMessagePage.getPageStart(),
+						logMessageTable.setData(logMessagePage.getPageStart(),
 								logMessagePage.getPageSize(),
 								logMessagePage.getPageData());
 					}

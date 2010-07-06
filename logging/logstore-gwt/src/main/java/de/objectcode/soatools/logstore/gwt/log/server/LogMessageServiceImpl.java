@@ -6,6 +6,8 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import de.objectcode.soatools.logstore.gwt.log.client.service.LogMessageFilter;
@@ -24,24 +26,14 @@ public class LogMessageServiceImpl extends GwtController implements LogMessageSe
 	private ILogMessageDao logMessageDao;
 	
 	@Override
+	@Transactional(propagation=Propagation.REQUIRED, readOnly=true)
 	public LogMessageSummary.Page getLogMessages(LogMessageFilter filter,
 			int pageStart, int pageSize){
-		System.out.println(">>>> " + logMessageDao);
-		List<LogMessageSummary> page = new ArrayList<LogMessageSummary>();
 
-		for (int i = 0; i < pageSize; i++) {
-			page.add(new LogMessageSummary(String.valueOf(pageStart + i),
-					"TestCat", "TestName"));
-		}
-
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		int totalNumber = logMessageDao.countLogMessages(filter);
+		List<LogMessageSummary> pageData = logMessageDao.findLogMessageSummaries(filter, pageStart, pageSize);
 		
-		return new LogMessageSummary.Page(pageStart, pageSize, 1000, page);
+		return new LogMessageSummary.Page(pageStart, pageSize, totalNumber, pageData);
 	}
 
 }
