@@ -72,11 +72,9 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 		// transaction
 		if (th instanceof RuntimeException) {
 			LOG.info("Got RuntimeException that will lead to a retry", th);
-			ExceptionCache.getInstance()
-					.addException(
-							message.getHeader().getCall().getMessageID()
-									.toString(), th);
 		}
+		ExceptionCache.getInstance().addException(
+				message.getHeader().getCall().getMessageID().toString(), th);
 	}
 
 	/**
@@ -104,7 +102,8 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 						throw new ActionProcessingException(
 								"Max redeliver count reached in service ("
 										+ service.getCategory() + ","
-										+ service.getName() + ") cause: " + cause.getMessage(), cause);
+										+ service.getName() + ") cause: "
+										+ cause.getMessage(), cause);
 					} else {
 						throw new ActionProcessingException(
 								"Max redeliver count reached in service ("
@@ -129,8 +128,7 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 			try {
 				dlqServiceInvoker.deliverAsync(message);
 
-				LOG
-						.info("Send redelivered JMS message to MessageStore for retry");
+				LOG.info("Send redelivered JMS message to MessageStore for retry");
 
 				return null;
 			} catch (MessageDeliverException e) {
