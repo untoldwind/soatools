@@ -41,9 +41,12 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 	final MessagePayloadProxy payload;
 	final Map<String, IValueLocator> valueLocators;
 	final IMessageCombiner messageCombiner;
+	boolean ignoreRuntimeExceptions;
 
 	public Aggregator(ConfigTree config) throws ConfigurationException {
 		payload = new MessagePayloadProxy(config);
+		ignoreRuntimeExceptions = config.getBooleanAttribute(
+				"ignore-runtime-exceptions", false);
 
 		String messageCombinerClass = config
 				.getAttribute("message-combiner-class");
@@ -77,6 +80,16 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 	}
 
 	public Message process(Message message) throws ActionProcessingException {
+		if (ignoreRuntimeExceptions && message.getFault() != null) {
+			if (message.getFault().getCause() != null
+					&& message.getFault().getCause() instanceof RuntimeException) {
+				if (LOG.isDebugEnabled())
+					LOG.debug("Ignoring runtime exception (assume retry)",
+							message.getFault().getCause());
+				return null;
+			}
+		}
+
 		Long splitId = (Long) message.getProperties().getProperty(
 				IConstants.SPLITTER_ID);
 
@@ -115,8 +128,8 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 
 			if (parts.size() == splitEntity.getPartCount() - 1) {
 				List<Map<String, Object>> partContents = new ArrayList<Map<String, Object>>(
-						Collections.<Map<String, Object>> nCopies(splitEntity
-								.getPartCount(), null));
+						Collections.<Map<String, Object>> nCopies(
+								splitEntity.getPartCount(), null));
 
 				partContents.set(partIndex, getContents(message));
 
@@ -145,8 +158,13 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 						part.setFaultReason(message.getFault().getReason());
 					}
 					if (message.getFault().getCode() != null) {
-						part.setFaultCode(message.getFault().getCode().toString());
+						part.setFaultCode(message.getFault().getCode()
+								.toString());
 					}
+					if (LOG.isDebugEnabled())
+						LOG.debug("Stored fault: "
+								+ message.getFault().getReason(), message
+								.getFault().getCause());
 				}
 
 				session.persist(part);
