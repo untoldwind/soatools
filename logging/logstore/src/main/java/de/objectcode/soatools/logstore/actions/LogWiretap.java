@@ -127,8 +127,8 @@ public class LogWiretap extends AbstractActionPipelineProcessor {
 			findJpbmIds(call.getFaultTo(), logMessage);
 			findJpbmIds(message.getProperties(), logMessage);
 
-			logMessage.getBody().add("message-id",
-					call.getMessageID().toString());
+			logMessage.getBody().add("message-id", call.getMessageID() != null ?
+					call.getMessageID().toString() : "<no message id>");
 			logMessage.getBody().add(
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()

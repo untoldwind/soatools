@@ -123,8 +123,8 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 			findJpbmIds(call.getFaultTo(), logMessage);
 			findJpbmIds(message.getProperties(), logMessage);
 
-			logMessage.getBody().add("message-id",
-					call.getMessageID().toString());
+			logMessage.getBody().add("message-id", call.getMessageID() != null ?
+					call.getMessageID().toString() : "<no message id>");
 			logMessage.getBody().add(
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()
@@ -161,8 +161,8 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 			th.printStackTrace(out);
 			out.flush();
 			out.close();
-			logMessage.getBody().add("fault-cause", writer.toString());
-			logMessage.getBody().add("fault-reason", th.getMessage());
+			logMessage.getBody().add("fault-cause", writer.toString());			
+			logMessage.getBody().add("fault-reason", th.getMessage() != null ? th.getMessage() : "<no reason>");
 
 			logService.deliverAsync(logMessage);
 		} catch (Exception e) {
@@ -179,7 +179,7 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 		final Boolean redelivered = (Boolean) message.getProperties()
 				.getProperty(JMS_REDELIVERED);
 
-		if (redelivered) {
+		if (redelivered != null && redelivered) {
 			try {
 				Map<String, Object> tags = new HashMap<String, Object>();
 
