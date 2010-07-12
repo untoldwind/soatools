@@ -127,8 +127,11 @@ public class HibernateLogMessageDao implements ILogMessageDao {
 				.isEmpty()) {
 			criteria = session.createCriteria(LogTag.class, "logTag");
 			criteria.createAlias("logMessage", "logMessage");
-			criteria.setProjection(Projections.property("logMessage"));
-
+			if ( filterCriteriaMap.get(LogMessageFilter.CriteriaType.TAGVALUE).size() > 1)
+				criteria.setProjection(Projections.distinct(Projections.property("logMessage")));
+			else
+				criteria.setProjection(Projections.property("logMessage"));
+				
 			Criterion tagCriterion = null;
 			for (LogMessageFilter.Criteria filterCriteria : filterCriteriaMap
 					.get(LogMessageFilter.CriteriaType.TAGVALUE)) {
@@ -170,6 +173,31 @@ public class HibernateLogMessageDao implements ILogMessageDao {
 		}
 		if (serviceCriterion != null)
 			criteria.add(serviceCriterion);
+
+		Criterion timestampCriterion = null;
+		for (LogMessageFilter.Criteria filterCriteria : filterCriteriaMap
+				.get(LogMessageFilter.CriteriaType.TIMESTAMP)) {
+			LogMessageFilter.TimestampCriteria timestampCriteria = (LogMessageFilter.TimestampCriteria) filterCriteria;
+
+			Criterion nextTimestampCriterion = null;
+			
+			if ( timestampCriteria.getFrom() != null )
+				nextTimestampCriterion = Restrictions.ge("logMessage.logEnterTimestamp", timestampCriteria.getFrom());
+			if ( timestampCriteria.getUntil() != null ) {
+				if ( nextTimestampCriterion != null )
+					nextTimestampCriterion = Restrictions.and(nextTimestampCriterion, Restrictions.le("logMessage.logEnterTimestamp", timestampCriteria.getUntil()));
+				else
+					Restrictions.le("logMessage.logEnterTimestamp", timestampCriteria.getUntil());
+			}
+			
+			if (timestampCriterion == null)
+				timestampCriterion = nextTimestampCriterion;
+			else
+				timestampCriterion = Restrictions.or(serviceCriterion,
+						nextTimestampCriterion);
+		}
+		if (timestampCriterion != null)
+			criteria.add(timestampCriterion);
 
 		return criteria;
 	}

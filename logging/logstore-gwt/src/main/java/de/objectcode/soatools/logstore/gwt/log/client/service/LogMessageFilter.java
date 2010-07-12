@@ -1,5 +1,6 @@
 package de.objectcode.soatools.logstore.gwt.log.client.service;
 
+import java.util.Date;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.IsSerializable;
@@ -76,5 +77,34 @@ public class LogMessageFilter implements IsSerializable {
 		public CriteriaType getType() {
 			return CriteriaType.TAGVALUE;
 		}
+	}
+	
+	public static class TimestampCriteria extends Criteria {
+		Date from;
+		Date until;
+		
+
+		public TimestampCriteria() {			
+		}
+		
+		public TimestampCriteria(Date from, Date until) {
+			this.from = from;
+			this.until = until;
+		}
+
+
+		public Date getFrom() {
+			return from;
+		}
+
+		public Date getUntil() {
+			return until;
+		}
+
+		@Override
+		public CriteriaType getType() {
+			return CriteriaType.TIMESTAMP;
+		}
+		
 	}
 }
