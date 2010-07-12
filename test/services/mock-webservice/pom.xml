@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>de.objectcode.soatools.test.services</groupId>
 		<artifactId>base</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<artifactId>soatools-test-services-mock-webservice</artifactId>

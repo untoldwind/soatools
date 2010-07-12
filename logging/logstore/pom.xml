@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>de.objectcode.soatools.logging</groupId>
 		<artifactId>base</artifactId>
-		<version>1.0.4-SNAPSHOT</version>
+		<version>1.0.4</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<packaging>jboss-esb</packaging>
