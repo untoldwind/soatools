@@ -84,7 +84,7 @@ public class JcaRetryOnException extends AbstractActionPipelineProcessor {
 		final Boolean redelivered = (Boolean) message.getProperties()
 				.getProperty(JMS_REDELIVERED);
 
-		if (redelivered) {
+		if (redelivered != null && redelivered) {
 			// The message has been redelivered by the JMS, i.e. on the first
 			// try there had been some kind of failure leading to a rollback of
 			// the transaction.
