@@ -3,7 +3,7 @@
 	<parent>
 		<groupId>de.objectcode.soatools</groupId>
 		<artifactId>base</artifactId>
-		<version>1.0.5-SNAPSHOT</version>
+		<version>1.0.5</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<groupId>de.objectcode.soatools.utils</groupId>
