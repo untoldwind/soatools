@@ -34,13 +34,16 @@ public class LogStoreSearchController implements Serializable {
 	private String processInstanceId;
 	private String tagName;
 	private String tagValue;
+	private String serviceCategory;
+	private String serviceName;
 	private Date fromDate;
 	private Date untilDate;
 
 	@In
 	Session logStoreDatabase;
 
-	@Out(required = false)
+	@In("logMessageList")
+	@Out("logMessageList")
 	LogMessageList logMessageList;
 
 	@End
@@ -57,55 +60,117 @@ public class LogStoreSearchController implements Serializable {
 	}
 
 	@Begin
-	@Transactional
 	public String findByProcessInstanceId() {
-		logMessageList = new LogMessageList(new LogMessageList.IRefreshCommand() {
-			public void refresh(LogMessageList list, Session logStoreSession) {
-				final Criteria criteria = logStoreSession
-						.createCriteria(LogMessage.class);
+		logMessageList
+				.setFetchCommand(new LogMessageList.CriteriaFetchCommand() {
+					@Override
+					protected Criteria createCriteria(Session logStoreSession,
+							boolean order) {
+						final Criteria criteria = logStoreSession
+								.createCriteria(LogMessage.class);
 
-				criteria.add(Restrictions.eq("jbpmProcessInstanceId", Long
-						.parseLong(processInstanceId)));
-				criteria.addOrder(Order.asc("id"));
+						criteria.add(Restrictions.eq("jbpmProcessInstanceId",
+								Long.parseLong(processInstanceId)));
+						if (order)
+							criteria.addOrder(Order.asc("id"));
 
-				logMessageList.fill(criteria.list());
-			}
-		});
-		logMessageList.refresh(logStoreDatabase);
+						return criteria;
+					}
+				});
+
+		logMessageList.refresh();
 
 		return LogStoreLogDetailController.VIEW_ID;
 	}
 
 	@Begin
-	@Transactional
 	public String findByTagValue() {
-		logMessageList = new LogMessageList(new LogMessageList.IRefreshCommand() {
-			public void refresh(LogMessageList list, Session logStoreSession) {
-				final Criteria criteria = logStoreSession
-						.createCriteria(LogTag.class);
+		logMessageList
+				.setFetchCommand(new LogMessageList.CriteriaFetchCommand() {
+					@Override
+					protected Criteria createCriteria(Session logStoreSession,
+							boolean order) {
+						final Criteria criteria = logStoreSession
+								.createCriteria(LogTag.class);
 
-				criteria.setProjection(Projections.property("logMessage"));
-				criteria.add(Restrictions.and(Restrictions.eq("name", tagName),
-						Restrictions.eq("tagValue", tagValue)));
-				Criteria logMessageCriteria = criteria
-						.createCriteria("logMessage");
-				if (fromDate != null) {
-					logMessageCriteria.add(Restrictions.ge("logEnterTimestamp",
-							fromDate));
-				}
-				if (untilDate != null) {
-					logMessageCriteria.add(Restrictions.le("logEnterTimestamp",
-							untilDate));
-				}
-				criteria.addOrder(Order.asc("logMessage.id"));
+						criteria.setProjection(Projections
+								.property("logMessage"));
+						if (tagValue != null && tagValue.indexOf('*') > 0)
+							criteria.add(Restrictions.and(Restrictions.eq(
+									"name", tagName), Restrictions.like(
+									"tagValue", tagValue.replace('*', '%'))));
+						else
+							criteria.add(Restrictions.and(Restrictions.eq(
+									"name", tagName), Restrictions.eq(
+									"tagValue", tagValue)));
+						Criteria logMessageCriteria = criteria
+								.createCriteria("logMessage");
+						if (fromDate != null) {
+							logMessageCriteria.add(Restrictions.ge(
+									"logEnterTimestamp", fromDate));
+						}
+						if (untilDate != null) {
+							logMessageCriteria.add(Restrictions.le(
+									"logEnterTimestamp", untilDate));
+						}
+						if (order)
+							criteria.addOrder(Order.asc("logMessage.id"));
 
-				logMessageList.fill(criteria.list());
-			}
-		});
-		logMessageList.refresh(logStoreDatabase);
+						return criteria;
+					}
+				});
+
+		logMessageList.refresh();
 
 		return LogStoreLogDetailController.VIEW_ID;
+	}
 
+	@Begin
+	public String findByServiceName() {
+		logMessageList
+				.setFetchCommand(new LogMessageList.CriteriaFetchCommand() {
+					@Override
+					protected Criteria createCriteria(Session logStoreSession,
+							boolean order) {
+						final Criteria criteria = logStoreSession
+								.createCriteria(LogMessage.class);
+
+						if (serviceCategory != null
+								&& serviceCategory.length() > 0) {
+							if (serviceCategory.indexOf('*') > 0)
+								criteria.add(Restrictions.like(
+										"serviceCategory", serviceCategory
+												.replace('*', '%')));
+							else
+								criteria.add(Restrictions.eq("serviceCategory",
+										serviceCategory));
+						}
+						if (serviceName != null && serviceName.length() > 0) {
+							if (serviceName.indexOf('*') > 0)
+								criteria.add(Restrictions.like("serviceName",
+										serviceName.replace('*', '%')));
+							else
+								criteria.add(Restrictions.eq("serviceName",
+										serviceName));
+						}
+						if (fromDate != null) {
+							criteria.add(Restrictions.ge("logEnterTimestamp",
+									fromDate));
+						}
+						if (untilDate != null) {
+							criteria.add(Restrictions.le("logEnterTimestamp",
+									untilDate));
+						}
+						if (order)
+							criteria.addOrder(Order.asc("id"));
+
+						return criteria;
+					}
+				});
+
+		logMessageList.refresh();
+
+		return LogStoreLogDetailController.VIEW_ID;
 	}
 
 	public String getTagName() {
@@ -138,6 +203,22 @@ public class LogStoreSearchController implements Serializable {
 
 	public void setUntilDate(Date untilDate) {
 		this.untilDate = untilDate;
+	}
+
+	public String getServiceCategory() {
+		return serviceCategory;
+	}
+
+	public void setServiceCategory(String serviceCategory) {
+		this.serviceCategory = serviceCategory;
+	}
+
+	public String getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String serviceName) {
+		this.serviceName = serviceName;
 	}
 
 	@Transactional

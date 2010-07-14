@@ -13,7 +13,7 @@
           <h:commandButton action="#{logStoreLogDetail.close}" value="Close" />
           <h:commandButton action="#{logStoreLogDetail.refresh}" value="Refresh" />
           <a4j:region renderRegionOnly="true">
-            <rich:dataTable value="#{logMessageList.logMessages}" var="logMessage" rowClasses="first,second"
+            <rich:dataTable value="#{logMessageList}" var="logMessage" rowClasses="first,second"
               columnClasses="narrow,wide" rows="20">
               <rich:column>
                 <h:outputText value="*" rendered="#{logMessage.id == logMessageList.current.id}"/>
@@ -54,6 +54,11 @@
               <rich:tabPanel switchType="ajax" selectedTab="#{logStoreLogDetail.selectedDetailTab}">
                 <rich:tab label="Summary">
                   <ui:include src="decorators/decorators.xhtml">
+                    <ui:param name="logMessage" value="#{logMessageList.current}" />
+                  </ui:include>
+                </rich:tab>
+                <rich:tab label="Tags">
+                  <ui:include src="logMessageTags.xhtml">
                     <ui:param name="logMessage" value="#{logMessageList.current}" />
                   </ui:include>
                 </rich:tab>

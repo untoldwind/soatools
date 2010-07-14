@@ -35,7 +35,7 @@ import de.objectcode.soatools.util.value.IValueLocator;
 import de.objectcode.soatools.util.value.ValueLocatorFactory;
 
 public class Aggregator extends AbstractActionPipelineProcessor {
-	private final static Log LOG = LogFactory.getLog(Splitter.class);
+	private final static Log LOG = LogFactory.getLog(Aggregator.class);
 
 	final SessionFactory sessionFactory;
 	final MessagePayloadProxy payload;
@@ -115,8 +115,8 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 
 			if (parts.size() == splitEntity.getPartCount() - 1) {
 				List<Map<String, Object>> partContents = new ArrayList<Map<String, Object>>(
-						Collections.<Map<String, Object>> nCopies(splitEntity
-								.getPartCount(), null));
+						Collections.<Map<String, Object>> nCopies(
+								splitEntity.getPartCount(), null));
 
 				partContents.set(partIndex, getContents(message));
 
@@ -145,7 +145,15 @@ public class Aggregator extends AbstractActionPipelineProcessor {
 						part.setFaultReason(message.getFault().getReason());
 					}
 					if (message.getFault().getCode() != null) {
-						part.setFaultCode(message.getFault().getCode().toString());
+						part.setFaultCode(message.getFault().getCode()
+								.toString());
+					}
+					if (LOG.isDebugEnabled()) {
+						if (message.getFault().getCause() != null
+								|| message.getFault().getReason() != null)
+							LOG.debug("Stored fault: "
+									+ message.getFault().getReason(), message
+									.getFault().getCause());
 					}
 				}
 

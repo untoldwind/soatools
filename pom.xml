@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.objectcode.soatools</groupId>
 	<artifactId>base</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.7-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>soatools</name>
 	<modules>
@@ -468,6 +468,8 @@
 			  <version>2.0</version>
 			  <configuration>
 			    <preparationGoals>clean</preparationGoals>
+			    <autoVersionSubmodules>true</autoVersionSubmodules>
+			    <goals>install</goals>
 			  </configuration>
 			</plugin>
 		</plugins>

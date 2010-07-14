@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ui:component xmlns="http://www.w3.org/1999/xhtml" xmlns:ui="http://java.sun.com/jsf/facelets"
+  xmlns:h="http://java.sun.com/jsf/html" xmlns:s="http://jboss.com/products/seam/taglib"
+  xmlns:f="http://java.sun.com/jsf/core" xmlns:a4j="http://richfaces.org/a4j" xmlns:rich="http://richfaces.org/rich">
+
+          <table class="message">
+            <tr class="message">
+              <th colspan="2">Message</th>
+            </tr>
+            <tr class="message">
+              <td class="message">ID</td>
+              <td class="message">
+                #{logMessage.id}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Message ID</td>
+              <td class="message">
+                #{logMessage.messageId}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Correlation ID</td>
+              <td class="message">
+                #{logMessage.correlationId}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Service Category</td>
+              <td class="message">
+                #{logMessage.serviceCategory}
+              </td>
+            </tr>
+            <tr class="message">
+              <td class="message">Service Name</td>
+              <td class="message">
+                #{logMessage.serviceName}
+              </td>
+            </tr>
+            <tr class="message">
+              <td colspan="2" class="section">Tags</td>
+            </tr>
+            <ui:repeat var="tag" value="#{logMessage.tagList}">
+              <tr class="message">
+                <td class="message">#{tag.name}</td>
+                <td class="message"><h:outputText value="#{tag.value}" converter="logMessageValueConverter"/></td>
+              </tr>
+            </ui:repeat>
+          </table>          
+</ui:component>
+            

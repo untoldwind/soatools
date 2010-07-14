@@ -123,8 +123,8 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 			findJpbmIds(call.getFaultTo(), logMessage);
 			findJpbmIds(message.getProperties(), logMessage);
 
-			logMessage.getBody().add("message-id",
-					call.getMessageID().toString());
+			logMessage.getBody().add("message-id", call.getMessageID() != null ?
+					call.getMessageID().toString() : "<no message id>");
 			logMessage.getBody().add(
 					"correlation-id",
 					call.getRelatesTo() != null ? call.getRelatesTo()
@@ -161,8 +161,8 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 			th.printStackTrace(out);
 			out.flush();
 			out.close();
-			logMessage.getBody().add("fault-cause", writer.toString());
-			logMessage.getBody().add("fault-reason", th.getMessage());
+			logMessage.getBody().add("fault-cause", writer.toString());			
+			logMessage.getBody().add("fault-reason", th.getMessage() != null ? th.getMessage() : "<no reason>");
 
 			logService.deliverAsync(logMessage);
 		} catch (Exception e) {
@@ -179,7 +179,7 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 		final Boolean redelivered = (Boolean) message.getProperties()
 				.getProperty(JMS_REDELIVERED);
 
-		if (redelivered) {
+		if (redelivered != null && redelivered) {
 			try {
 				Map<String, Object> tags = new HashMap<String, Object>();
 
@@ -217,6 +217,20 @@ public class ExceptionLogWiretap extends AbstractActionPipelineProcessor {
 						"correlation-id",
 						call.getRelatesTo() != null ? call.getRelatesTo()
 								.toString() : "");
+				logMessage.getBody().add("message-to",
+						call.getTo() != null ? call.getTo().toString() : "");
+				logMessage.getBody().add("message-from",
+						call.getFrom() != null ? call.getFrom().toString() : "");
+				logMessage.getBody().add(
+						"message-replyTo",
+						call.getReplyTo() != null ? call.getReplyTo().toString()
+								: "");
+				logMessage.getBody().add(
+						"message-faultTo",
+						call.getFaultTo() != null ? call.getFaultTo().toString()
+								: "");
+				logMessage.getBody().add("message-type",
+						message.getType().toString());
 				logMessage.getBody().add("service-category", serviceCategory);
 				logMessage.getBody().add("service-name", serviceName);
 				logMessage
