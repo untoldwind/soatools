@@ -108,7 +108,7 @@
 
 								<artifactItem>
 									<groupId>de.objectcode.soatools</groupId>
-									<artifactId>soatools-esb-camel</artifactId>
+									<artifactId>soatools-camel</artifactId>
 									<version>${project.version}</version>
 									<type>esb</type>
 								</artifactItem>
